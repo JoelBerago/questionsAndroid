@@ -40,36 +40,6 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
 
     }
 
-    /*
-    public void testIntentSetting() {
-
-        getInstrumentation().runOnMainSync(new Runnable() {
-            @Override
-            public void run() {
-                roomNameEditText.requestFocus();
-            }
-        });
-
-        getInstrumentation().sendStringSync("all");
-        getInstrumentation().waitForIdleSync();
-
-        String actualText = roomNameEditText.getText().toString();
-        assertEquals("all", actualText);
-
-        // Tap "Join" button
-        // ----------------------
-
-        TouchUtils.clickView(this, joinButton);
-        //Wait until all events from the MainHandler's queue are processed
-        getInstrumentation().waitForIdleSync();
-
-        Intent intent = activity.getIntent();
-        assertNotNull("Intent should be set", intent);
-
-        assertEquals("all", intent.getStringExtra(LoginActivity.ROOM_NAME));
-    }
-
-*/
     public void testCreatingActivity() {
 
         //Create and add an ActivityMonitor to monitor interaction between the system and the
@@ -128,4 +98,35 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
         getInstrumentation().removeMonitor(receiverActivityMonitor);
 
     }
-}
+
+/*
+    public void testIntentSetting() {
+
+        getInstrumentation().runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                roomNameEditText.requestFocus();
+            }
+        });
+
+        getInstrumentation().sendStringSync("all");
+        getInstrumentation().waitForIdleSync();
+
+        String actualText = roomNameEditText.getText().toString();
+        assertEquals("all", actualText);
+
+        // Tap "Join" button
+        // ----------------------
+
+        TouchUtils.clickView(this, joinButton);
+        //Wait until all events from the MainHandler's queue are processed
+        getInstrumentation().waitForIdleSync();
+
+        Intent intent = activity.getIntent();
+        assertNotNull("Intent should be set", intent);
+
+        //assertEquals("all", intent.getStringExtra(roomName));
+    }
+*/
+
+ }

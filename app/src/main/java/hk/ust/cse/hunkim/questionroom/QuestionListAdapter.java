@@ -54,7 +54,7 @@ public class QuestionListAdapter extends DatabaseListAdapter {
                     @Override
                     public void onClick(View view) {
                         MainActivity m = (MainActivity) view.getContext();
-                        m.updateLikes((String) view.getTag());
+                        //m.updateLikes((String) view.getTag());        //likes are not yet implemented. -JT
                     }
                 }
         );

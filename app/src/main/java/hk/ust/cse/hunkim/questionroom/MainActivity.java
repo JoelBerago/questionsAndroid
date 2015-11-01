@@ -125,13 +125,13 @@ public class MainActivity extends ListActivity {
         */
     }
 
-    //temporary, for testing
+    /*/temporary, for testing
     public boolean hasAdapter()
     {
         if (mChatListAdapter==null)
             return false;
         return true;
-    }
+    }*/
 
     @Override
     public void onStop() {
@@ -165,7 +165,7 @@ public class MainActivity extends ListActivity {
 
         startActivityForResult(galleryIntent, ImageHelper.RESULT_LOAD_IMG);
     }
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ImageHelper.RESULT_LOAD_IMG && resultCode == RESULT_OK && data != null) {
@@ -177,13 +177,13 @@ public class MainActivity extends ListActivity {
             ImageHelper.picturePath = cursor.getString(columnIndex);
             cursor.close();
         }
-    }
+    }*/
 
-    public void updateLikes(String id) {
-        if (dbutil.contains(id)) {
+    public void updateLikes(String id) {    //not yet functional.  -JT
+        /*if (dbutil.contains(id)) {
             Log.e("Dupkey", "Key is already in the DB!");
             return;
-        }
+        }*/
 
         /* TODO: Update Likes
         final Firebase echoRef = mFirebaseRef.child(id).child("echo");
@@ -203,11 +203,11 @@ public class MainActivity extends ListActivity {
                     }
                 }
         );
-        */
+
 
 
         // Update SQLite DB
-        dbutil.put(id);
+        dbutil.put(id);*/
     }
 
     public void Close(View view) {
