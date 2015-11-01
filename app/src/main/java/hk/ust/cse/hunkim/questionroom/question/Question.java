@@ -26,6 +26,9 @@ public class Question extends BaseQuestion {
     }
 
     public List<Answer>  getAnswers() {
+        if (this.answers == null) {
+            this.answers = new ArrayList<Answer>();
+        }
         return answers;
     }
 
