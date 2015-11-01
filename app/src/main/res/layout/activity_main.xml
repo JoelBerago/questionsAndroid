@@ -64,9 +64,17 @@
                 android:layout_height="fill_parent"
                 android:layout_alignParentRight="true"
                 android:orientation="horizontal"
-                android:gravity="right">
+                android:gravity="right"
+                android:weightSum="1">
 
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="2dp"
+                    android:id="@+id/selected_picture"
+                    android:layout_weight="0.32"
+                    android:layout_gravity="center_vertical"/>
 
                 <ImageButton
                     android:id="@+id/uploadImage"

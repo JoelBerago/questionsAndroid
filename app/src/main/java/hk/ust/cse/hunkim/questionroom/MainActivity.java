@@ -1,6 +1,7 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.DataSetObserver;
@@ -143,6 +144,7 @@ public class MainActivity extends ListActivity {
 
     private void sendMessage() {
         EditText inputText = (EditText) findViewById(R.id.messageInput);
+
         String input = inputText.getText().toString();
         Question question;
         if (!input.equals("")) {
@@ -153,9 +155,12 @@ public class MainActivity extends ListActivity {
 
             if (!ImageHelper.picturePath.equals("")) {
                 mChatListAdapter.uploadPhoto(ImageHelper.picturePath, question);
+
             } else {
                 mChatListAdapter.push(question);
             }
+
+
         }
     }
 
@@ -166,6 +171,7 @@ public class MainActivity extends ListActivity {
         // Start the Intent
 
         startActivityForResult(galleryIntent, ImageHelper.RESULT_LOAD_IMG);
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -178,6 +184,21 @@ public class MainActivity extends ListActivity {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             ImageHelper.picturePath = cursor.getString(columnIndex);
             cursor.close();
+
+            ImageView iv = (ImageView) findViewById(R.id.selected_picture);
+            iv.setImageBitmap(null);
+            iv.setImageDrawable(null);
+            Log.i("picture",ImageHelper.picturePath);
+            if (!ImageHelper.picturePath.equals("")) {
+                Picasso.with(this)
+                        .load("file://"+ImageHelper.picturePath)
+                        .placeholder(R.drawable.like24)
+                        .resize(200, 200)   // image can stretch up to 240x140 max.
+                        .centerInside()
+                        .into(iv);
+                Log.i("picture", "should be displayed");
+            }
+
         }
     }
 

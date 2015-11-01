@@ -117,6 +117,7 @@ public class QuestionListAdapter extends DatabaseListAdapter{
             });
         }
 
+        //-----EXPAND AND COLLAPSE (not nested)----------//
         Button replyBtn = (Button) view.findViewById(R.id.reply);
         replyBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -127,8 +128,6 @@ public class QuestionListAdapter extends DatabaseListAdapter{
                 } else {
                     answerFooter.setVisibility(View.GONE);
                 }
-//                        ((ListView) view.findViewById(R.id.answerlist)).setVisibility(View.VISIBLE);
-//                view.findViewById(R.id.answerlistFooter).setVisibility(View.VISIBLE);
             }
         });
 
@@ -146,10 +145,9 @@ public class QuestionListAdapter extends DatabaseListAdapter{
                     answerList.setVisibility(View.GONE);
                     collapseBtn.setText("Expand");
                 }
-//                        ((ListView) view.findViewById(R.id.answerlist)).setVisibility(View.VISIBLE);
-//                view.findViewById(R.id.answerlistFooter).setVisibility(View.VISIBLE);
             }
         });
+        //----------------------------------------------//
 
         view.setTag(question.getId());  // store key in the view
     }
