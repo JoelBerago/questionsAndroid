@@ -15,7 +15,7 @@ public abstract class BaseQuestion implements Comparable<BaseQuestion> {
     // TODO: Fix time handling; server side's fault probably.
     @JsonProperty("time") private String time;
     protected long unixTime;
-    protected int likes;
+    @JsonProperty("likes") protected String[] likes;
     protected boolean newQuestion;
 
     // Dummy Constructor for JSONObject-ifying
@@ -27,7 +27,6 @@ public abstract class BaseQuestion implements Comparable<BaseQuestion> {
      */
     public BaseQuestion(String message) {
         this.text = message;
-        this.likes = 0;
         //this.unixTime = new Date().getTime();
         this.imageURL = "";
     }
@@ -50,10 +49,6 @@ public abstract class BaseQuestion implements Comparable<BaseQuestion> {
 
     public String getImageURL() {
         return imageURL;
-    }
-
-    public int getLikes() {
-        return likes;
     }
 
     public void updateNewQuestion() {
@@ -86,7 +81,16 @@ public abstract class BaseQuestion implements Comparable<BaseQuestion> {
             }
             return other.unixTime > this.unixTime ? -1 : 1;
         }
-        return this.likes - other.likes;
+
+        int thisLikes = 0;
+        int otherLikes = 0;
+
+        if (this.likes != null)
+            thisLikes = this.likes.length;
+        if (other.likes != null)
+            otherLikes = other.likes.length;
+
+        return thisLikes - otherLikes;
     }
 
     @Override
@@ -99,5 +103,17 @@ public abstract class BaseQuestion implements Comparable<BaseQuestion> {
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String[] getLikes() {
+        return likes;
+    }
+
+    public void setLikes(String[] likes) {
+        this.likes = likes;
     }
 }

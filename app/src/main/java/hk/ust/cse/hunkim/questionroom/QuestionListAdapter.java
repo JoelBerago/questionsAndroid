@@ -3,16 +3,22 @@ package hk.ust.cse.hunkim.questionroom;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.support.v7.internal.view.menu.ListMenuItemView;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
 
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
+import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 
 /**
@@ -35,7 +41,10 @@ public class QuestionListAdapter extends DatabaseListAdapter {
         DBUtil dbUtil = activity.getDbutil();
 
         // Map a Chat object to an entry in our listview
-        int likes = question.getLikes();
+        String[] likesArr = question.getLikes();
+        int likes = 0;
+        if (likesArr != null)
+            likes = likesArr.length;
         Button likeButton = (Button) view.findViewById(R.id.echo);
         likeButton.setText("" + likes);
         likeButton.setTextColor(Color.BLUE);
@@ -74,6 +83,18 @@ public class QuestionListAdapter extends DatabaseListAdapter {
             likeButton.getBackground().setColorFilter(null);
         } else {
             likeButton.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+        }
+
+        if (!question.getImageURL().equals("")) {
+            ImageView iv = (ImageView) view.findViewById(R.id.imageView);
+            iv.setImageDrawable(null);
+
+            if (view.getTag() == question.getId()) {
+                Picasso.with(activity.getApplicationContext())
+                        .load(question.getImageURL())
+                        .tag(question.getId())
+                        .into(iv);
+            }
         }
 
         view.setTag(question.getId());  // store key in the view

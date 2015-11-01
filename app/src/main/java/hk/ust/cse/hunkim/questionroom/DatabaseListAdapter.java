@@ -6,13 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 import hk.ust.cse.hunkim.questionroom.services.ErrorIdResponse;
+import hk.ust.cse.hunkim.questionroom.services.ImageResponse;
 import hk.ust.cse.hunkim.questionroom.services.QuestionService;
+import hk.ust.cse.hunkim.questionroom.services.PhotoService;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.JacksonConverterFactory;
@@ -39,6 +46,30 @@ public abstract class DatabaseListAdapter extends BaseAdapter {
         this.mQuestionList = new ArrayList<Question>();
     }
 
+    public void uploadPhoto(String picturePath, final Question question) {
+        PhotoService service = retrofit.create(PhotoService.class);
+        final Call<ImageResponse> responseURL = service.uploadPhoto(
+                RequestBody.create(
+                        MediaType.parse("text/plain"),
+                        ImageHelper.compressFile(picturePath)));
+
+        responseURL.enqueue(
+                new Callback<ImageResponse>() {
+                    @Override
+                    public void onResponse(Response<ImageResponse> response, Retrofit retrofit) {
+                        question.setImageURL(response.body().Filepath);
+                        push(question);
+                        notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e("QuestionRoom", "uploadPhoto() failed at callback", t);
+                    }
+                }
+        );
+    }
+
     public void push(final Question question) {
         QuestionService service = retrofit.create(QuestionService.class);
 
@@ -52,8 +83,8 @@ public abstract class DatabaseListAdapter extends BaseAdapter {
             @Override
             public void onResponse(Response<ErrorIdResponse> response, Retrofit retrofit) {
                 question.setId(response.body().id);
-                notifyDataSetChanged();
                 mQuestionList.add(question);
+                notifyDataSetChanged();
             }
 
             @Override
@@ -106,6 +137,15 @@ public abstract class DatabaseListAdapter extends BaseAdapter {
     @Override
     public long getItemId(int i) {
         return i;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+
+        if (getCount() != 0)
+            return getCount();
+
+        return 1;
     }
 
     @Override

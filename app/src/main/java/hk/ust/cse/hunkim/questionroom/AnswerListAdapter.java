@@ -38,4 +38,13 @@ public class AnswerListAdapter extends ArrayAdapter<Answer> {
 
         return rowView;
     }
+
+    @Override
+    public int getViewTypeCount() {
+
+        if (getCount() != 0)
+            return getCount();
+
+        return 1;
+    }
 }

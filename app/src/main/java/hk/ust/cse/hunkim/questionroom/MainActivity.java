@@ -2,8 +2,11 @@ package hk.ust.cse.hunkim.questionroom;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
+import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 
 public class MainActivity extends ListActivity {
@@ -39,7 +43,7 @@ public class MainActivity extends ListActivity {
         assert (intent != null);
 
         // Make it a bit more reliable
-        roomName = intent.getStringExtra(JoinActivity.ROOM_NAME);
+        roomName = intent.getStringExtra(JoinActivity.ROOM_NAME).toLowerCase();
         if (roomName == null || roomName.length() == 0) {
             roomName = "all";
         }
@@ -63,6 +67,13 @@ public class MainActivity extends ListActivity {
             @Override
             public void onClick(View view) {
                 sendMessage();
+            }
+        });
+
+        findViewById(R.id.uploadImage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImage();
             }
         });
 
@@ -131,12 +142,40 @@ public class MainActivity extends ListActivity {
     private void sendMessage() {
         EditText inputText = (EditText) findViewById(R.id.messageInput);
         String input = inputText.getText().toString();
+        Question question;
         if (!input.equals("")) {
-            Question question = new Question(roomName, input);
-            mChatListAdapter.push(question);
+            question = new Question(roomName, input);
 
             // Clear inputText.
             inputText.setText("");
+
+            if (!ImageHelper.picturePath.equals("")) {
+                mChatListAdapter.uploadPhoto(ImageHelper.picturePath, question);
+            } else {
+                mChatListAdapter.push(question);
+            }
+        }
+    }
+
+    private void selectImage() {
+        // Create intent to Open Image applications like Gallery, Google Photos
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // Start the Intent
+
+        startActivityForResult(galleryIntent, ImageHelper.RESULT_LOAD_IMG);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ImageHelper.RESULT_LOAD_IMG && resultCode == RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            ImageHelper.picturePath = cursor.getString(columnIndex);
+            cursor.close();
         }
     }
 

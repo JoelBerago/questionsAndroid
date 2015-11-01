@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content" >
+
+    <Button
+        android:id="@+id/echo"
+        android:drawableLeft="@drawable/like24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/head_desc"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/echo" />
 
-        <Button
-            android:id="@+id/echo"
-            android:drawableLeft="@drawable/like24"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/echo" />
 
-        <TextView
-            android:id="@+id/head_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp" />
-    </LinearLayout>
     <ListView
         android:id="@+id/answerlist"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-    </ListView>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView" />
+</RelativeLayout>

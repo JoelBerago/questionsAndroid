@@ -34,4 +34,13 @@ public class FollowupListAdapter extends ArrayAdapter<FollowUp> {
         textView.setText(values[position].getText());
         return rowView;
     }
+
+    @Override
+    public int getViewTypeCount() {
+
+        if (getCount() != 0)
+            return getCount();
+
+        return 1;
+    }
 }
