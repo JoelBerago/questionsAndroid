@@ -1,50 +1,82 @@
 package hk.ust.cse.hunkim.questionroom;
 
-import android.app.Activity;
 import android.content.Context;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import android.widget.EditText;
 
+import java.util.Collections;
 import java.util.List;
 
-import hk.ust.cse.hunkim.questionroom.R;
+import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Answer;
 import hk.ust.cse.hunkim.questionroom.question.FollowUp;
+import hk.ust.cse.hunkim.questionroom.question.Question;
+import hk.ust.cse.hunkim.questionroom.services.ErrorIdResponse;
+import hk.ust.cse.hunkim.questionroom.services.QuestionService;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 /**
  * Created by J.T and Long on 10/31/2015.
  */
-public class FollowupListAdapter extends ArrayAdapter<FollowUp> {
-    private final Context context;
-    private final List<FollowUp> values;
+public class FollowupListAdapter extends DatabaseListAdapter<FollowUp> {
+    private final Answer answer;
 
-    public FollowupListAdapter(Context context, int textViewResourceId, List<FollowUp> values) {
-        super(context, textViewResourceId, values);
+    public FollowupListAdapter(Context context, int textViewResourceId, Answer answer, List<FollowUp> followUpList) {
+        super(context, textViewResourceId, followUpList);
         this.context = context;
-        this.values = values;
+        this.answer = answer;
+        this.mQuestionList = answer.getFollow_ups();
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.followup, parent, false);
+    protected void populateView(View view, final FollowUp followUp) {
+        super.populateView(view, followUp);
+    }
+
+    @Override
+    public void push(final FollowUp followUp, String baseID) {
+        QuestionService service = retrofit.create(QuestionService.class);
+
+        Call<ErrorIdResponse> response = service.createFollowup(
+                baseID,
+                followUp.getText(),
+                followUp.getImageURL()
+        );
+
+        response.enqueue(new Callback<ErrorIdResponse>() {
+            @Override
+            public void onResponse(Response<ErrorIdResponse> response, Retrofit retrofit) {
+                followUp.setId(response.body().id);
+                mQuestionList.add(followUp);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.push():", t);
+            }
+        });
+    }
+
+    protected void sendFollowup(View view) {
+        EditText inputText = (EditText) ((MainActivity) context).findViewById(R.id.messageInput);
+        String input = inputText.getText().toString();
+        FollowUp followUp;
+        if (!input.equals("")) {
+            followUp = new FollowUp(input);
+
+            // Clear inputText.
+            inputText.setText("");
+
+            if (!ImageHelper.picturePath.equals("")) {
+                uploadPhoto(ImageHelper.picturePath, followUp, answer.getId());
+            } else {
+                push(followUp, answer.getId());
+            }
         }
-            TextView textView = (TextView) convertView.findViewById(R.id.head_desc_followup);
-
-            textView.setText(values.get(position).getText());
-            return convertView;
-    }
-
-    @Override
-    public int getViewTypeCount() {
-
-        if (getCount() != 0)
-            return getCount();
-
-        return 1;
     }
 }

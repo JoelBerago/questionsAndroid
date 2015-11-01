@@ -13,8 +13,9 @@ public class Answer extends BaseQuestion {
 
     public List<FollowUp> getFollow_ups() {
         if (this.follow_ups == null) {
-        this.follow_ups = new ArrayList<FollowUp>();
-    }
+            this.follow_ups = new ArrayList<FollowUp>();
+        }
+
         return follow_ups;
     }
 

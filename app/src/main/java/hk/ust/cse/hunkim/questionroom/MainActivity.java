@@ -7,16 +7,18 @@ import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import hk.ust.cse.hunkim.questionroom.db.DBHelper;
-import hk.ust.cse.hunkim.questionroom.db.DBUtil;
+import java.util.ArrayList;
+import java.util.List;
+
 import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 
@@ -42,32 +44,27 @@ public class MainActivity extends ListActivity {
             roomName = "all";
         }
         if(mChatListAdapter==null)
-            mChatListAdapter = new QuestionListAdapter(this, R.layout.question);
+            mChatListAdapter = new QuestionListAdapter(this, R.layout.question, new ArrayList<Question>());
 
         setTitle("Room name: " + roomName);
+
         // Setup our input methods. Enter key on the keyboard or pushing the send button
-        EditText inputText = (EditText) findViewById(R.id.messageInput);
+        final EditText inputText = (EditText) findViewById(R.id.messageInput);
         inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if (actionId == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    sendMessage();
+                    sendQuestion(getListView());
                 }
                 return true;
             }
         });
 
-        findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
+        final Button sendButton = (Button) findViewById(R.id.sendButton);
+        sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendMessage();
-            }
-        });
-
-        findViewById(R.id.uploadImage).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectImage();
+                sendQuestion(view);
             }
         });
     }
@@ -80,7 +77,7 @@ public class MainActivity extends ListActivity {
         final ListView listView = getListView();
 
         if(mChatListAdapter==null)
-         mChatListAdapter = new QuestionListAdapter(this, R.layout.question);
+            mChatListAdapter = new QuestionListAdapter(this, R.layout.question, new ArrayList<Question>());
         listView.setAdapter(mChatListAdapter);
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
@@ -129,7 +126,7 @@ public class MainActivity extends ListActivity {
         mChatListAdapter.cleanup();
     }
 
-    private void sendMessage() {
+    public void sendQuestion(View view) {
         EditText inputText = (EditText) findViewById(R.id.messageInput);
         String input = inputText.getText().toString();
         Question question;
@@ -140,14 +137,14 @@ public class MainActivity extends ListActivity {
             inputText.setText("");
 
             if (!ImageHelper.picturePath.equals("")) {
-                mChatListAdapter.uploadPhoto(ImageHelper.picturePath, question);
+                mChatListAdapter.uploadPhoto(ImageHelper.picturePath, question, "");
             } else {
-                mChatListAdapter.push(question);
+                mChatListAdapter.push(question, "");
             }
         }
     }
 
-    private void selectImage() {
+    public void selectImage(View view) {
         // Create intent to Open Image applications like Gallery, Google Photos
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

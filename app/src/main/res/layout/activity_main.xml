@@ -5,36 +5,19 @@
 
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="Close"
-        android:text = "Quit Room"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        />
-
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/close"
-        android:layout_above="@+id/listFooter"
-        android:transcriptMode="alwaysScroll" />
-
     <LinearLayout
         android:id="@+id/listFooter"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/uploadImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_gallery"/>
+            android:src="@android:drawable/ic_menu_gallery"
+            android:onClick="selectImage"/>
 
         <EditText
             android:id="@+id/messageInput"
@@ -46,10 +29,19 @@
             android:singleLine="true"
             android:hint="Add new question" />
 
-        <ImageButton
+        <Button
             android:id="@+id/sendButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_send" />
+            android:text="New Question"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true" />
     </LinearLayout>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/listFooter"
+        android:nestedScrollingEnabled="true"/>
 </RelativeLayout>
