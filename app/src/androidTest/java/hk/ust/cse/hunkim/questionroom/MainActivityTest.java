@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.test.ActivityUnitTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,6 +42,14 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
         assertNotNull(mButton);
 
         assertEquals("This is set correctly", "Room name: all", getActivity().getTitle());
+    }
+
+    @MediumTest
+    public void testMChat() {
+        startActivity(mStartIntent, null, null);
+        mButton = (ImageButton) getActivity().findViewById(R.id.sendButton);
+        assertNotNull(getActivity());
+        assertNotNull(mButton);
     }
 
 
@@ -88,7 +97,12 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
 
         mButton.performClick();
 
-        // TODO: How to confirm a new text is posted?
-        // assertEquals("Child count: ", lView.getChildCount(), 10);
+
+
+        // LH start
+        EditText inputText = (EditText) activity.findViewById(R.id.messageInput);
+        inputText.beginBatchEdit();
+        inputText.setText("Hi there");
+        inputText.endBatchEdit();
     }
 }
