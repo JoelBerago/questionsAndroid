@@ -11,12 +11,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:orientation="horizontal"
-        android:background="@color/material_deep_teal_200">
+        android:background="#333">
 
         <LinearLayout
             android:id="@+id/profileCharacterLayout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_alignParentBottom="true"
             android:gravity="center_horizontal"
             android:orientation="vertical">
@@ -33,7 +33,8 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Knight Lv 1"
                 android:id="@+id/profileCharacterClass"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="#fff" />
         </LinearLayout>
 
 
@@ -45,18 +46,22 @@
             android:orientation="vertical">
             <EditText
                 android:id="@+id/messageInput"
+                android:inputType="textMultiLine"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:lines="4"
+                android:minLines="4"
+                android:gravity="top|left"
                 android:layout_weight="1"
-                android:inputType="textShortMessage"
-                android:lines="1"
-                android:singleLine="true"
-                android:hint="Add new question" />
+                android:scrollbars="vertical"
+                android:hint="Add new question"
+                android:textColor="#fff"
+                android:textColorHint="#555" />
 
             <LinearLayout
                 android:id="@+id/footerButtonLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_alignParentRight="true"
                 android:orientation="horizontal"
                 android:gravity="right">
