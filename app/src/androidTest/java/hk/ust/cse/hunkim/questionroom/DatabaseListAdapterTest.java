@@ -74,6 +74,8 @@ public class DatabaseListAdapterTest  extends ActivityUnitTestCase<MainActivity>
         test.push(q);
 
         Answer a = new Answer("hello too");
+
+        test.uploadPhoto("/data/local/1.png", q);
 //        test.push(0,a);
        // test.push(0, 0, new FollowUp("bye"));
     }
