@@ -104,5 +104,17 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
         inputText.beginBatchEdit();
         inputText.setText("Hi there");
         inputText.endBatchEdit();
+
+
+
+        activity.findViewById(R.id.uploadImage).performClick();
+
+        activity.onStop();
+        activity.onStart();
+
+    }
+
+    public void MatthieuTest() {
+
     }
 }
