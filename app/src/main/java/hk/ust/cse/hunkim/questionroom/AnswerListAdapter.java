@@ -1,51 +1,105 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.content.Context;
-import android.view.LayoutInflater;
+import android.database.DataSetObserver;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
+import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Answer;
+import hk.ust.cse.hunkim.questionroom.question.BaseQuestion;
+import hk.ust.cse.hunkim.questionroom.question.Question;
+import hk.ust.cse.hunkim.questionroom.services.ErrorIdResponse;
+import hk.ust.cse.hunkim.questionroom.services.QuestionService;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 /**
  * Created by JT and Long on 10/31/2015.
  */
-public class AnswerListAdapter extends ArrayAdapter<Answer> {
-    private final Context context;
-    private final List<Answer> values;
+public class AnswerListAdapter extends DatabaseListAdapter<Answer> {
+    private final Question question;
 
-    public AnswerListAdapter(Context context, int textViewResourceId, List<Answer> values) {
-        super(context, textViewResourceId, values);
+    public AnswerListAdapter(Context context, int textViewResourceId, Question question, List<Answer> answerList) {
+        super(context, textViewResourceId, answerList);
         this.context = context;
-        this.values = values;
+        this.question = question;
+        this.mQuestionList = question.getAnswers();
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.answer, parent, false);
-        TextView textView = (TextView) rowView.findViewById(R.id.head_desc_answers);
+    protected void populateView(final View view, final Answer answer) {
+        super.populateView(view, answer);
 
-        textView.setText(values.get(position).getText());
+        final ListView followupList = ((ListView) view.findViewById(R.id.followuplist));
+        final FollowupListAdapter mChatListAdapter = new FollowupListAdapter(view.getContext(), R.layout.followup, answer, answer.getFollow_ups());
+        followupList.setAdapter(mChatListAdapter);
 
-        final ListView followupList = ((ListView) rowView.findViewById(R.id.followuplist));
+        view.findViewById(R.id.sendButton).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mChatListAdapter.sendFollowup(view);
+                    }
+                }
+        );
 
-        followupList.setAdapter(new FollowupListAdapter(context, R.id.followuplist, values.get(position).getFollow_ups()));
-
-        return rowView;
+        mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                followupList.setSelection(mChatListAdapter.getCount() - 1);
+            }
+        });
     }
 
     @Override
-    public int getViewTypeCount() {
-        if (getCount() != 0)
-            return getCount();
+    public void push(final Answer answer, String baseID) {
+        QuestionService service = retrofit.create(QuestionService.class);
 
-        return 1;
+        Call<ErrorIdResponse> response = service.createAnswer(
+                baseID,
+                answer.getText(),
+                answer.getImageURL()
+        );
+
+        response.enqueue(new Callback<ErrorIdResponse>() {
+            @Override
+            public void onResponse(Response<ErrorIdResponse> response, Retrofit retrofit) {
+                answer.setId(response.body().id);
+                mQuestionList.add(answer);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.push():", t);
+            }
+        });
+    }
+
+    protected void sendAnswer(View view) {
+        EditText inputText = (EditText) ((MainActivity) context).findViewById(R.id.messageInput);
+        String input = inputText.getText().toString();
+        Answer answer;
+        if (!input.equals("")) {
+            answer = new Answer(input);
+
+            // Clear inputText.
+            inputText.setText("");
+
+            if (!ImageHelper.picturePath.equals("")) {
+                uploadPhoto(ImageHelper.picturePath, answer, question.getId());
+            } else {
+                push(answer, question.getId());
+            }
+        }
     }
 }

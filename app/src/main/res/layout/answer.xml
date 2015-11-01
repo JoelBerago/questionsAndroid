@@ -1,63 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="20dp" >
+    android:layout_height="fill_parent"
+    android:paddingLeft="20dp"
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/echo"
-        android:drawableLeft="@drawable/like24"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/head_desc_answers"
+    <RelativeLayout
+        android:id="@+id/answerLayout"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/echo" />
+        android:layout_height="wrap_content" >
+        <Button
+            android:id="@+id/echo"
+            android:drawableLeft="@drawable/like24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/echo"
-        android:gravity="center_horizontal"/>
+        <TextView
+            android:id="@+id/head_desc"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/echo"
+            android:layout_toLeftOf="@+id/sendButton"/>
 
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/head_desc"
+            android:gravity="center_horizontal"/>
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="answer"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
     <ListView
         android:id="@+id/followuplist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView" />
-
-    <LinearLayout
-        android:id="@+id/followuplistFooter"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@+id/followuplist"
-        android:paddingLeft="40dp">
-
-        <ImageButton
-            android:id="@+id/followupuploadImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_gallery"/>
-
-        <EditText
-            android:id="@+id/followupmessageInput"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="textShortMessage"
-            android:lines="1"
-            android:singleLine="true"
-            android:hint="Give follow-up reply"/>
-
-        <ImageButton
-            android:id="@+id/followupsendButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_send" />
-    </LinearLayout>
-</RelativeLayout>
+        android:layout_height="match_parent"
+        android:isScrollContainer="false"
+        android:nestedScrollingEnabled="true"/>
+</LinearLayout >

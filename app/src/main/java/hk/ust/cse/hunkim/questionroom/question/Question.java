@@ -1,5 +1,7 @@
 package hk.ust.cse.hunkim.questionroom.question;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
@@ -26,6 +28,10 @@ public class Question extends BaseQuestion {
     }
 
     public List<Answer>  getAnswers() {
+        if (this.answers == null) {
+            this.answers = new ArrayList<Answer>();
+        }
+
         return answers;
     }
 
