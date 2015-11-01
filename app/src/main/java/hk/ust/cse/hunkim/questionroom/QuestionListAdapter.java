@@ -1,14 +1,20 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.content.Context;
+import android.app.Activity;
+import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -20,7 +26,7 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 /**
  * Created by Joel on 29/10/2015.
  */
-public class QuestionListAdapter extends DatabaseListAdapter {
+public class QuestionListAdapter extends DatabaseListAdapter{
 // The mUsername for this client. We use this to indicate which messages originated from this user
     Context activity;
 
@@ -32,7 +38,8 @@ public class QuestionListAdapter extends DatabaseListAdapter {
     }
 
     @Override
-    protected void populateView(View view, Question question) {
+    protected void populateView(View view, final Question question) {
+        DBUtil dbUtil = activity.getDbutil();
         // Map a Chat object to an entry in our listview
         String[] likesArr = question.getLikes();
         int likes = 0;
@@ -78,16 +85,36 @@ public class QuestionListAdapter extends DatabaseListAdapter {
             likeButton.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
         }
 
+        ///////////////////////////////
+        // display image under text
+        ImageView iv = (ImageView) view.findViewById(R.id.imageView);
+        iv.setImageBitmap(null);
+        iv.setImageDrawable(null);
+        // only if URL exist
         if (!question.getImageURL().equals("")) {
-            ImageView iv = (ImageView) view.findViewById(R.id.imageView);
-            iv.setImageDrawable(null);
-
-            if (view.getTag() == question.getId()) {
-                Picasso.with(context)
-                        .load(question.getImageURL())
-                        .tag(question.getId())
-                        .into(iv);
-            }
+            Picasso.with(view.getContext())
+                    .load(question.getImageURL())
+                    .resize(240, 140)   // image can stretch up to 240x140 max.
+                    .centerInside()
+                    .into(iv);
+            // upon clicking image view, pop up dialog
+            iv.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Log.e("Debug", "clicked");
+                    //Toast.makeText(activity, question.getImageURL(), Toast.LENGTH_SHORT).show();
+                    if (!question.getImageURL().equals("")) {
+                        Dialog dialog = new Dialog(activity);
+                        dialog.setTitle("View image");
+                        dialog.setContentView(R.layout.imageview_dialog);
+                        ImageView iv = (ImageView) dialog.findViewById(R.id.dialog_image);
+                        iv.setImageBitmap(null);
+                        Picasso.with(dialog.getContext())
+                                .load(question.getImageURL())
+                                .into(iv);
+                        dialog.show();
+                    }
+                }
+            });
         }
 
         view.setTag(question.getId());  // store key in the view
@@ -97,4 +124,5 @@ public class QuestionListAdapter extends DatabaseListAdapter {
     protected void sortModels(List<Question> mModels) {
         Collections.sort(mModels);
     }
+
 }
