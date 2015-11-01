@@ -1,12 +1,11 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
@@ -14,7 +13,11 @@ import com.squareup.okhttp.RequestBody;
 import java.util.ArrayList;
 import java.util.List;
 
+import hk.ust.cse.hunkim.questionroom.db.DBHelper;
+import hk.ust.cse.hunkim.questionroom.db.DBUtil;
 import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
+import hk.ust.cse.hunkim.questionroom.question.Answer;
+import hk.ust.cse.hunkim.questionroom.question.FollowUp;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 import hk.ust.cse.hunkim.questionroom.services.ErrorIdResponse;
 import hk.ust.cse.hunkim.questionroom.services.ImageResponse;
@@ -30,19 +33,23 @@ import retrofit.Retrofit;
  * Created by Joel on 29/10/2015.
  */
 public abstract class DatabaseListAdapter extends BaseAdapter {
+    protected Context context;
     private static final String BASE_URL = "http://questions-backend.herokuapp.com/api/";
-
-    private int mLayout;
-    private LayoutInflater mInflater;
-    private List<Question> mQuestionList;
     private final static Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(JacksonConverterFactory.create())
             .build();
 
-    public DatabaseListAdapter(int mLayout, Activity activity) {
-        this.mLayout = mLayout;
-        this.mInflater = activity.getLayoutInflater();
+    protected DBUtil dbUtil;
+    private int mLayoutID;
+    private List<Question> mQuestionList;
+
+    public DatabaseListAdapter(Context context, int mLayoutID) {
+        DBHelper mDbHelper = new DBHelper(context);
+        dbUtil = new DBUtil(mDbHelper);
+
+        this.context = context;
+        this.mLayoutID = mLayoutID;
         this.mQuestionList = new ArrayList<Question>();
     }
 
@@ -84,6 +91,57 @@ public abstract class DatabaseListAdapter extends BaseAdapter {
             public void onResponse(Response<ErrorIdResponse> response, Retrofit retrofit) {
                 question.setId(response.body().id);
                 mQuestionList.add(question);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.push():", t);
+            }
+        });
+    }
+
+    public void push(final int questionIndex, final Answer answer) {
+        QuestionService service = retrofit.create(QuestionService.class);
+        final Question question = mQuestionList.get(questionIndex);
+
+        // TODO: Check if question is null?
+        Call<ErrorIdResponse> response = service.createQuestion(
+                question.getId(),
+                answer.getText(),
+                answer.getImageURL()
+        );
+
+        response.enqueue(new Callback<ErrorIdResponse>() {
+            @Override
+            public void onResponse(Response<ErrorIdResponse> response, Retrofit retrofit) {
+                answer.setId(response.body().id);
+                question.addAnswer(answer);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.push():", t);
+            }
+        });
+    }
+
+    public void push(int questionIndex, final int answerIndex, final FollowUp followup) {
+        QuestionService service = retrofit.create(QuestionService.class);
+
+        final Question question = mQuestionList.get(questionIndex);
+        Call<ErrorIdResponse> response = service.createQuestion(
+                question.getAnswer(answerIndex).getId(),
+                followup.getText(),
+                followup.getImageURL()
+        );
+
+        response.enqueue(new Callback<ErrorIdResponse>() {
+            @Override
+            public void onResponse(Response<ErrorIdResponse> response, Retrofit retrofit) {
+                followup.setId(response.body().id);
+                question.addFollowup(answerIndex, followup);
                 notifyDataSetChanged();
             }
 
@@ -151,7 +209,7 @@ public abstract class DatabaseListAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if (view == null) {
-            view = mInflater.inflate(mLayout, viewGroup, false);
+            view = ((Activity)context).getLayoutInflater().inflate(mLayoutID, viewGroup, false);
         }
 
         // FIXME: Perhaps this is the first time to show data

@@ -2,14 +2,16 @@ package hk.ust.cse.hunkim.questionroom.question;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by hunkim on 7/16/15.
  */
 public class Question extends BaseQuestion {
     @JsonProperty("room") protected String room;
-    @JsonProperty("answers") protected Answer[] answers;
+    @JsonProperty("answers") protected List<Answer> answers;
 
     // Dummy Constructor for JSONObject-ifying
     public Question() {}
@@ -23,15 +25,27 @@ public class Question extends BaseQuestion {
         return this.room;
     }
 
-    public Answer[] getAnswers() {
+    public List<Answer>  getAnswers() {
         return answers;
+    }
+
+    public Answer getAnswer(int index) {
+        return answers.get(index);
+    }
+
+    public void addFollowup(int answerIndex, FollowUp followup) {
+        this.getAnswer(answerIndex).addFollowUp(followup);
     }
 
     public void setRoom(String room) {
         this.room = room;
     }
 
-    public void setAnswers(Answer[] answers) {
-        this.answers = answers;
+    public void addAnswer(Answer answer) {
+        if (this.answers == null) {
+            this.answers = new ArrayList<Answer>();
+        }
+
+        this.answers.add(answer);
     }
 }

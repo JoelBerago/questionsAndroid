@@ -1,11 +1,14 @@
 package hk.ust.cse.hunkim.questionroom;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import java.util.List;
 
 import hk.ust.cse.hunkim.questionroom.R;
 import hk.ust.cse.hunkim.questionroom.question.Answer;
@@ -16,9 +19,9 @@ import hk.ust.cse.hunkim.questionroom.question.FollowUp;
  */
 public class FollowupListAdapter extends ArrayAdapter<FollowUp> {
     private final Context context;
-    private final FollowUp[] values;
+    private final List<FollowUp> values;
 
-    public FollowupListAdapter(Context context, int textViewResourceId, FollowUp[] values) {
+    public FollowupListAdapter(Context context, int textViewResourceId, List<FollowUp> values) {
         super(context, textViewResourceId, values);
         this.context = context;
         this.values = values;
@@ -26,9 +29,9 @@ public class FollowupListAdapter extends ArrayAdapter<FollowUp> {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.followup, parent, false);
+        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.followup, parent, false);
         TextView textView = (TextView) rowView.findViewById(R.id.head_desc_followup);
 
         textView.setText(values[position].getText());

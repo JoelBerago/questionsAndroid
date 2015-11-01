@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.List;
+
 import hk.ust.cse.hunkim.questionroom.question.Answer;
 
 /**
@@ -15,9 +17,9 @@ import hk.ust.cse.hunkim.questionroom.question.Answer;
  */
 public class AnswerListAdapter extends ArrayAdapter<Answer> {
     private final Context context;
-    private final Answer[] values;
+    private final List<Answer> values;
 
-    public AnswerListAdapter(Context context, int textViewResourceId, Answer[] values) {
+    public AnswerListAdapter(Context context, int textViewResourceId, List<Answer> values) {
         super(context, textViewResourceId, values);
         this.context = context;
         this.values = values;
@@ -30,18 +32,17 @@ public class AnswerListAdapter extends ArrayAdapter<Answer> {
         View rowView = inflater.inflate(R.layout.answer, parent, false);
         TextView textView = (TextView) rowView.findViewById(R.id.head_desc_answers);
 
-        textView.setText(values[position].getText());
+        textView.setText(values.get(position).getText());
 
         final ListView followupList = ((ListView) rowView.findViewById(R.id.followuplist));
 
-        followupList.setAdapter(new FollowupListAdapter(context, R.id.followuplist, values[position].getFollow_ups()));
+        followupList.setAdapter(new FollowupListAdapter(context, R.id.followuplist, values.get(position).getFollow_ups()));
 
         return rowView;
     }
 
     @Override
     public int getViewTypeCount() {
-
         if (getCount() != 0)
             return getCount();
 

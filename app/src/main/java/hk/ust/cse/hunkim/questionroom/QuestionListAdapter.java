@@ -1,9 +1,8 @@
 package hk.ust.cse.hunkim.questionroom;
 
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.support.v7.internal.view.menu.ListMenuItemView;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
@@ -11,14 +10,11 @@ import android.widget.ListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
 
-import hk.ust.cse.hunkim.questionroom.db.DBUtil;
-import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 
 /**
@@ -26,20 +22,17 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
  */
 public class QuestionListAdapter extends DatabaseListAdapter {
 // The mUsername for this client. We use this to indicate which messages originated from this user
-    MainActivity activity;
+    Context activity;
 
-    public QuestionListAdapter(Activity activity, int mLayout) {
-        super(mLayout, activity);
+    public QuestionListAdapter(Context context, int mLayout) {
+        super(context, mLayout);
+
         // Must be MainActivity
         assert (activity instanceof MainActivity);
-
-        this.activity = (MainActivity) activity;
     }
 
     @Override
     protected void populateView(View view, Question question) {
-        DBUtil dbUtil = activity.getDbutil();
-
         // Map a Chat object to an entry in our listview
         String[] likesArr = question.getLikes();
         int likes = 0;
@@ -71,11 +64,11 @@ public class QuestionListAdapter extends DatabaseListAdapter {
             msgString += "<font color=red>NEW </font>";
         }
         msgString += question.getText();
-        ((TextView) view.findViewById(R.id.head_desc)).setText(Html.fromHtml(msgString + " (" + question.getAnswers().length + ")"));
+        ((TextView) view.findViewById(R.id.head_desc)).setText(Html.fromHtml(msgString + " (" + question.getAnswers().size() + ")"));
 
         final ListView answerList = ((ListView) view.findViewById(R.id.answerlist));
 
-        answerList.setAdapter(new AnswerListAdapter(view.getContext(), R.id.answerlist,question.getAnswers()));
+        answerList.setAdapter(new AnswerListAdapter(context, R.id.answerlist,question.getAnswers()));
 
         // http://stackoverflow.com/questions/8743120/how-to-grey-out-a-button
         // grey out our button
@@ -90,7 +83,7 @@ public class QuestionListAdapter extends DatabaseListAdapter {
             iv.setImageDrawable(null);
 
             if (view.getTag() == question.getId()) {
-                Picasso.with(activity.getApplicationContext())
+                Picasso.with(context)
                         .load(question.getImageURL())
                         .tag(question.getId())
                         .into(iv);
