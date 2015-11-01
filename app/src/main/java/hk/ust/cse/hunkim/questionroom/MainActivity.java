@@ -24,12 +24,6 @@ public class MainActivity extends ListActivity {
     private String roomName;
     private QuestionListAdapter mChatListAdapter;
 
-    private DBUtil dbutil;
-
-    public DBUtil getDbutil() {
-        return dbutil;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,10 +70,6 @@ public class MainActivity extends ListActivity {
                 selectImage();
             }
         });
-
-        // get the DB Helper
-        DBHelper mDbHelper = new DBHelper(this);
-        dbutil = new DBUtil(mDbHelper);
     }
 
     @Override
@@ -180,12 +170,12 @@ public class MainActivity extends ListActivity {
     }
 
     public void updateLikes(String id) {
-        if (dbutil.contains(id)) {
+        /* TODO: Update Likes
+        if (dbUtil.contains(id)) {
             Log.e("Dupkey", "Key is already in the DB!");
             return;
         }
 
-        /* TODO: Update Likes
         final Firebase echoRef = mFirebaseRef.child(id).child("echo");
         echoRef.addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -203,11 +193,11 @@ public class MainActivity extends ListActivity {
                     }
                 }
         );
-        */
 
 
         // Update SQLite DB
-        dbutil.put(id);
+        dbUtil.put(id);
+        */
     }
 
     public void Close(View view) {
