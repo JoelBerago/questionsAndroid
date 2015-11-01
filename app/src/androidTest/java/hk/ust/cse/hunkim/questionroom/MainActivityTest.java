@@ -46,11 +46,12 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
 
     @MediumTest
     public void testPostingMessage() {
-        Activity activity = startActivity(mStartIntent, null, null);
+        MainActivity activity = startActivity(mStartIntent, null, null);
         mButton = (ImageButton) activity.findViewById(R.id.sendButton);
         final TextView text = (TextView) activity.findViewById(R.id.messageInput);
         final ListView lView = getActivity().getListView();
 
+        //assertTrue( activity.hasAdapter());
         assertNotNull(mButton);
         assertNotNull(text);
         assertNotNull(lView);
@@ -80,6 +81,7 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
         getInstrumentation().waitForIdleSync();
 
         text.setText("This is test!");
+
         mButton.performClick();
 
         // TODO: How to confirm a new text is posted?
