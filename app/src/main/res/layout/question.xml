@@ -24,7 +24,38 @@
 
     <ListView
         android:id="@+id/answerlist"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView" />
+
+    <LinearLayout
+        android:id="@+id/answerlistFooter"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/answerlist"
+        android:paddingLeft="20dp" >
+
+        <ImageButton
+            android:id="@+id/answerloadImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_gallery"/>
+
+        <EditText
+            android:id="@+id/answermessageInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="textShortMessage"
+            android:lines="1"
+            android:singleLine="true"
+            android:hint="Reply an answer"/>
+
+        <ImageButton
+            android:id="@+id/answersendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_send" />
+    </LinearLayout>
 </RelativeLayout>

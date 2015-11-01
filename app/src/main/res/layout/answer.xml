@@ -25,7 +25,38 @@
 
     <ListView
         android:id="@+id/followuplist"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView" />
+
+    <LinearLayout
+        android:id="@+id/followuplistFooter"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/followuplist"
+        android:paddingLeft="40dp">
+
+        <ImageButton
+            android:id="@+id/followupuploadImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_gallery"/>
+
+        <EditText
+            android:id="@+id/followupmessageInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="textShortMessage"
+            android:lines="1"
+            android:singleLine="true"
+            android:hint="Give follow-up reply"/>
+
+        <ImageButton
+            android:id="@+id/followupsendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_send" />
+    </LinearLayout>
 </RelativeLayout>
