@@ -120,15 +120,40 @@ public class QuestionListAdapter extends DatabaseListAdapter{
         Button replyBtn = (Button) view.findViewById(R.id.reply);
         replyBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ((ListView)view.findViewById(R.id.answerlist)).setVisibility(View.VISIBLE);
-                view.findViewById(R.id.answerlistFooter).setVisibility(View.VISIBLE);
+                LinearLayout answerFooter = (LinearLayout) view.findViewById(R.id.answerlistFooter);
+
+                if (answerFooter.getVisibility() != View.VISIBLE) {
+                    answerFooter.setVisibility(View.VISIBLE);
+                } else {
+                    answerFooter.setVisibility(View.GONE);
+                }
+//                        ((ListView) view.findViewById(R.id.answerlist)).setVisibility(View.VISIBLE);
+//                view.findViewById(R.id.answerlistFooter).setVisibility(View.VISIBLE);
             }
+        });
 
+        Button collapseBtn = (Button) view.findViewById(R.id.btn_collapse);
+        collapseBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                ListView answerList = (ListView) view.findViewById(R.id.answerlist);
+                Button collapseBtn = (Button) view.findViewById(R.id.btn_collapse);
 
+                if (answerList.getVisibility() != View.VISIBLE) {
+                    answerList.setVisibility(View.VISIBLE);
+                    collapseBtn.setText("Collapse");
+
+                } else {
+                    answerList.setVisibility(View.GONE);
+                    collapseBtn.setText("Expand");
+                }
+//                        ((ListView) view.findViewById(R.id.answerlist)).setVisibility(View.VISIBLE);
+//                view.findViewById(R.id.answerlistFooter).setVisibility(View.VISIBLE);
+            }
         });
 
         view.setTag(question.getId());  // store key in the view
     }
+
 
     @Override
     protected void sortModels(List<Question> mModels) {
