@@ -75,12 +75,12 @@ public abstract class BaseQuestion implements Comparable<BaseQuestion> {
         }
 
 
-        if (this.likes == other.likes) {
-            if (other.unixTime == this.unixTime) {
-                return 0;
-            }
-            return other.unixTime > this.unixTime ? -1 : 1;
-        }
+//        if (this.likes == other.likes) {
+//            if (other.unixTime == this.unixTime) {
+//                return 0;
+//            }
+//            return other.unixTime > this.unixTime ? -1 : 1;
+//        }
 
         int thisLikes = 0;
         int otherLikes = 0;
