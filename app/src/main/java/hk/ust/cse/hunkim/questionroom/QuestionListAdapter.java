@@ -9,6 +9,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -38,7 +39,7 @@ public class QuestionListAdapter extends DatabaseListAdapter{
     }
 
     @Override
-    protected void populateView(View view, final Question question) {
+    protected void populateView(final View view, final Question question) {
         // Map a Chat object to an entry in our listview
         String[] likesArr = question.getLikes();
         int likes = 0;
@@ -116,7 +117,15 @@ public class QuestionListAdapter extends DatabaseListAdapter{
             });
         }
 
-        //Button replyBtn = (ImageView) view.findViewById(R.id.imageView);
+        Button replyBtn = (Button) view.findViewById(R.id.reply);
+        replyBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                ((ListView)view.findViewById(R.id.answerlist)).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.answerlistFooter).setVisibility(View.VISIBLE);
+            }
+
+
+        });
 
         view.setTag(question.getId());  // store key in the view
     }
