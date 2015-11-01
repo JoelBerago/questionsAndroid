@@ -98,25 +98,40 @@
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/close"
+        android:layout_above="@+id/mainActivityFooter"
         android:layout_below="@+id/listFooter"
         android:transcriptMode="alwaysScroll" />
 
 
-
-
-
-
-
-    <Button
-        android:id="@+id/close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="Close"
-        android:text = "Quit Room"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:id="@+id/mainActivityFooter"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        />
+        android:background="#333">
+
+
+        <Button
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:onClick="Close"
+            android:text = "&lt; Leave Room  "
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:background="#eee" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Room Name"
+            android:id="@+id/txt_room_name"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:textColor="#fff"
+            android:textSize="20dp" />
+    </RelativeLayout>
 
 
 </RelativeLayout>

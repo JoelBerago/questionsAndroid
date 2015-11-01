@@ -40,6 +40,8 @@ public class MainActivity extends ListActivity {
         Intent intent = getIntent();
         assert (intent != null);
 
+        TextView txt=(TextView) findViewById(R.id.txt_room_name);
+
         // Make it a bit more reliable
         roomName = intent.getStringExtra(JoinActivity.ROOM_NAME).toLowerCase();
         if (roomName == null || roomName.length() == 0) {
@@ -49,6 +51,7 @@ public class MainActivity extends ListActivity {
             mChatListAdapter = new QuestionListAdapter(this, R.layout.question);
 
         setTitle("Room name: " + roomName);
+        txt.setText("ROOM: "+roomName);
 
         // Resize your main character using Picasso
         ImageView iv = (ImageView) findViewById(R.id.profileCharacter);
