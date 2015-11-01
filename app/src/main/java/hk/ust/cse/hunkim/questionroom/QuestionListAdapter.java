@@ -53,7 +53,7 @@ public class QuestionListAdapter extends DatabaseListAdapter{
                     @Override
                     public void onClick(View view) {
                         MainActivity m = (MainActivity) view.getContext();
-                        m.updateLikes((String) view.getTag());
+                        //m.updateLikes((String) view.getTag());        //likes are not yet implemented. -JT
                     }
                 }
         );
@@ -66,9 +66,9 @@ public class QuestionListAdapter extends DatabaseListAdapter{
         // Set question Text.
         String msgString = "";
         question.updateNewQuestion();
-        if (question.isNewQuestion()) {
+        /*if (question.isNewQuestion()) {               //timestamp not yet implemented. -JT
             msgString += "<font color=red>NEW </font>";
-        }
+        }*/
         msgString += question.getText();
         ((TextView) view.findViewById(R.id.head_desc)).setText(Html.fromHtml(msgString + " (" + question.getAnswers().size() + ")"));
 

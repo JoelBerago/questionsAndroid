@@ -115,13 +115,13 @@ public class MainActivity extends ListActivity {
         */
     }
 
-    //temporary, for testing
+    /*/temporary, for testing
     public boolean hasAdapter()
     {
         if (mChatListAdapter==null)
             return false;
         return true;
-    }
+    }*/
 
     @Override
     public void onStop() {
@@ -155,7 +155,7 @@ public class MainActivity extends ListActivity {
 
         startActivityForResult(galleryIntent, ImageHelper.RESULT_LOAD_IMG);
     }
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ImageHelper.RESULT_LOAD_IMG && resultCode == RESULT_OK && data != null) {
@@ -167,7 +167,7 @@ public class MainActivity extends ListActivity {
             ImageHelper.picturePath = cursor.getString(columnIndex);
             cursor.close();
         }
-    }
+    }*/
 
     public void updateLikes(String id) {
         /* TODO: Update Likes
@@ -193,7 +193,6 @@ public class MainActivity extends ListActivity {
                     }
                 }
         );
-
 
         // Update SQLite DB
         dbUtil.put(id);

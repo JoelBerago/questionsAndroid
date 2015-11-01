@@ -12,6 +12,9 @@ public class Answer extends BaseQuestion {
     @JsonProperty("follow_ups") private List<FollowUp> follow_ups;
 
     public List<FollowUp> getFollow_ups() {
+        if (this.follow_ups == null) {
+        this.follow_ups = new ArrayList<FollowUp>();
+    }
         return follow_ups;
     }
 
