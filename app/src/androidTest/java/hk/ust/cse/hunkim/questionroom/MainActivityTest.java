@@ -30,7 +30,7 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
         // into your Activity. But do not call startActivity()
         // until the actual test methods.
         mStartIntent = new Intent(Intent.ACTION_MAIN);
-        mStartIntent.putExtra(JoinActivity.ROOM_NAME, "all");
+        mStartIntent.putExtra(JoinActivity.ROOM_NAME, "");
     }
 
     @MediumTest
@@ -80,7 +80,11 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
 
         getInstrumentation().waitForIdleSync();
 
-        text.setText("This is test!");
+        text.setText("This is a test!");
+
+        mButton.performClick();
+
+        text.setText(""); //handle null output without error
 
         mButton.performClick();
 

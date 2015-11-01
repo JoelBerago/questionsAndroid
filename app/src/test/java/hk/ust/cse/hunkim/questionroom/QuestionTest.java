@@ -18,7 +18,7 @@ public class QuestionTest  extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        q = new Question("Dummy", "Hello? This is very nice");
+        q = new Question("", "Hello? This is very nice");
     }
 
     @SmallTest
@@ -27,7 +27,8 @@ public class QuestionTest  extends TestCase {
         String[] strHead = {
                 "Hello? This is very nice", "Hello?",
                 "This is cool! Really?", "This is cool!",
-                "How.about.this? Cool", "How.about.this?"
+                "How.about.this? Cool", "How.about.this?",
+                ""
         };
 
         for (int i = 0; i < strHead.length; i++) {
