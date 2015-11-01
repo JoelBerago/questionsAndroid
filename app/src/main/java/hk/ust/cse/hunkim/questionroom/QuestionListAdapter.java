@@ -39,7 +39,6 @@ public class QuestionListAdapter extends DatabaseListAdapter{
 
     @Override
     protected void populateView(View view, final Question question) {
-        DBUtil dbUtil = activity.getDbutil();
         // Map a Chat object to an entry in our listview
         String[] likesArr = question.getLikes();
         int likes = 0;

@@ -29,13 +29,14 @@ public class FollowupListAdapter extends ArrayAdapter<FollowUp> {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.followup, parent, false);
-        TextView textView = (TextView) rowView.findViewById(R.id.head_desc_followup);
+        }
+            TextView textView = (TextView) convertView.findViewById(R.id.head_desc_followup);
 
-        textView.setText(values[position].getText());
-        return rowView;
+            textView.setText(values.get(position).getText());
+            return convertView;
     }
 
     @Override
