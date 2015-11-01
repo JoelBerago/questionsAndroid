@@ -28,4 +28,20 @@ public interface QuestionService {
 
     @GET("v1/questions/room/{room}")
     Call<List<Question>> getQuestions(@Path("room") String room);
+
+    @FormUrlEncoded
+    @POST("v1/answer")
+    Call<ErrorIdResponse> createAnswer(
+            @Field("id") String id,
+            @Field("text") String text,
+            @Field("imageURL") String imageURL
+    );
+
+    @FormUrlEncoded
+    @POST("v1/followup")
+    Call<ErrorIdResponse> createFollowup(
+            @Field("id") String id,
+            @Field("text") String text,
+            @Field("imageURL") String imageURL
+    );
 }
