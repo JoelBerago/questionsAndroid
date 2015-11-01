@@ -28,13 +28,13 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
  */
 public class QuestionListAdapter extends DatabaseListAdapter{
 // The mUsername for this client. We use this to indicate which messages originated from this user
-    Context activity;
+    //Context activity;
 
     public QuestionListAdapter(Context context, int mLayout) {
         super(context, mLayout);
 
         // Must be MainActivity
-        assert (activity instanceof MainActivity);
+        //assert (activity instanceof MainActivity);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class QuestionListAdapter extends DatabaseListAdapter{
         if (!question.getImageURL().equals("")) {
             Picasso.with(view.getContext())
                     .load(question.getImageURL())
-                    .resize(240, 140)   // image can stretch up to 240x140 max.
+                    .resize(400, 240)   // image can stretch up to 240x140 max.
                     .centerInside()
                     .into(iv);
             // upon clicking image view, pop up dialog
@@ -102,7 +102,7 @@ public class QuestionListAdapter extends DatabaseListAdapter{
                     Log.e("Debug", "clicked");
                     //Toast.makeText(activity, question.getImageURL(), Toast.LENGTH_SHORT).show();
                     if (!question.getImageURL().equals("")) {
-                        Dialog dialog = new Dialog(activity);
+                        Dialog dialog = new Dialog(context);
                         dialog.setTitle("View image");
                         dialog.setContentView(R.layout.imageview_dialog);
                         ImageView iv = (ImageView) dialog.findViewById(R.id.dialog_image);
@@ -115,6 +115,8 @@ public class QuestionListAdapter extends DatabaseListAdapter{
                 }
             });
         }
+
+        //Button replyBtn = (ImageView) view.findViewById(R.id.imageView);
 
         view.setTag(question.getId());  // store key in the view
     }

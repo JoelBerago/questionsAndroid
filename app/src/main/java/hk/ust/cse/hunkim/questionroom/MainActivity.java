@@ -12,8 +12,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
@@ -45,6 +48,15 @@ public class MainActivity extends ListActivity {
             mChatListAdapter = new QuestionListAdapter(this, R.layout.question);
 
         setTitle("Room name: " + roomName);
+
+        // Resize your main character using Picasso
+        ImageView iv = (ImageView) findViewById(R.id.profileCharacter);
+        Picasso.with(this)
+                .load(R.drawable.temp_char)
+                .resize(150, 240)   // image can stretch up to 240x140 max.
+                .centerInside()
+                .into(iv);
+
         // Setup our input methods. Enter key on the keyboard or pushing the send button
         EditText inputText = (EditText) findViewById(R.id.messageInput);
         inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {

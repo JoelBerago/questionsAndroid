@@ -4,22 +4,75 @@
     android:layout_height="wrap_content"
     android:paddingLeft="40dp" >
 
-    <Button
-        android:id="@+id/echo"
-        android:drawableLeft="@drawable/like24"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/head_desc_followup"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/echo" />
 
-    <ImageView
-        android:id="@+id/imageView"
+    <LinearLayout
+        android:id="@+id/followupContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/echo"
-        android:gravity="center_horizontal"/>
+        android:orientation="horizontal">
+        <LinearLayout
+            android:id="@+id/followupUserContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:background="@color/background_material_light">
+
+            <ImageView
+                android:id="@+id/followupUserCharacter"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/temp_char"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Anonymous\nLv1"
+                android:id="@+id/questionUserClass" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/followupTextContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/head_desc_followup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/questionUserContainer"
+                android:layout_marginLeft="5dp"
+                android:textSize="16dp"
+                android:textColor="#000000" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" />
+            <LinearLayout
+                android:id="@+id/followupLikeContainer"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:gravity="right"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/echo"
+                    android:layout_height="wrap_content"
+                    android:layout_width="60dp"
+                    />
+                <Button
+                    android:id="@+id/reply"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="reply"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+    </LinearLayout>
 </RelativeLayout>
