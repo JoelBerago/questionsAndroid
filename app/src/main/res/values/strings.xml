@@ -9,5 +9,8 @@
 
     <string name="error_invalid_room_name">Use only alphanumeric characters</string>
     <string name="error_field_required">This field is required</string>
+    <string name="joinRoomMessage">Ask questions, gain experience point, and level up your character!
+        Simply join a question room using a simple name (such as comp3111). Be part of the league now!
+    </string>
 
 </resources>
