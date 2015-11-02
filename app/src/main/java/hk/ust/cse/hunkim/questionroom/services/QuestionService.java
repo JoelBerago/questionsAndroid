@@ -44,4 +44,11 @@ public interface QuestionService {
             @Field("text") String text,
             @Field("imageURL") String imageURL
     );
+
+    @FormUrlEncoded
+    @POST("v1/like")
+    Call<ErrorIdResponse> addLike(
+            @Field("id") String id,
+            @Field("user") String user
+    );
 }

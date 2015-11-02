@@ -45,7 +45,7 @@ public class QuestionListAdapter extends DatabaseListAdapter{
         int likes = 0;
         if (likesArr != null)
             likes = likesArr.length;
-        Button likeButton = (Button) view.findViewById(R.id.echo);
+        final Button likeButton = (Button) view.findViewById(R.id.echo);
         likeButton.setText("" + likes);
         likeButton.setTextColor(Color.BLUE);
         likeButton.setTag(question.getId()); // Set tag for button
@@ -54,7 +54,7 @@ public class QuestionListAdapter extends DatabaseListAdapter{
                     @Override
                     public void onClick(View view) {
                         MainActivity m = (MainActivity) view.getContext();
-                        m.updateLikes((String) view.getTag());
+                        m.updateLikes(question);
                     }
                 }
         );

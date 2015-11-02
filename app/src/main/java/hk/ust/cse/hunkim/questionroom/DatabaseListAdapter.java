@@ -77,6 +77,34 @@ public abstract class DatabaseListAdapter extends BaseAdapter {
         );
     }
 
+    //---------add like & push to database
+    public void add_like(final Question question, final String user){
+        QuestionService service=retrofit.create(QuestionService.class);
+
+        Call<ErrorIdResponse> response=service.addLike(
+            question.getId(),user
+        );
+
+        Log.i("add_like","ADDED");
+        Log.i("add_like",question.getId());
+        Log.i("add_like",user);
+
+        response.enqueue(new Callback<ErrorIdResponse>() {
+            @Override
+            public void onResponse(Response<ErrorIdResponse> response, Retrofit retrofit) {
+                question.addLikes(user);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.add_like():", t);
+            }
+        });
+
+    }
+    //--------------------------------------
+
     public void push(final Question question) {
         QuestionService service = retrofit.create(QuestionService.class);
 
@@ -152,6 +180,8 @@ public abstract class DatabaseListAdapter extends BaseAdapter {
         });
     }
 
+
+
     public void pull(final String roomName) {
         QuestionService service = retrofit.create(QuestionService.class);
         Call<List<Question>> response;
@@ -177,6 +207,8 @@ public abstract class DatabaseListAdapter extends BaseAdapter {
             }
         });
     }
+
+
 
     public void cleanup() {
         mQuestionList.clear();

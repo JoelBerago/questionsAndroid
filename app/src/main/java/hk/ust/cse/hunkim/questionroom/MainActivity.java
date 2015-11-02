@@ -51,7 +51,7 @@ public class MainActivity extends ListActivity {
             mChatListAdapter = new QuestionListAdapter(this, R.layout.question);
 
         setTitle("Room name: " + roomName);
-        txt.setText("ROOM: "+roomName);
+        txt.setText("ROOM: " + roomName);
 
         // Resize your main character using Picasso
         ImageView iv = (ImageView) findViewById(R.id.profileCharacter);
@@ -205,8 +205,11 @@ public class MainActivity extends ListActivity {
         }
     }
 
-    public void updateLikes(String id) {
-        /* TODO: Update Likes
+    public void updateLikes(Question question) {
+        // TODO: Update Likes
+         mChatListAdapter.add_like(question,"mika");
+
+         /*
         if (dbUtil.contains(id)) {
             Log.e("Dupkey", "Key is already in the DB!");
             return;
@@ -234,6 +237,11 @@ public class MainActivity extends ListActivity {
         // Update SQLite DB
         dbUtil.put(id);
         */
+
+
+
+
+
     }
 
     public void Close(View view) {

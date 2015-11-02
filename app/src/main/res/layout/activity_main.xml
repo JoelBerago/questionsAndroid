@@ -99,8 +99,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/mainActivityFooter"
-        android:layout_below="@+id/listFooter"
-        android:transcriptMode="alwaysScroll" />
+        android:layout_below="@+id/listFooter" />
 
 
     <RelativeLayout
@@ -120,7 +119,7 @@
             android:text = "&lt; Leave Room  "
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:background="#eee" />
+            android:background="#aaa" />
 
         <TextView
             android:layout_width="wrap_content"
