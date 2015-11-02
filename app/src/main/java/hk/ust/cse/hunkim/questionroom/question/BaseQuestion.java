@@ -1,8 +1,12 @@
 package hk.ust.cse.hunkim.questionroom.question;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Joel on 29/10/2015.
@@ -113,7 +117,22 @@ public abstract class BaseQuestion implements Comparable<BaseQuestion> {
         return likes;
     }
 
-    public void setLikes(String[] likes) {
-        this.likes = likes;
+    public void setLikes(String[] l) {
+        this.likes = new String[l.length];
+        this.likes=l;
+    }
+
+    public void addLikes(String user){
+        Log.i("add_like",String.valueOf(likes.length));
+        String[] new_arr = new String[likes.length + 1];
+        if(likes.length!=0) {
+            for (int i = 0; i < likes.length; i++) {
+                new_arr[i] = likes[i];
+            }
+        }
+        new_arr[likes.length]=user;
+        setLikes(new_arr);
+        Log.i("add_like", String.valueOf(likes.length));
+
     }
 }

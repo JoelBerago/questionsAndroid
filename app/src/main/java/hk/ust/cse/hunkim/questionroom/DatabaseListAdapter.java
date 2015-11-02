@@ -27,9 +27,14 @@ import java.util.List;
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
 import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
+import hk.ust.cse.hunkim.questionroom.question.Answer;
 import hk.ust.cse.hunkim.questionroom.question.BaseQuestion;
+import hk.ust.cse.hunkim.questionroom.question.FollowUp;
+import hk.ust.cse.hunkim.questionroom.question.Question;
+import hk.ust.cse.hunkim.questionroom.services.ErrorIdResponse;
 import hk.ust.cse.hunkim.questionroom.services.ImageResponse;
 import hk.ust.cse.hunkim.questionroom.services.PhotoService;
+import hk.ust.cse.hunkim.questionroom.services.QuestionService;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.JacksonConverterFactory;
@@ -46,15 +51,15 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
             .addConverterFactory(JacksonConverterFactory.create())
             .build();
 
-    //protected DBUtil dbUtil;
+    protected DBUtil dbUtil;
     protected Context context;
     private int mLayoutID;
     private LayoutInflater inflater;
     protected List<T> mQuestionList;
 
     public DatabaseListAdapter(Context context, int mLayoutID, List<T> mQuestionList) {
-        //DBHelper mDbHelper = new DBHelper(context);
-        //dbUtil = new DBUtil(mDbHelper);
+        DBHelper mDbHelper = new DBHelper(context);
+        dbUtil = new DBUtil(mDbHelper);
 
         this.context = context;
         this.mLayoutID = mLayoutID;
@@ -88,7 +93,142 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         );
     }
 
+//<<<<<<< HEAD
     public abstract void push(final T basequestion, String baseID);
+//=======
+    //---------add like & push to database
+    public void add_like(final Question question, final String user){
+        QuestionService service=retrofit.create(QuestionService.class);
+
+        Call<ErrorIdResponse> response=service.addLike(
+            question.getId(),user
+        );
+
+        Log.i("add_like","ADDED");
+        Log.i("add_like",question.getId());
+        Log.i("add_like",user);
+
+        response.enqueue(new Callback<ErrorIdResponse>() {
+            @Override
+            public void onResponse(Response<ErrorIdResponse> response, Retrofit retrofit) {
+                question.addLikes(user);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.add_like():", t);
+            }
+        });
+
+    }
+    //--------------------------------------
+
+    public void push(final Question question) {
+        QuestionService service = retrofit.create(QuestionService.class);
+
+        Call<ErrorIdResponse> response = service.createQuestion(
+                question.getText(),
+                question.getImageURL(),
+                question.getRoom()
+        );
+
+        response.enqueue(new Callback<ErrorIdResponse>() {
+            @Override
+            public void onResponse(Response<ErrorIdResponse> response, Retrofit retrofit) {
+                question.setId(response.body().id);
+                mQuestionList.add((T) question);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.push():", t);
+            }
+        });
+    }
+
+    public void push(final int questionIndex, final Answer answer) {
+        QuestionService service = retrofit.create(QuestionService.class);
+        final Question question = (Question) mQuestionList.get(questionIndex);
+
+        // TODO: Check if question is null?
+        Call<ErrorIdResponse> response = service.createQuestion(
+                question.getId(),
+                answer.getText(),
+                answer.getImageURL()
+        );
+
+        response.enqueue(new Callback<ErrorIdResponse>() {
+            @Override
+            public void onResponse(Response<ErrorIdResponse> response, Retrofit retrofit) {
+                answer.setId(response.body().id);
+                question.addAnswer(answer);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.push():", t);
+            }
+        });
+    }
+
+    public void push(int questionIndex, final int answerIndex, final FollowUp followup) {
+        QuestionService service = retrofit.create(QuestionService.class);
+
+        final Question question = (Question) mQuestionList.get(questionIndex);
+        Call<ErrorIdResponse> response = service.createQuestion(
+                question.getAnswer(answerIndex).getId(),
+                followup.getText(),
+                followup.getImageURL()
+        );
+
+        response.enqueue(new Callback<ErrorIdResponse>() {
+            @Override
+            public void onResponse(Response<ErrorIdResponse> response, Retrofit retrofit) {
+                followup.setId(response.body().id);
+                question.addFollowup(answerIndex, followup);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.push():", t);
+            }
+        });
+    }
+
+
+
+    public void pull(final String roomName) {
+        QuestionService service = retrofit.create(QuestionService.class);
+        Call<List<Question>> response;
+
+        if (roomName == "")
+            response = service.getQuestions();
+        else
+            response = service.getQuestions(roomName);
+
+        response.enqueue(new Callback<List<Question>>() {
+            @Override
+            public void onResponse(Response<List<Question>> response, Retrofit retrofit) {
+                for (Question q: response.body()) {
+                    mQuestionList.add((T) q);
+                }
+
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.pull():", t);
+            }
+        });
+    }
+//>>>>>>> UI_enhancement
+
+
 
     public void cleanup() {
         mQuestionList.clear();
@@ -154,7 +294,7 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
                     @Override
                     public void onClick(View view) {
                         MainActivity m = (MainActivity) view.getContext();
-                        m.updateLikes((String) view.getTag());
+                        m.updateLikes((Question) baseQuestion);
                     }
                 }
         );

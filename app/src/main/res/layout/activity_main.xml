@@ -54,7 +54,7 @@
                 android:gravity="top|left"
                 android:layout_weight="1"
                 android:scrollbars="vertical"
-                android:hint="Add new question/answer/reply. Press the button you want to send to."
+                android:hint="Add new question"
                 android:textColor="#fff"
                 android:textColorHint="#555" />
 
@@ -69,25 +69,28 @@
 
 
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="2dp"
                     android:id="@+id/selected_picture"
-                    android:layout_weight="0.32"
-                    android:layout_gravity="center_vertical"/>
+                    android:layout_weight="0.33"
+                    android:layout_gravity="center_vertical"
+                    android:onClick="imageClicked" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/uploadImage"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Upload Image"
-                    android:onClick="selectImage"/>
+                    android:src="@android:drawable/ic_menu_gallery"
+                    android:layout_weight="0.33"
+                    android:onClick="selectImage" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/sendButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Post Question"/>
+                    android:src="@android:drawable/ic_menu_send"
+                    android:layout_weight="0.33" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -120,7 +123,7 @@
             android:text = "&lt; Leave Room  "
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:background="#eee" />
+            android:background="#aaa" />
 
         <TextView
             android:layout_width="wrap_content"
