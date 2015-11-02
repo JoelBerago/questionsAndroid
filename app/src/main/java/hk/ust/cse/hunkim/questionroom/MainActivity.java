@@ -1,7 +1,9 @@
 package hk.ust.cse.hunkim.questionroom;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.DataSetObserver;
@@ -195,13 +197,42 @@ public class MainActivity extends ListActivity {
             if (!ImageHelper.picturePath.equals("")) {
                 Picasso.with(this)
                         .load("file://"+ImageHelper.picturePath)
-                        .placeholder(R.drawable.like24)
+                        .placeholder(R.drawable.firebase_logo)
                         .resize(200, 200)   // image can stretch up to 240x140 max.
                         .centerInside()
                         .into(iv);
                 Log.i("picture", "should be displayed");
             }
 
+        }
+    }
+
+    public void imageClicked(View view){
+        final ImageView iv = (ImageView) findViewById(R.id.selected_picture);
+        if(!(iv.getDrawable()==null)){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Remove Image?")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        //delete image
+                        public void onClick(DialogInterface dialog, int id) {
+                            ImageHelper.picturePath="";
+                            iv.setImageBitmap(null);
+                            iv.setImageDrawable(null);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        //do nothing
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        else{
+            Log.i("image","no images selected");
+            return;
         }
     }
 
@@ -237,9 +268,6 @@ public class MainActivity extends ListActivity {
         // Update SQLite DB
         dbUtil.put(id);
         */
-
-
-
 
 
     }
