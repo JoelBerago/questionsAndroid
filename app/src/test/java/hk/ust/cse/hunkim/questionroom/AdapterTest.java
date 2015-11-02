@@ -2,13 +2,9 @@ package hk.ust.cse.hunkim.questionroom;
 
 import android.content.Intent;
 import android.test.ActivityUnitTestCase;
-import android.view.View;
-import android.widget.TextView;
 
-import junit.framework.TestCase;
+import java.util.ArrayList;
 
-import hk.ust.cse.hunkim.questionroom.question.Answer;
-import hk.ust.cse.hunkim.questionroom.question.FollowUp;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 
 
@@ -17,7 +13,7 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
  */
 
 public class AdapterTest extends ActivityUnitTestCase<MainActivity> {
-    Question q;
+    Question question;
     private Intent mStartIntent;
 
     public AdapterTest()  {
@@ -32,7 +28,7 @@ public class AdapterTest extends ActivityUnitTestCase<MainActivity> {
 
     public void testDatabaseListAdapter() {
         MainActivity ma = startActivity(mStartIntent, null, null);
-        QuestionListAdapter q = new QuestionListAdapter(ma, R.layout.question);
+        QuestionListAdapter q = new QuestionListAdapter(ma, R.layout.question, new ArrayList<Question>());
         Question ques = new Question();
         ques.setImageURL("");
     }

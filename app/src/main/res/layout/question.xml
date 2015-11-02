@@ -1,47 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
-
-    <RelativeLayout
-        android:id="@+id/questionLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
-        <Button
-            android:id="@+id/echo"
-            android:drawableLeft="@drawable/like24"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/head_desc"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/echo"
-            android:layout_toLeftOf="@+id/sendButton"/>
-
-        <Button
-            android:id="@+id/sendButton"
+    android:layout_height="wrap_content" >
+    <LinearLayout
+        android:id="@+id/questionContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:id="@+id/questionUserContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="answer"
-            android:layout_alignParentRight="true" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:background="@color/background_material_light">
 
-        <ImageView
-            android:id="@+id/imageView"
+            <ImageView
+                android:id="@+id/questionUserCharacter"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/temp_char"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Anonymous\nLv1"
+                android:textSize="9dp"
+                android:id="@+id/questionUserClass" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/questionTextContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/head_desc"
-            android:gravity="center_horizontal" />
-    </RelativeLayout>
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/head_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/questionUserContainer"
+                android:layout_marginLeft="5dp"
+                android:textSize="16dp"
+                android:textColor="#000000" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" />
+            <RelativeLayout
+
+                android:id="@+id/questionLikeContainer"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:gravity="left"
+                android:orientation="horizontal">
+
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:id="@+id/echo"
+                    android:layout_height="wrap_content"
+                    android:layout_width="60dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:textSize="10dp" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:id="@+id/reply"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Answer"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/echo"
+                    android:textSize="10dp" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Expand"
+                    android:id="@+id/btn_collapse"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/reply"
+                    android:textSize="10dp" />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+
 
     <ListView
         android:id="@+id/answerlist"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/questionLayout"
-        android:nestedScrollingEnabled="true"/>
-</LinearLayout>
+        android:layout_below="@+id/questionContainer"
+        android:visibility="gone"
+        android:layout_marginLeft="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:id="@+id/answerlistFooter"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/answerlist"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:paddingLeft="20dp" >
+
+
+
+        <EditText
+            android:id="@+id/answermessageInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="textShortMessage"
+            android:lines="1"
+            android:singleLine="true"
+            android:hint="Reply an answer"/>
+        <ImageButton
+            android:id="@+id/answerloadImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_gallery"/>
+        <ImageButton
+            android:id="@+id/answersendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_send" />
+    </LinearLayout>
+</RelativeLayout>

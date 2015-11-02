@@ -7,17 +7,20 @@ import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Question;
@@ -38,6 +41,8 @@ public class MainActivity extends ListActivity {
         Intent intent = getIntent();
         assert (intent != null);
 
+        TextView txt=(TextView) findViewById(R.id.txt_room_name);
+
         // Make it a bit more reliable
         roomName = intent.getStringExtra(JoinActivity.ROOM_NAME).toLowerCase();
         if (roomName == null || roomName.length() == 0) {
@@ -47,6 +52,15 @@ public class MainActivity extends ListActivity {
             mChatListAdapter = new QuestionListAdapter(this, R.layout.question, new ArrayList<Question>());
 
         setTitle("Room name: " + roomName);
+        txt.setText("ROOM: "+roomName);
+
+        // Resize your main character using Picasso
+        ImageView iv = (ImageView) findViewById(R.id.profileCharacter);
+        Picasso.with(this)
+                .load(R.drawable.temp_char)
+                .resize(150, 240)   // image can stretch up to 240x140 max.
+                .centerInside()
+                .into(iv);
 
         // Setup our input methods. Enter key on the keyboard or pushing the send button
         final EditText inputText = (EditText) findViewById(R.id.messageInput);
@@ -128,6 +142,7 @@ public class MainActivity extends ListActivity {
 
     public void sendQuestion(View view) {
         EditText inputText = (EditText) findViewById(R.id.messageInput);
+
         String input = inputText.getText().toString();
         Question question;
         if (!input.equals("")) {
@@ -141,6 +156,8 @@ public class MainActivity extends ListActivity {
             } else {
                 mChatListAdapter.push(question, "");
             }
+
+
         }
     }
 
@@ -151,8 +168,9 @@ public class MainActivity extends ListActivity {
         // Start the Intent
 
         startActivityForResult(galleryIntent, ImageHelper.RESULT_LOAD_IMG);
+
     }
-    /*@Override
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ImageHelper.RESULT_LOAD_IMG && resultCode == RESULT_OK && data != null) {
@@ -163,8 +181,23 @@ public class MainActivity extends ListActivity {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             ImageHelper.picturePath = cursor.getString(columnIndex);
             cursor.close();
+
+            ImageView iv = (ImageView) findViewById(R.id.selected_picture);
+            iv.setImageBitmap(null);
+            iv.setImageDrawable(null);
+            Log.i("picture",ImageHelper.picturePath);
+            if (!ImageHelper.picturePath.equals("")) {
+                Picasso.with(this)
+                        .load("file://"+ImageHelper.picturePath)
+                        .placeholder(R.drawable.like24)
+                        .resize(200, 200)   // image can stretch up to 240x140 max.
+                        .centerInside()
+                        .into(iv);
+                Log.i("picture", "should be displayed");
+            }
+
         }
-    }*/
+    }
 
     public void updateLikes(String id) {
         /* TODO: Update Likes

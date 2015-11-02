@@ -46,13 +46,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
-class DatabaseListAdapterTest2 extends DatabaseListAdapter {
+class DatabaseListAdapterTest2 extends DatabaseListAdapter<Question> {
         public DatabaseListAdapterTest2(Context context, int mLayoutID){
-            super(context , mLayoutID);
+            super(context , mLayoutID, new ArrayList<Question>());
         }
 
     @Override
@@ -62,6 +63,11 @@ class DatabaseListAdapterTest2 extends DatabaseListAdapter {
 
     @Override
     protected void sortModels(List<Question> mModels) {
+
+    }
+
+    @Override
+    public void push(Question question, String string) {
 
     }
 }
@@ -556,14 +562,14 @@ public class DatabaseListAdapterTest  extends ActivityUnitTestCase<MainActivity>
 
         final Question q = new Question("test","hello");
         q.setRoom("all");
-        test.push(q);
+        test.push(q, "");
 
         Answer a = new Answer("hello too");
 
         //test.uploadPhoto("/data/local/1.png", q);
 
 
-        new QuestionListAdapter(context,0);
+        new QuestionListAdapter(context,0,new ArrayList<Question>());
         Question qu = new Question("all","zut");
         String[] s = {"moi","moi","et moi"};
         qu.setLikes(s);

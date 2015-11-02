@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
         final AnswerListAdapter mChatListAdapter = new AnswerListAdapter(view.getContext(), R.layout.answer, question, question.getAnswers());
         answerList.setAdapter(mChatListAdapter);
 
-        view.findViewById(R.id.sendButton).setOnClickListener(
+        view.findViewById(R.id.answersendButton).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -54,6 +56,39 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
                 answerList.setSelection(mChatListAdapter.getCount() - 1);
             }
         });
+
+
+        //-----EXPAND AND COLLAPSE (not nested)----------//
+        Button replyBtn = (Button) view.findViewById(R.id.reply);
+        replyBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                LinearLayout answerFooter = (LinearLayout) view.findViewById(R.id.answerlistFooter);
+
+                if (answerFooter.getVisibility() != View.VISIBLE) {
+                    answerFooter.setVisibility(View.VISIBLE);
+                } else {
+                    answerFooter.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        Button collapseBtn = (Button) view.findViewById(R.id.btn_collapse);
+        collapseBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                ListView answerList = (ListView) view.findViewById(R.id.answerlist);
+                Button collapseBtn = (Button) view.findViewById(R.id.btn_collapse);
+
+                if (answerList.getVisibility() != View.VISIBLE) {
+                    answerList.setVisibility(View.VISIBLE);
+                    collapseBtn.setText("Collapse");
+
+                } else {
+                    answerList.setVisibility(View.GONE);
+                    collapseBtn.setText("Expand");
+                }
+            }
+        });
+        //----------------------------------------------//
     }
 
     @Override
@@ -105,5 +140,11 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
                 Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.pull():", t);
             }
         });
+    }
+
+
+    @Override
+    protected void sortModels(List<Question> mModels) {
+        Collections.sort(mModels);
     }
 }

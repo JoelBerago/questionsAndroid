@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,26 +8,73 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="hk.ust.cse.hunkim.questionroom.JoinActivity">
+    tools:context="hk.ust.cse.hunkim.questionroom.JoinActivity"
+    android:background="#333">
 
-    <AutoCompleteTextView
-        android:id="@+id/room_name"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/joinRoomMessage"
+        android:id="@+id/joinRoomMessage"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:layout_marginBottom="60dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentStart="true"
+        android:textStyle="italic" />
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/prompt_room_name"
-        android:inputType="textShortMessage"
-        android:maxLines="1"
-        android:singleLine="true" />
+        android:text="League of Questions"
+        android:id="@+id/leagueOfQuestions"
+        android:textSize="38dp"
+        android:textStyle="bold"
+        android:textColor="#fff"
+        android:layout_above="@+id/joinRoomMessage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:gravity="center" />
 
-    <Button
-        android:id="@+id/join_button"
-        style="?android:textAppearanceSmall"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:onClick="attemptJoin"
-        android:text="@string/action_join"
-        android:textStyle="bold" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/joinRoomMessage"
+        android:id="@+id/linearLayout">
 
-</LinearLayout>
+        <AutoCompleteTextView
+            android:id="@+id/room_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prompt_room_name"
+            android:inputType="textShortMessage"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="#fff"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="12dp"
+            android:textColorHint="#aaa" />
 
+        <Button
+            android:id="@+id/join_button"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="attemptJoin"
+            android:text="@string/action_join"
+            android:textStyle="bold"
+            android:layout_alignBaseline="@+id/room_name"
+            android:layout_alignBottom="@+id/room_name"
+            android:layout_alignStart="@+id/room_name"
+            android:layout_gravity="center"
+            android:textColor="#222"
+            android:background="#ccc"
+            android:height="20dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

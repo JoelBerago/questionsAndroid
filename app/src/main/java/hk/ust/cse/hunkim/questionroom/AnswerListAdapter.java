@@ -42,7 +42,7 @@ public class AnswerListAdapter extends DatabaseListAdapter<Answer> {
         final FollowupListAdapter mChatListAdapter = new FollowupListAdapter(view.getContext(), R.layout.followup, answer, answer.getFollow_ups());
         followupList.setAdapter(mChatListAdapter);
 
-        view.findViewById(R.id.sendButton).setOnClickListener(
+        view.findViewById(R.id.followupsendButton).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
