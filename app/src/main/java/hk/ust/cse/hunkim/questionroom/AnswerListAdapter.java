@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -42,14 +43,11 @@ public class AnswerListAdapter extends DatabaseListAdapter<Answer> {
         final FollowupListAdapter mChatListAdapter = new FollowupListAdapter(view.getContext(), R.layout.followup, answer, answer.getFollow_ups());
         followupList.setAdapter(mChatListAdapter);
 
-        view.findViewById(R.id.followupsendButton).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mChatListAdapter.sendFollowup(view);
-                    }
-                }
-        );
+        view.findViewById(R.id.reply).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mChatListAdapter.sendFollowup(view);
+            }
+        });
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
