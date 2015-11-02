@@ -62,11 +62,22 @@
                 <Button
                     style="?android:attr/buttonStyleSmall"
                     android:id="@+id/echo"
-                    android:layout_height="wrap_content"
-                    android:layout_width="60dp"
+                    android:layout_height="25dp"
+                    android:layout_width="25dp"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:textSize="10dp" />
+                    android:layout_centerVertical="true"
+                    android:textSize="10dp"
+                    android:background="@drawable/like24" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/echo"
+                    android:text="0"
+                    android:layout_marginLeft="2dp"
+                    android:textAlignment="center"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/numberOfLikes" />
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
@@ -75,7 +86,8 @@
                     android:layout_width="wrap_content"
                     android:text="Answer"
                     android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@+id/echo"
+                    android:layout_toRightOf="@+id/numberOfLikes"
+                    android:layout_marginLeft="4dp"
                     android:textSize="10dp" />
 
                 <Button

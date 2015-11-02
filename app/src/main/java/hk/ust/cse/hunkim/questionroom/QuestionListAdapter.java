@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -46,9 +48,10 @@ public class QuestionListAdapter extends DatabaseListAdapter{
         if (likesArr != null)
             likes = likesArr.length;
         final Button likeButton = (Button) view.findViewById(R.id.echo);
-        likeButton.setText("" + likes);
-        likeButton.setTextColor(Color.BLUE);
-        likeButton.setTag(question.getId()); // Set tag for button
+        TextView numberOfLikes=(TextView) view.findViewById(R.id.numberOfLikes);
+        numberOfLikes.setText("" + likes);
+        //likeButton.setTextColor(Color.BLUE);
+        //likeButton.setTag(question.getId()); // Set tag for button
         likeButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
