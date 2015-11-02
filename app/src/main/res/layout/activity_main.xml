@@ -54,7 +54,7 @@
                 android:gravity="top|left"
                 android:layout_weight="1"
                 android:scrollbars="vertical"
-                android:hint="Add new question"
+                android:hint="Add new question/answer/reply. Press the button you want to send to."
                 android:textColor="#fff"
                 android:textColorHint="#555" />
 

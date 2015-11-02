@@ -40,15 +40,6 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
         final AnswerListAdapter mChatListAdapter = new AnswerListAdapter(view.getContext(), R.layout.answer, question, question.getAnswers());
         answerList.setAdapter(mChatListAdapter);
 
-        view.findViewById(R.id.answersendButton).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mChatListAdapter.sendAnswer(view);
-                    }
-                }
-        );
-
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
@@ -57,18 +48,9 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
             }
         });
 
-
-        //-----EXPAND AND COLLAPSE (not nested)----------//
-        Button replyBtn = (Button) view.findViewById(R.id.reply);
-        replyBtn.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.reply).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                LinearLayout answerFooter = (LinearLayout) view.findViewById(R.id.answerlistFooter);
-
-                if (answerFooter.getVisibility() != View.VISIBLE) {
-                    answerFooter.setVisibility(View.VISIBLE);
-                } else {
-                    answerFooter.setVisibility(View.GONE);
-                }
+                mChatListAdapter.sendAnswer(view);
             }
         });
 
@@ -88,7 +70,6 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
                 }
             }
         });
-        //----------------------------------------------//
     }
 
     @Override

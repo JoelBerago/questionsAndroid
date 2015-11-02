@@ -46,15 +46,15 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
             .addConverterFactory(JacksonConverterFactory.create())
             .build();
 
-    protected DBUtil dbUtil;
+    //protected DBUtil dbUtil;
     protected Context context;
     private int mLayoutID;
     private LayoutInflater inflater;
     protected List<T> mQuestionList;
 
     public DatabaseListAdapter(Context context, int mLayoutID, List<T> mQuestionList) {
-        DBHelper mDbHelper = new DBHelper(context);
-        dbUtil = new DBUtil(mDbHelper);
+        //DBHelper mDbHelper = new DBHelper(context);
+        //dbUtil = new DBUtil(mDbHelper);
 
         this.context = context;
         this.mLayoutID = mLayoutID;
@@ -159,6 +159,7 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
                 }
         );
         // check if we already clicked
+        /*
         boolean clickable = !dbUtil.contains(baseQuestion.getId());
         likeButton.setClickable(clickable);
         likeButton.setEnabled(clickable);
@@ -169,6 +170,7 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         } else {
             likeButton.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
         }
+        */
 
         /// SETUP TEXT
         TextView textView = (TextView) view.findViewById(R.id.head_desc);
