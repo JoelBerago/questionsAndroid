@@ -571,8 +571,10 @@ public class DatabaseListAdapterTest  extends ActivityUnitTestCase<MainActivity>
 
         new QuestionListAdapter(context,0,new ArrayList<Question>());
         Question qu = new Question("all","zut");
+        /* DEPRECATED
         String[] s = {"moi","moi","et moi"};
         qu.setLikes(s);
+        */
         test.populateView(null, qu);
 
 //        test.push(0,a);

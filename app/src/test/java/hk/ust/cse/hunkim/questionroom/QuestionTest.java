@@ -52,7 +52,8 @@ public class QuestionTest  extends TestCase {
         q1.getAnswers();
         q1.getAnswer(0);
 
-        q1.setLikes(null);
+        /// DEPRECATED
+        //q1.setLikes(null);
         q1.compareTo(q1);
         assertEquals(q1.compareTo(q1), 0);
     }

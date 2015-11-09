@@ -26,6 +26,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
+import hk.ust.cse.hunkim.questionroom.question.BaseQuestion;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 
 public class MainActivity extends ListActivity {
@@ -231,40 +232,7 @@ public class MainActivity extends ListActivity {
         }
     }
 
-    public void updateLikes(Question question) {
-        // TODO: Update Likes
-         mChatListAdapter.add_like(question,"mika");
 
-         /*
-        if (dbUtil.contains(id)) {
-            Log.e("Dupkey", "Key is already in the DB!");
-            return;
-        }
-
-        final Firebase echoRef = mFirebaseRef.child(id).child("echo");
-        echoRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Long echoValue = (Long) dataSnapshot.getValue();
-                        Log.e("Echo update:", "" + echoValue);
-
-                        echoRef.setValue(echoValue + 1);
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                }
-        );
-
-        // Update SQLite DB
-        dbUtil.put(id);
-        */
-
-
-    }
 
     public void Close(View view) {
         finish();

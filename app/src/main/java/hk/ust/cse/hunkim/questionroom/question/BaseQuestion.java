@@ -19,7 +19,7 @@ public abstract class BaseQuestion implements Comparable<BaseQuestion> {
     // TODO: Fix time handling; server side's fault probably.
     @JsonProperty("time") private String time;
     protected long unixTime;
-    @JsonProperty("likes") protected String[] likes;
+    @JsonProperty("likes") protected List<String> likes;
     protected boolean newQuestion;
 
     // Dummy Constructor for JSONObject-ifying
@@ -90,9 +90,9 @@ public abstract class BaseQuestion implements Comparable<BaseQuestion> {
         int otherLikes = 0;
 
         if (this.likes != null)
-            thisLikes = this.likes.length;
+            thisLikes = this.likes.size();
         if (other.likes != null)
-            otherLikes = other.likes.length;
+            otherLikes = other.likes.size();
 
         return thisLikes - otherLikes;
     }
@@ -113,26 +113,14 @@ public abstract class BaseQuestion implements Comparable<BaseQuestion> {
         this.text = text;
     }
 
-    public String[] getLikes() {
+    public List<String> getLikes() {
+        if (likes == null)
+            likes = new ArrayList<String>();
+
         return likes;
     }
 
-    public void setLikes(String[] l) {
-        this.likes = new String[l.length];
-        this.likes=l;
-    }
-
-    public void addLikes(String user){
-        Log.i("add_like",String.valueOf(likes.length));
-        String[] new_arr = new String[likes.length + 1];
-        if(likes.length!=0) {
-            for (int i = 0; i < likes.length; i++) {
-                new_arr[i] = likes[i];
-            }
-        }
-        new_arr[likes.length]=user;
-        setLikes(new_arr);
-        Log.i("add_like", String.valueOf(likes.length));
-
+    public void addLikes(String user) {
+        getLikes().add(user);
     }
 }

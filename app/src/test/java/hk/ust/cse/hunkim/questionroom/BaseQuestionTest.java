@@ -28,9 +28,11 @@ public class BaseQuestionTest extends TestCase {
         Question q3 = new Question("comp3111", "What?");
         Question q4 = new Question("comp3111H", "When?");
 
+        /* DEPRECATED
         String[] strs = new String[1];
         strs[0] = "asf";
         q2.setLikes(strs);
+        */
 
         q2.equals("asf");
         q2.equals(q1);
@@ -52,7 +54,9 @@ public class BaseQuestionTest extends TestCase {
         for (int i=0; i < 10; i++) {
             strs[i] = "" + i;
         }
-        q1.setLikes(strs);
+
+        /// DEPRECATED
+        //q1.setLikes(strs);
         q1.getUnixTime();
 
         Answer a = new Answer();

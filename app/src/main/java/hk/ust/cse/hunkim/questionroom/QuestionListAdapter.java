@@ -2,20 +2,12 @@ package hk.ust.cse.hunkim.questionroom;
 
 import android.content.Context;
 import android.database.DataSetObserver;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
-//<<<<<<< HEAD
-import java.util.ArrayList;
-//=======
-import org.w3c.dom.Text;
-
-//>>>>>>> UI_enhancement
 import java.util.Collections;
 import java.util.List;
 
@@ -41,41 +33,7 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
 
     @Override
     protected void populateView(final View view, final Question question) {
-//<<<<<<< HEAD
         super.populateView(view, question);
-//=======
-        // Map a Chat object to an entry in our listview
-        String[] likesArr = question.getLikes();
-        int likes = 0;
-        if (likesArr != null)
-            likes = likesArr.length;
-        final Button likeButton = (Button) view.findViewById(R.id.echo);
-        TextView numberOfLikes=(TextView) view.findViewById(R.id.numberOfLikes);
-        numberOfLikes.setText("" + likes);
-        likeButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        MainActivity m = (MainActivity) view.getContext();
-                        m.updateLikes(question);
-                    }
-                }
-        );
-
-        // check if we already clicked
-        boolean clickable = !dbUtil.contains(question.getId());
-        likeButton.setClickable(clickable);
-        likeButton.setEnabled(clickable);
-
-        // Set question Text.
-        String msgString = "";
-        question.updateNewQuestion();
-        if (question.isNewQuestion()) {
-            msgString += "<font color=red>NEW </font>";
-        }
-        msgString += question.getText();
-        ((TextView) view.findViewById(R.id.head_desc)).setText(Html.fromHtml(msgString + " (" + question.getAnswers().size() + ")"));
-//>>>>>>> UI_enhancement
 
         final ListView answerList = ((ListView) view.findViewById(R.id.answerlist));
         final AnswerListAdapter mChatListAdapter = new AnswerListAdapter(view.getContext(), R.layout.answer, question, question.getAnswers());
