@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -41,6 +42,9 @@ public class MainActivity extends ListActivity {
         //Firebase.setAndroidContext(this);
 
         setContentView(R.layout.activity_main);
+
+        //creating a dummy method to encapsulate things that should happen when logging in.
+        onLogin();
 
         Intent intent = getIntent();
         assert (intent != null);
@@ -144,6 +148,19 @@ public class MainActivity extends ListActivity {
         mChatListAdapter.cleanup();
     }
 
+    public void onLogin()
+    {
+        //pseudocode:
+        //check if user's last login was on a date prior to today
+        //if so
+        // User.addXP(10);
+        Toast.makeText(MainActivity.this, "You gained +10 xp!", Toast.LENGTH_SHORT).show(); //"for logging in"?
+        //check if previous questions or answers were liked
+        //make a for loop with an iterator of BaseQuestion type perhaps
+        // User.addXP(20);
+        // Toast.makeText(MainActivity.this, "You gained +20 xp!", Toast.LENGTH_SHORT).show(); //"Another user liked your question/answer"?
+    }
+
     public void sendQuestion(View view) {
         EditText inputText = (EditText) findViewById(R.id.messageInput);
 
@@ -161,7 +178,8 @@ public class MainActivity extends ListActivity {
                 mChatListAdapter.push(question, "");
             }
 
-
+            //User.addXP(10);
+            Toast.makeText(MainActivity.this, "You gained +10 xp!", Toast.LENGTH_SHORT).show();
         }
     }
 
