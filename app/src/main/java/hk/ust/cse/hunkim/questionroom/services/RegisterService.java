@@ -11,15 +11,13 @@ import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Path;
 
-public interface LogInService {
+public interface RegisterService {
     @FormUrlEncoded
-    @POST("v1/account/login")
-    Call<LogInResponse> loginRequest(
+    @POST("v1/account/register")
+    Call<LogInResponse> registerRequest(
             @Field("email") String email,
-            @Field("password") String password
+            @Field("password") String password,
+            @Field("username") String username
     );
-
-
-
 
 }
