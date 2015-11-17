@@ -22,6 +22,7 @@ public abstract class BaseQuestion implements Comparable<BaseQuestion>, Serializ
     protected long unixTime;
     @JsonProperty("likes") protected List<String> likes;
     protected boolean newQuestion;
+    @JsonProperty("userId") protected int userId;
 
     // Dummy Constructor for JSONObject-ifying
     public BaseQuestion() {}

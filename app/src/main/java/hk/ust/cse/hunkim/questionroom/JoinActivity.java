@@ -2,7 +2,6 @@ package hk.ust.cse.hunkim.questionroom;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,24 +10,15 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
-import hk.ust.cse.hunkim.questionroom.services.LogInResponse;
-import hk.ust.cse.hunkim.questionroom.services.UserInfoResponse;
-import hk.ust.cse.hunkim.questionroom.services.UserInfoService;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.JacksonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
-
 
 /**
  * A login screen that offers login via email/password.
  */
 public class JoinActivity extends Activity {
+    private int userId;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-
 
     // UI references.
     private TextView roomNameView;
@@ -37,7 +27,6 @@ public class JoinActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
-
 
         // Set up the login form.
         roomNameView = (TextView) findViewById(R.id.room_name);
@@ -53,7 +42,7 @@ public class JoinActivity extends Activity {
         });
 
         Bundle extras=getIntent().getExtras();
-        int userId=extras.getInt("userId");
+        userId=extras.getInt(BaseActivity.USERID);
         Log.i("LOGIN","join activity userId: "+String.valueOf(userId));
     }
 
@@ -89,6 +78,7 @@ public class JoinActivity extends Activity {
             // Start main activity
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra(MainActivity.ROOM_NAME, room_name);
+            intent.putExtra(MainActivity.USERID, userId);
             startActivity(intent);
         }
     }

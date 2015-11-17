@@ -55,7 +55,9 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
         Call<ErrorIdResponse> response = service.createQuestion(
                 question.getText(),
                 question.getImageURL(),
-                question.getRoom()
+                question.getRoom(),
+                ((MainActivity) context).getUserId()
+
         );
 
         response.enqueue(new Callback<ErrorIdResponse>() {

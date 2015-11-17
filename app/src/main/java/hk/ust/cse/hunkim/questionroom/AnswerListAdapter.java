@@ -65,7 +65,8 @@ public class AnswerListAdapter extends DatabaseListAdapter<Answer> {
         Call<ErrorIdResponse> response = service.createAnswer(
                 baseID,
                 answer.getText(),
-                answer.getImageURL()
+                answer.getImageURL(),
+                ((AnswerActivity) context).getUserId()
         );
 
         response.enqueue(new Callback<ErrorIdResponse>() {

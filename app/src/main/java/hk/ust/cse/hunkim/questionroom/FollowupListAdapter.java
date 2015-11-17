@@ -44,7 +44,8 @@ public class FollowupListAdapter extends DatabaseListAdapter<FollowUp> {
         Call<ErrorIdResponse> response = service.createFollowup(
                 baseID,
                 followUp.getText(),
-                followUp.getImageURL()
+                followUp.getImageURL(),
+                ((FollowupActivity) context).getUserId()
         );
 
         response.enqueue(new Callback<ErrorIdResponse>() {

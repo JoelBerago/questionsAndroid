@@ -27,6 +27,8 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
  */
 public abstract class BaseActivity extends ListActivity {
     public static final String ROOM_NAME = "Room_name";
+    public static final String USERID = "userId";
+    protected int userId;
     protected String roomName;
     protected DatabaseListAdapter mChatListAdapter;
 
@@ -130,4 +132,7 @@ public abstract class BaseActivity extends ListActivity {
     public void Close(View view) {
         finish();
     }
+
+    public int getUserId() { return userId; }
+
 }
