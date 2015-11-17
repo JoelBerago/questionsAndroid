@@ -5,5 +5,5 @@ package hk.ust.cse.hunkim.questionroom.services;
  */
 public class LogInResponse {
     public String error;
-    public int session;
+    public int userId;
 }

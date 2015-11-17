@@ -2,14 +2,22 @@ package hk.ust.cse.hunkim.questionroom;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
+import hk.ust.cse.hunkim.questionroom.services.LogInResponse;
+import hk.ust.cse.hunkim.questionroom.services.UserInfoResponse;
+import hk.ust.cse.hunkim.questionroom.services.UserInfoService;
+import retrofit.Call;
+import retrofit.Callback;
 import retrofit.JacksonConverterFactory;
+import retrofit.Response;
 import retrofit.Retrofit;
 
 
@@ -20,13 +28,6 @@ public class JoinActivity extends Activity {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-
-
-    protected final static String BASE_URL = "http://questions-backend.herokuapp.com/api/";
-    protected final static Retrofit joinActivity_retrofit = new Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(JacksonConverterFactory.create())
-            .build();
 
 
     // UI references.
@@ -50,6 +51,10 @@ public class JoinActivity extends Activity {
                 return true;
             }
         });
+
+        Bundle extras=getIntent().getExtras();
+        int userId=extras.getInt("userId");
+        Log.i("LOGIN","join activity userId: "+String.valueOf(userId));
     }
 
 
