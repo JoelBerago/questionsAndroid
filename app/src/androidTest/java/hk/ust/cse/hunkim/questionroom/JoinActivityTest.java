@@ -90,7 +90,7 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
         Intent intent = mainActivity.getIntent();
         assertNotNull("Intent should be set", intent);
 
-        assertEquals("all", intent.getStringExtra(JoinActivity.ROOM_NAME));
+        assertEquals("all", intent.getStringExtra(MainActivity.ROOM_NAME));
 
         assertEquals("This is set correctly", "Room name: all", mainActivity.getTitle());
 

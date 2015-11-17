@@ -23,7 +23,7 @@ public class AdapterTest extends ActivityUnitTestCase<MainActivity> {
     protected void setUp() throws Exception {
         super.setUp();
         mStartIntent = new Intent(Intent.ACTION_MAIN);
-        mStartIntent.putExtra(JoinActivity.ROOM_NAME, "testing");
+        mStartIntent.putExtra(MainActivity.ROOM_NAME, "testing");
     }
 
     public void testDatabaseListAdapter() {

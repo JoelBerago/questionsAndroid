@@ -10,10 +10,18 @@
         android:icon="@drawable/firebase_logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".AnswerActivity"
+            android:label="Reply an Answer" >
+        </activity>
+
+        <activity
+            android:name=".FollowupActivity"
+            android:label="Reply a Follow Up" >
         </activity>
 
         <activity
@@ -21,8 +29,14 @@
             android:label="@string/app_name" >
             android:windowSoftInputMode="adjustResize|stateVisible" >
 
+        </activity>
+        <activity
+            android:name=".LogIn"
+            android:label="@string/app_name" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

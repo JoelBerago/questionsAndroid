@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -14,10 +15,11 @@ import android.widget.TextView;
  * A login screen that offers login via email/password.
  */
 public class JoinActivity extends Activity {
-    public static final String ROOM_NAME = "Room_name";
+    private int userId;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
+
     // UI references.
     private TextView roomNameView;
 
@@ -25,7 +27,6 @@ public class JoinActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
-
 
         // Set up the login form.
         roomNameView = (TextView) findViewById(R.id.room_name);
@@ -39,6 +40,10 @@ public class JoinActivity extends Activity {
                 return true;
             }
         });
+
+        Bundle extras=getIntent().getExtras();
+        userId=extras.getInt(BaseActivity.USERID);
+        Log.i("LOGIN","join activity userId: "+String.valueOf(userId));
     }
 
 
@@ -72,7 +77,8 @@ public class JoinActivity extends Activity {
         } else {
             // Start main activity
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra(ROOM_NAME, room_name);
+            intent.putExtra(MainActivity.ROOM_NAME, room_name);
+            intent.putExtra(MainActivity.USERID, userId);
             startActivity(intent);
         }
     }

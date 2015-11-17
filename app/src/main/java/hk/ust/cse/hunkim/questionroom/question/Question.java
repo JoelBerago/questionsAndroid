@@ -2,6 +2,7 @@ package hk.ust.cse.hunkim.questionroom.question;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

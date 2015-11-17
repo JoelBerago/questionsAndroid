@@ -122,7 +122,7 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         QuestionService service = retrofit.create(QuestionService.class);
         Call<List<Question>> response;
 
-        if (roomName == "")
+        if (roomName.equals(""))
             response = service.getQuestions();
         else
             response = service.getQuestions(roomName);
