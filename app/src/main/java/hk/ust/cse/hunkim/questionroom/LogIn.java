@@ -1,5 +1,9 @@
 package hk.ust.cse.hunkim.questionroom;
 
+/**
+ * Created by mikacuy on 11/15/15.
+ */
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -45,10 +49,10 @@ public class LogIn extends AppCompatActivity {
 
         //check if user already logged in
         if (pref.getString("logged", null)!=null && pref.getString("logged", null).toString().equals("logged")) {
-            Log.i("LOGIN","saved log-in");
+            Log.i("LOGIN", "saved log-in");
             Intent intent = new Intent(LogIn.this, JoinActivity.class);
+            intent.putExtra("userId", pref.getInt("userId", -1)); //-1 invalid user ID!
             startActivity(intent);
-            intent.putExtra("session", pref.getInt("session", -1)); //-1 invalid session ID!
         }
 
         //not logged in yet
@@ -87,14 +91,14 @@ public class LogIn extends AppCompatActivity {
                     SharedPreferences.Editor editor = pref.edit();
 
                     editor.putString("logged", "logged");
-                    editor.putInt("session", response.body().session);
+                    editor.putInt("userId", response.body().userId);
                     editor.commit();
 
-                    Log.i("LOGIN", "session: " + String.valueOf(pref.getInt("session", -1)));
+                    Log.i("LOGIN", "userId: " + String.valueOf(pref.getInt("userId", -1)));
 
                     Intent intent = new Intent(LogIn.this, JoinActivity.class);
+                    intent.putExtra("userId", response.body().userId);
                     startActivity(intent);
-                    intent.putExtra("session", pref.getInt("session", -1));
 
                 }
             }
@@ -139,7 +143,7 @@ public class LogIn extends AppCompatActivity {
                     Log.i("Register", "Register error");
                     txt.setTextColor(Color.RED);
                     txt.setText(response.body().error.toString()+" Register Failed. Please try again.");
-                } else { 
+                } else {
                     Log.i("REGISTER", "valid register");
                     txt.setTextColor(Color.GREEN);
                     txt.setText("Register complete. Please sign in.");
