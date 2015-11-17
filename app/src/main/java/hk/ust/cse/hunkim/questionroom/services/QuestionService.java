@@ -20,7 +20,8 @@ public interface QuestionService {
     Call<ErrorIdResponse> createQuestion(
             @Field("text") String text,
             @Field("imageURL") String imageURL,
-            @Field("room") String room
+            @Field("room") String room,
+            @Field("userId") int userId
     );
 
     @GET("v1/question")
@@ -34,7 +35,8 @@ public interface QuestionService {
     Call<ErrorIdResponse> createAnswer(
             @Field("id") String id,
             @Field("text") String text,
-            @Field("imageURL") String imageURL
+            @Field("imageURL") String imageURL,
+            @Field("userId") int userId
     );
 
     @FormUrlEncoded
@@ -42,7 +44,8 @@ public interface QuestionService {
     Call<ErrorIdResponse> createFollowup(
             @Field("id") String id,
             @Field("text") String text,
-            @Field("imageURL") String imageURL
+            @Field("imageURL") String imageURL,
+            @Field("userId") int userId
     );
 
     @FormUrlEncoded
