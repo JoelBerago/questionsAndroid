@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
+import retrofit.JacksonConverterFactory;
+import retrofit.Retrofit;
+
 
 /**
  * A login screen that offers login via email/password.
@@ -17,6 +20,15 @@ public class JoinActivity extends Activity {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
+
+
+    protected final static String BASE_URL = "http://questions-backend.herokuapp.com/api/";
+    protected final static Retrofit joinActivity_retrofit = new Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(JacksonConverterFactory.create())
+            .build();
+
+
     // UI references.
     private TextView roomNameView;
 
