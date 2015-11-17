@@ -24,20 +24,14 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.UserHandle;
 import android.support.annotation.Nullable;
-import android.test.AndroidTestCase;
 import android.view.Display;
 import android.view.View;
 import android.widget.ImageButton;
 
-import hk.ust.cse.hunkim.questionroom.db.DBHelper;
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
-import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Answer;
-import hk.ust.cse.hunkim.questionroom.question.FollowUp;
 import hk.ust.cse.hunkim.questionroom.question.Question;
-import hk.ust.cse.hunkim.questionroom.question.BaseQuestion;
 
-import android.content.Intent;
 import android.test.ActivityUnitTestCase;
 
 import java.io.File;
@@ -554,7 +548,7 @@ public class DatabaseListAdapterTest  extends ActivityUnitTestCase<MainActivity>
         // into your Activity. But do not call startActivity()
         // until the actual test methods.
         mStartIntent = new Intent(Intent.ACTION_MAIN);
-        mStartIntent.putExtra(JoinActivity.ROOM_NAME, "all");
+        mStartIntent.putExtra(MainActivity.ROOM_NAME, "all");
     }
     public void test () {
         Context ma = startActivity(mStartIntent, null, null);

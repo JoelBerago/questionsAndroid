@@ -1,12 +1,11 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.content.Context;
-import android.database.DataSetObserver;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,8 +22,8 @@ import retrofit.Retrofit;
  * Created by Joel on 29/10/2015.
  */
 public class QuestionListAdapter extends DatabaseListAdapter<Question> {
-    public QuestionListAdapter(Context context, int mLayout, List<Question> questionList) {
-        super(context, mLayout, questionList);
+    public QuestionListAdapter(Context context, int textViewResourceId, List<Question> questionList) {
+        super(context, textViewResourceId, questionList);
 
         // Must be MainActivity
         assert (context instanceof MainActivity);
@@ -35,53 +34,16 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
     protected void populateView(final View view, final Question question) {
         super.populateView(view, question);
 
-        final ListView answerList = ((ListView) view.findViewById(R.id.answerlist));
-        final AnswerListAdapter mChatListAdapter = new AnswerListAdapter(view.getContext(), R.layout.answer, question, question.getAnswers());
-        answerList.setAdapter(mChatListAdapter);
-
-        mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                answerList.setSelection(mChatListAdapter.getCount() - 1);
-            }
-        });
-
-        view.findViewById(R.id.reply).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mChatListAdapter.sendAnswer(view);
-            }
-        });
-
         //REPLY
         Button replyBtn = (Button) view.findViewById(R.id.reply);
         replyBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                LinearLayout answerFooter = (LinearLayout) view.findViewById(R.id.answerlistFooter);
-
-                if (answerFooter.getVisibility() != View.VISIBLE) {
-                    answerFooter.setVisibility(View.VISIBLE);
-                } else {
-                    answerFooter.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        //EXPAND AND COLLAPSE
-        Button collapseBtn = (Button) view.findViewById(R.id.btn_collapse);
-        collapseBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                ListView answerList = (ListView) view.findViewById(R.id.answerlist);
-                Button collapseBtn = (Button) view.findViewById(R.id.btn_collapse);
-
-                if (answerList.getVisibility() != View.VISIBLE) {
-                    answerList.setVisibility(View.VISIBLE);
-                    collapseBtn.setText("Collapse");
-
-                } else {
-                    answerList.setVisibility(View.GONE);
-                    collapseBtn.setText("Expand");
-                }
+                Intent intent = new Intent(context, AnswerActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable(AnswerActivity.QUESTION, question);
+                intent.putExtras(b);
+                intent.putExtra(MainActivity.ROOM_NAME, ((MainActivity) context).roomName);
+                context.startActivity(intent);
             }
         });
     }
@@ -135,11 +97,5 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
                 Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.pull():", t);
             }
         });
-    }
-
-
-    @Override
-    protected void sortModels(List<Question> mModels) {
-        Collections.sort(mModels);
     }
 }

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 /**
  * Created by Joel on 29/10/2015.
  */
-public abstract class BaseQuestion implements Comparable<BaseQuestion> {
+public abstract class BaseQuestion implements Comparable<BaseQuestion>, Serializable {
     @JsonProperty("__v") private String __v;
     @JsonProperty("_id") protected String id;
     @JsonProperty("text") protected String text;

@@ -1,7 +1,9 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,27 +35,25 @@ public class AnswerListAdapter extends DatabaseListAdapter<Answer> {
         this.context = context;
         this.question = question;
         this.mQuestionList = question.getAnswers();
+
+        // Must be MainActivity
+        assert (context instanceof AnswerActivity);
     }
 
     @Override
     protected void populateView(final View view, final Answer answer) {
         super.populateView(view, answer);
 
-        final ListView followupList = ((ListView) view.findViewById(R.id.followuplist));
-        final FollowupListAdapter mChatListAdapter = new FollowupListAdapter(view.getContext(), R.layout.followup, answer, answer.getFollow_ups());
-        followupList.setAdapter(mChatListAdapter);
-
-        view.findViewById(R.id.reply).setOnClickListener(new View.OnClickListener() {
+        //REPLY
+        Button replyBtn = (Button) view.findViewById(R.id.reply);
+        replyBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mChatListAdapter.sendFollowup(view);
-            }
-        });
-
-        mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                followupList.setSelection(mChatListAdapter.getCount() - 1);
+                Intent intent = new Intent(context, FollowupActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable(FollowupActivity.ANSWER, answer);
+                intent.putExtras(b);
+                intent.putExtra(MainActivity.ROOM_NAME, ((AnswerActivity) context).roomName);
+                context.startActivity(intent);
             }
         });
     }
@@ -81,23 +81,5 @@ public class AnswerListAdapter extends DatabaseListAdapter<Answer> {
                 Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.push():", t);
             }
         });
-    }
-
-    protected void sendAnswer(View view) {
-        EditText inputText = (EditText) ((MainActivity) context).findViewById(R.id.messageInput);
-        String input = inputText.getText().toString();
-        Answer answer;
-        if (!input.equals("")) {
-            answer = new Answer(input);
-
-            // Clear inputText.
-            inputText.setText("");
-
-            if (!ImageHelper.picturePath.equals("")) {
-                uploadPhoto(ImageHelper.picturePath, answer, question.getId());
-            } else {
-                push(answer, question.getId());
-            }
-        }
     }
 }

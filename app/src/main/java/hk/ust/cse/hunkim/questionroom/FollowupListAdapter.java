@@ -62,21 +62,4 @@ public class FollowupListAdapter extends DatabaseListAdapter<FollowUp> {
         });
     }
 
-    protected void sendFollowup(View view) {
-        EditText inputText = (EditText) ((MainActivity) context).findViewById(R.id.messageInput);
-        String input = inputText.getText().toString();
-        FollowUp followUp;
-        if (!input.equals("")) {
-            followUp = new FollowUp(input);
-
-            // Clear inputText.
-            inputText.setText("");
-
-            if (!ImageHelper.picturePath.equals("")) {
-                uploadPhoto(ImageHelper.picturePath, followUp, answer.getId());
-            } else {
-                push(followUp, answer.getId());
-            }
-        }
-    }
 }

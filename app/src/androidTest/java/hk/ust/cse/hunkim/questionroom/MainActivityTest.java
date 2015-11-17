@@ -1,19 +1,14 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.test.ActivityUnitTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 
 /**
  * Created by hunkim on 7/20/15.
@@ -37,7 +32,7 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
         // into your Activity. But do not call startActivity()
         // until the actual test methods.
         mStartIntent = new Intent(Intent.ACTION_MAIN);
-        mStartIntent.putExtra(JoinActivity.ROOM_NAME, "");
+        mStartIntent.putExtra(MainActivity.ROOM_NAME, "");
     }
 
     @MediumTest
@@ -136,7 +131,7 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
 
         Intent intent = new Intent(Intent.ACTION_MAIN);
       //  intent.int(mStartIntent);
-        intent.putExtra(JoinActivity.ROOM_NAME, "all");
+        intent.putExtra(MainActivity.ROOM_NAME, "all");
         MainActivity activity = startActivity(intent, null, null);
         activity.onCreate(null,null);
 
