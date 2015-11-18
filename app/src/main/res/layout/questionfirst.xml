@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+    <LinearLayout
+        android:id="@+id/questionUserContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:background="@color/background_material_light">
+
+        <ImageView
+            android:id="@+id/questionUserCharacter"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/temp_char" />
+
+        <TextView
+            android:id="@+id/questionUserClass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Anonymous\nLv1"
+            android:textSize="9dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/questionTextContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/questionUserContainer"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/head_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/questionUserContainer"
+            android:layout_marginLeft="5dp"
+            android:textSize="16dp"
+            android:textColor="#000000" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" />
+        <RelativeLayout
+            android:id="@+id/questionLikeContainer"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:gravity="left"
+            android:orientation="horizontal">
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:id="@+id/echo"
+                android:layout_height="25dp"
+                android:layout_width="25dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/like24" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/echo"
+                android:text="0"
+                android:layout_marginLeft="2dp"
+                android:textAlignment="center"
+                android:layout_centerVertical="true"
+                android:id="@+id/numberOfLikes" />
+
+            <Button
+                android:id="@+id/reply"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/numberOfLikes"
+                android:layout_marginLeft="4dp"
+                android:textSize="8dp" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

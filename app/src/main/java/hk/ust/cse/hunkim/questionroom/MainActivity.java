@@ -36,7 +36,10 @@ public class MainActivity extends BaseActivity {
         final ListView listView = getListView();
 
         if(mChatListAdapter==null)
-            mChatListAdapter = new QuestionListAdapter(this, R.layout.question, new ArrayList<Question>());
+            mChatListAdapter = new QuestionListAdapter(this, R.layout.questionfirst, new ArrayList<Question>());
+
+        mChatListAdapter.pull(roomName);
+
         listView.setAdapter(mChatListAdapter);
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
@@ -46,8 +49,6 @@ public class MainActivity extends BaseActivity {
                 listView.setSelection(mChatListAdapter.getCount() - 1);
             }
         });
-
-        mChatListAdapter.pull(roomName);
     }
 
     public void onLogin()
@@ -84,5 +85,4 @@ public class MainActivity extends BaseActivity {
             Toast.makeText(MainActivity.this, "You gained +10 xp!", Toast.LENGTH_SHORT).show();
         }
     }
-
 }

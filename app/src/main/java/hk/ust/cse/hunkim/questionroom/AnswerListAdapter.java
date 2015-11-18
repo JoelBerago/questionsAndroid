@@ -2,18 +2,14 @@ package hk.ust.cse.hunkim.questionroom;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 
-import java.util.Collections;
 import java.util.List;
 
-import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Answer;
 import hk.ust.cse.hunkim.questionroom.question.BaseQuestion;
 import hk.ust.cse.hunkim.questionroom.question.Question;
@@ -41,21 +37,48 @@ public class AnswerListAdapter extends DatabaseListAdapter<Answer> {
     }
 
     @Override
-    protected void populateView(final View view, final Answer answer) {
-        super.populateView(view, answer);
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        if (view == null) {
+            if (i == 0)
+                view = inflater.inflate(R.layout.questionfirst, viewGroup, false);
+            else
+                view = inflater.inflate(R.layout.questionsecond, viewGroup, false);
+        }
 
         //REPLY
         Button replyBtn = (Button) view.findViewById(R.id.reply);
-        replyBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(context, FollowupActivity.class);
-                Bundle b = new Bundle();
-                b.putSerializable(FollowupActivity.ANSWER, answer);
-                intent.putExtras(b);
-                intent.putExtra(MainActivity.ROOM_NAME, ((AnswerActivity) context).roomName);
-                context.startActivity(intent);
-            }
-        });
+        BaseQuestion item;
+
+        if (i == 0) {
+            item = question;
+            replyBtn.setVisibility(View.GONE);
+        }
+        else {
+            item = mQuestionList.get(i - 1);
+            final Answer answer = (Answer) item;
+
+            String replyText = "Followup (" + Integer.toString(answer.getFollow_ups().size()) + ")";
+            replyBtn.setText(replyText);
+            replyBtn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, FollowupActivity.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable(FollowupActivity.ANSWER, answer);
+                    intent.putExtras(b);
+                    intent.putExtra(MainActivity.ROOM_NAME, ((AnswerActivity) context).roomName);
+                    context.startActivity(intent);
+                }
+            });
+        }
+
+        populateView(view, item);
+        view.setTag(item.getId());
+        return view;
+    }
+
+    @Override
+    public int getCount() {
+        return super.getCount() + 1;
     }
 
     @Override

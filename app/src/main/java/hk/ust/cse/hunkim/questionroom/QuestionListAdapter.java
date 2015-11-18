@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import java.util.Collections;
 import java.util.List;
 
+import hk.ust.cse.hunkim.questionroom.question.BaseQuestion;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 import hk.ust.cse.hunkim.questionroom.services.ErrorIdResponse;
 import hk.ust.cse.hunkim.questionroom.services.QuestionService;
@@ -31,11 +33,27 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
     }
 
     @Override
-    protected void populateView(final View view, final Question question) {
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        String tag;
+        if (view == null) {
+            view = inflater.inflate(R.layout.questionfirst, viewGroup, false);
+        }
+
+        populateView(view, mQuestionList.get(i));
+        tag =  mQuestionList.get(i).getId();
+
+        view.setTag(tag);
+        return view;
+    }
+
+    @Override
+    protected void populateView(final View view, final BaseQuestion question) {
         super.populateView(view, question);
 
         //REPLY
         Button replyBtn = (Button) view.findViewById(R.id.reply);
+        String replyText = "Answer (" + Integer.toString(((Question)question).getAnswers().size()) + ")";
+        replyBtn.setText(replyText);
         replyBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(context, AnswerActivity.class);

@@ -2,6 +2,7 @@ package hk.ust.cse.hunkim.questionroom;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,6 +20,10 @@ public class JoinActivity extends Activity {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
+
+    //get access to SharedPreference
+    public static final String PREFS_NAME = "LoginPrefs";
+
 
     // UI references.
     private TextView roomNameView;
@@ -41,8 +46,12 @@ public class JoinActivity extends Activity {
             }
         });
 
-        Bundle extras=getIntent().getExtras();
-        userId=extras.getInt(BaseActivity.USERID);
+        //get the userID from SharedPreference
+        SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
+        userId=pref.getInt("userId", -1);
+
+        //Bundle extras=getIntent().getExtras();
+        //userId=extras.getInt(BaseActivity.USERID);
         Log.i("LOGIN","join activity userId: "+String.valueOf(userId));
     }
 
@@ -78,9 +87,23 @@ public class JoinActivity extends Activity {
             // Start main activity
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra(MainActivity.ROOM_NAME, room_name);
-            intent.putExtra(MainActivity.USERID, userId);
+            //intent.putExtra(MainActivity.USERID, userId);
             startActivity(intent);
         }
+    }
+
+    public void handle_userLogout(View view){
+        SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = pref.edit();
+
+        //clear SharedPreferences
+        editor.clear();
+        editor.commit();
+
+        //Go back to login page
+        Intent intent=new Intent(this, LogIn.class);
+        startActivity(intent);
+
     }
 
     private boolean isEmailValid(String room_name) {
