@@ -26,10 +26,12 @@ import android.os.UserHandle;
 import android.support.annotation.Nullable;
 import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
 import hk.ust.cse.hunkim.questionroom.question.Answer;
+import hk.ust.cse.hunkim.questionroom.question.BaseQuestion;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 
 import android.test.ActivityUnitTestCase;
@@ -51,7 +53,12 @@ class DatabaseListAdapterTest2 extends DatabaseListAdapter<Question> {
         }
 
     @Override
-    protected void populateView(View view, Question question) {
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        return view;
+    }
+
+    @Override
+    protected void populateView(View view, BaseQuestion question) {
 
     }
 

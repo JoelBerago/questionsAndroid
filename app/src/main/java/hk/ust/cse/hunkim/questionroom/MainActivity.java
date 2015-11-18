@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -35,7 +36,10 @@ public class MainActivity extends BaseActivity {
         final ListView listView = getListView();
 
         if(mChatListAdapter==null)
-            mChatListAdapter = new QuestionListAdapter(this, R.layout.question, new ArrayList<Question>());
+            mChatListAdapter = new QuestionListAdapter(this, R.layout.questionfirst, new ArrayList<Question>());
+
+        mChatListAdapter.pull(roomName);
+
         listView.setAdapter(mChatListAdapter);
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
@@ -45,8 +49,19 @@ public class MainActivity extends BaseActivity {
                 listView.setSelection(mChatListAdapter.getCount() - 1);
             }
         });
+    }
 
-        mChatListAdapter.pull(roomName);
+    public void onLogin()
+    {
+        //pseudocode:
+        //check if user's last login was on a date prior to today
+        //if so
+        // User.addXP(10);
+        Toast.makeText(MainActivity.this, "You gained +10 xp!", Toast.LENGTH_SHORT).show(); //"for logging in"?
+        //check if previous questions or answers were liked
+        //make a for loop with an iterator of BaseQuestion type perhaps
+        // User.addXP(20);
+        // Toast.makeText(MainActivity.this, "You gained +20 xp!", Toast.LENGTH_SHORT).show(); //"Another user liked your question/answer"?
     }
 
     public void sendQuestion(View view) {
@@ -65,7 +80,9 @@ public class MainActivity extends BaseActivity {
             } else {
                 mChatListAdapter.push(question, "");
             }
+
+            //User.addXP(10);
+            Toast.makeText(MainActivity.this, "You gained +10 xp!", Toast.LENGTH_SHORT).show();
         }
     }
-
 }
