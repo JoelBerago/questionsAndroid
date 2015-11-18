@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Knight Lv 1"
+                android:text="DummyClass Lv 1"
                 android:id="@+id/profileCharacterClass"
                 android:textStyle="bold"
                 android:textColor="#fff" />
@@ -43,8 +43,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:max="100"
-                android:progress="25"
-                android:id="@+id/progressBar2" />
+                android:progress="0"
+                android:id="@+id/experienceBar" />
         </LinearLayout>
 
 
