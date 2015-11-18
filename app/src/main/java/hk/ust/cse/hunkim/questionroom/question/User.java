@@ -9,19 +9,32 @@ import hk.ust.cse.hunkim.questionroom.MainActivity;
  */
 public class User {
 
-    private String ITSC;
+    private String ITSC; //used as unique identifier
+    private String username;
     private String RPGclass;
     private int level;
-    private int XP;
+    private int XP; private float percent;
+    private boolean jail;
 
     public static final int LEVEL_INCREMENT = 20;
 
-    public User(String logininfo)
+    //constructor should ask for ITSC, username, XP, and jail from backend
+    public User(String ITSC, String username, int totalXP, boolean jail)
     {
-        ITSC = logininfo;
+        this.ITSC = ITSC;
+        this.username = username;
+        this.jail = jail;
+
+        //backend XP is total, frontend is XP above current level. Need to convert
+        XP = totalXP;
         level = 1;
-        XP = 0;
-        RPGclass = "Soldier"; //idk
+        while(XP > (level*LEVEL_INCREMENT))
+        {
+            XP -= level*LEVEL_INCREMENT;
+            level++;
+        }
+        percent = (float) XP/(level*LEVEL_INCREMENT);
+        RPGclass = "Knight"; //to be determined
     }
 
     public void setRPGClass(String newclass)
@@ -55,6 +68,8 @@ public class User {
             //currently doesn't work, MainActivity.this is not an accessible instance
         }
         //assume it is impossible to gain enough XP to level up twice at once.
+
+        percent = (float) XP/(level*LEVEL_INCREMENT);
     }
 
 
