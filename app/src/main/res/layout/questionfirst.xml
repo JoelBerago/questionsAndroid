@@ -58,7 +58,6 @@
                 android:gravity="left"
                 android:orientation="horizontal">
 
-
                 <Button
                     style="?android:attr/buttonStyleSmall"
                     android:id="@+id/echo"
@@ -100,55 +99,5 @@
                     android:textSize="10dp" />
             </RelativeLayout>
         </LinearLayout>
-
-
-
-    </LinearLayout>
-
-
-
-
-
-    <ListView
-        android:id="@+id/answerlist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/questionContainer"
-        android:visibility="gone"
-        android:layout_marginLeft="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:nestedScrollingEnabled="true"/>
-
-    <LinearLayout
-        android:id="@+id/answerlistFooter"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/answerlist"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:paddingLeft="20dp" >
-
-
-
-        <EditText
-            android:id="@+id/answermessageInput"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="textShortMessage"
-            android:lines="1"
-            android:singleLine="true"
-            android:hint="Reply an answer"/>
-        <ImageButton
-            android:id="@+id/answerloadImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_gallery"/>
-        <ImageButton
-            android:id="@+id/answersendButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_send" />
     </LinearLayout>
 </RelativeLayout>

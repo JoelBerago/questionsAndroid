@@ -7,9 +7,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import java.util.ArrayList;
 
 import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Answer;
@@ -88,7 +85,7 @@ public class AnswerActivity extends BaseActivity {
         final ListView listView = getListView();
 
         if(mChatListAdapter==null)
-            mChatListAdapter = new AnswerListAdapter(this, R.layout.question, question, question.getAnswers());
+            mChatListAdapter = new AnswerListAdapter(this, R.layout.questionsecond, question, question.getAnswers());
         listView.setAdapter(mChatListAdapter);
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {

@@ -11,7 +11,6 @@ import android.widget.ListView;
 import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Answer;
 import hk.ust.cse.hunkim.questionroom.question.FollowUp;
-import hk.ust.cse.hunkim.questionroom.question.Question;
 
 /**
  * Created by Joel on 17/11/2015.
@@ -86,7 +85,7 @@ public class FollowupActivity extends BaseActivity {
         final ListView listView = getListView();
 
         if(mChatListAdapter==null)
-            mChatListAdapter = new FollowupListAdapter(this, R.layout.question, answer, answer.getFollow_ups());
+            mChatListAdapter = new FollowupListAdapter(this, R.layout.questionsecond, answer, answer.getFollow_ups());
         listView.setAdapter(mChatListAdapter);
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {

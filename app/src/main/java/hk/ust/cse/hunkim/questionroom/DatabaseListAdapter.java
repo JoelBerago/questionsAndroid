@@ -52,13 +52,11 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
             .build();
 
     protected Context context;
-    private int mLayoutID;
-    private LayoutInflater inflater;
+    protected LayoutInflater inflater;
     protected List<T> mQuestionList;
 
     public DatabaseListAdapter(Context context, int mLayoutID, List<T> mQuestionList) {
         this.context = context;
-        this.mLayoutID = mLayoutID;
         this.mQuestionList = mQuestionList;
 
         inflater =
@@ -130,7 +128,7 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         response.enqueue(new Callback<List<Question>>() {
             @Override
             public void onResponse(Response<List<Question>> response, Retrofit retrofit) {
-                for (Question q: response.body()) {
+                for (Question q : response.body()) {
                     mQuestionList.add((T) q);
                 }
 
@@ -172,28 +170,7 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         return 1;
     }
 
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if (view == null) {
-            view = inflater.inflate(mLayoutID, viewGroup, false);
-        }
-
-        // FIXME: Perhaps this is the first time to show data
-        // Let's order the list
-        if (i == 0) {
-            sortModels(mQuestionList);
-        }
-
-        // Let's get keys and models
-        final T basequestion = mQuestionList.get(i);
-
-        // Call out to subclass to marshall this model into the provided view
-        populateView(view, basequestion);
-        view.setTag(basequestion.getId());
-        return view;
-    }
-
-    protected void populateView(final View view, final T baseQuestion) {
+    protected void populateView(final View view, final BaseQuestion baseQuestion) {
         /// SETUP LIKES
         // Map a Chat object to an entry in our listview
         List<String> likesArr = baseQuestion.getLikes();
@@ -205,8 +182,7 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // TODO: Change hardcoded name to use username when implemented
-                        add_like(baseQuestion, "asdf");
+                        add_like(baseQuestion, Integer.toString(((BaseActivity) context).getUserId()));
                     }
                 }
         );
@@ -216,8 +192,7 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
             numberOfLikes.setText(Integer.toString(likes));
 
         // check if we already clicked
-        // TODO: Fix with proper username when finalized.
-        boolean clickable = !likesArr.contains(baseQuestion.getId());
+        boolean clickable = !likesArr.contains(Integer.toString(((BaseActivity)context).getUserId()));
         likeButton.setClickable(clickable);
         likeButton.setEnabled(clickable);
         if (clickable) {

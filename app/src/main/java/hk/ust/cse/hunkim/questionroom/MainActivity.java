@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ public class MainActivity extends BaseActivity {
         final ListView listView = getListView();
 
         if(mChatListAdapter==null)
-            mChatListAdapter = new QuestionListAdapter(this, R.layout.question, new ArrayList<Question>());
+            mChatListAdapter = new QuestionListAdapter(this, R.layout.questionfirst, new ArrayList<Question>());
         listView.setAdapter(mChatListAdapter);
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {

@@ -2,16 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="40dp" >
-
-
+    android:paddingStart="20dp">
     <LinearLayout
-        android:id="@+id/followupContainer"
+        android:id="@+id/questionContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <LinearLayout
-            android:id="@+id/followupUserContainer"
+            android:id="@+id/questionUserContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -19,7 +17,7 @@
             android:background="@color/background_material_light">
 
             <ImageView
-                android:id="@+id/followupUserCharacter"
+                android:id="@+id/questionUserCharacter"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
                 android:scaleType="centerInside"
@@ -29,11 +27,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Anonymous\nLv1"
+                android:textSize="9dp"
                 android:id="@+id/questionUserClass" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/followupTextContainer"
+            android:id="@+id/questionTextContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -51,20 +50,55 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal" />
-            <LinearLayout
-                android:id="@+id/followupLikeContainer"
+            <RelativeLayout
+
+                android:id="@+id/questionLikeContainer"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="30dp"
                 android:layout_alignParentRight="true"
-                android:gravity="right"
+                android:gravity="left"
                 android:orientation="horizontal">
+
                 <Button
+                    style="?android:attr/buttonStyleSmall"
                     android:id="@+id/echo"
-                    android:layout_height="wrap_content"
-                    android:layout_width="60dp"
+                    android:layout_height="25dp"
+                    android:layout_width="25dp"
                     android:layout_alignParentLeft="true"
-                    />
-            </LinearLayout>
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/like24" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/echo"
+                    android:text="0"
+                    android:layout_marginLeft="2dp"
+                    android:textAlignment="center"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/numberOfLikes" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:id="@+id/reply"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Answer"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/numberOfLikes"
+                    android:layout_marginLeft="4dp"
+                    android:textSize="10dp" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Expand"
+                    android:id="@+id/btn_collapse"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/reply"
+                    android:textSize="10dp" />
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

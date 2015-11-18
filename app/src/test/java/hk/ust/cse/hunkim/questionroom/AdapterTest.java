@@ -28,7 +28,7 @@ public class AdapterTest extends ActivityUnitTestCase<MainActivity> {
 
     public void testDatabaseListAdapter() {
         MainActivity ma = startActivity(mStartIntent, null, null);
-        QuestionListAdapter q = new QuestionListAdapter(ma, R.layout.question, new ArrayList<Question>());
+        QuestionListAdapter q = new QuestionListAdapter(ma, R.layout.questionfirst, new ArrayList<Question>());
         Question ques = new Question();
         ques.setImageURL("");
     }

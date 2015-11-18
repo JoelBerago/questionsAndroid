@@ -2,18 +2,14 @@ package hk.ust.cse.hunkim.questionroom;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 
-import java.util.Collections;
 import java.util.List;
 
-import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Answer;
 import hk.ust.cse.hunkim.questionroom.question.BaseQuestion;
 import hk.ust.cse.hunkim.questionroom.question.Question;
@@ -41,8 +37,31 @@ public class AnswerListAdapter extends DatabaseListAdapter<Answer> {
     }
 
     @Override
-    protected void populateView(final View view, final Answer answer) {
-        super.populateView(view, answer);
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        String tag;
+        if (view == null) {
+            if (i == 0)
+                view = inflater.inflate(R.layout.questionfirst, viewGroup, false);
+            else
+                view = inflater.inflate(R.layout.questionsecond, viewGroup, false);
+        }
+
+        if (i == 0) {
+            populateView(view, question);
+            tag = question.getId();
+        }
+        else {
+            populateView(view, mQuestionList.get(i));
+            tag = mQuestionList.get(i).getId();
+        }
+
+        view.setTag(tag);
+        return view;
+    }
+
+    @Override
+    protected void populateView(final View view, final BaseQuestion baseQuestion) {
+        super.populateView(view, baseQuestion);
 
         //REPLY
         Button replyBtn = (Button) view.findViewById(R.id.reply);
@@ -50,7 +69,7 @@ public class AnswerListAdapter extends DatabaseListAdapter<Answer> {
             public void onClick(View v) {
                 Intent intent = new Intent(context, FollowupActivity.class);
                 Bundle b = new Bundle();
-                b.putSerializable(FollowupActivity.ANSWER, answer);
+                b.putSerializable(FollowupActivity.ANSWER, baseQuestion);
                 intent.putExtras(b);
                 intent.putExtra(MainActivity.ROOM_NAME, ((AnswerActivity) context).roomName);
                 context.startActivity(intent);
