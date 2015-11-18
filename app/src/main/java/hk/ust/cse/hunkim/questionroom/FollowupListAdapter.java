@@ -52,10 +52,6 @@ public class FollowupListAdapter extends DatabaseListAdapter<FollowUp> {
             tag = mQuestionList.get(i-1).getId();
         }
 
-        //REPLY
-        Button replyBtn = (Button) view.findViewById(R.id.reply);
-        replyBtn.setVisibility(View.GONE);
-
         view.setTag(tag);
         return view;
     }

@@ -27,6 +27,9 @@ public interface QuestionService {
     @GET("v1/question")
     Call<List<Question>> getQuestions();
 
+    @GET("v1/question/{id}")
+    Call<Question> getQuestion(@Path("id") String questionId);
+
     @GET("v1/questions/room/{room}")
     Call<List<Question>> getQuestions(@Path("room") String room);
 
