@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:id="@+id/profileCharacterLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="fill_parent"
             android:layout_alignParentBottom="true"
             android:gravity="center_horizontal"
@@ -29,14 +29,23 @@
                 android:scaleType="centerInside"
                 android:src="@drawable/temp_char"/>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="DummyClass Lv 1"
-                android:id="@+id/profileCharacterClass"
-                android:textStyle="bold"
-                android:textColor="#fff" />
+                android:layout_gravity="right">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Username"
+                    android:id="@+id/txtUserInfo"
+                    android:layout_marginLeft="0dp"
+                    android:textColor="#fff"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
+
+            </RelativeLayout>
 
             <ProgressBar
                 style="?android:attr/progressBarStyleHorizontal"

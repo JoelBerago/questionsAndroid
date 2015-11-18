@@ -21,6 +21,7 @@ public class User {
     private boolean jail;
 
     public static final int LEVEL_INCREMENT = 20;
+
     public enum Hierarchy{
         //http://crunchify.com/why-and-for-what-should-i-use-enum-java-enum-examples/
 
@@ -51,8 +52,8 @@ public class User {
             level++;
             if(level%10==0 && level<45) {
                 RPGclass.classUP();
-                TextView textView = (TextView) view.findViewById(R.id.profileCharacterClass);
-                textView.setText(getRPGClass()+" Lv. "+getLevel());
+                //TextView textView = (TextView) view.findViewById(R.id.profileCharacterClass);
+                //textView.setText(getRPGClass()+" Lv. "+getLevel());
             }
         }
         percent = (100*XP)/(level*LEVEL_INCREMENT);
@@ -84,8 +85,8 @@ public class User {
             //currently doesn't work, MainActivity.this is not an accessible instance
             if (level % 10 == 0 && level < 45) RPGclass.classUP();
 
-            TextView textView = (TextView) view.findViewById(R.id.profileCharacterClass);
-            textView.setText(getRPGClass() + " Lv " + getLevel());
+            //TextView textView = (TextView) view.findViewById(R.id.profileCharacterClass);
+            //textView.setText(getRPGClass() + " Lv " + getLevel());
         }
         //assume it is impossible to gain enough XP to level up twice at once.
 
