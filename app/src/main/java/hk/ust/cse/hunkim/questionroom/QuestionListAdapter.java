@@ -52,6 +52,8 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
 
         //REPLY
         Button replyBtn = (Button) view.findViewById(R.id.reply);
+        String replyText = "Answer (" + Integer.toString(((Question)question).getAnswers().size()) + ")";
+        replyBtn.setText(replyText);
         replyBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(context, AnswerActivity.class);

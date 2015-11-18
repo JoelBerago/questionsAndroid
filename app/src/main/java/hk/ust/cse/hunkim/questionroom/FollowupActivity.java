@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Answer;
@@ -25,13 +26,19 @@ public class FollowupActivity extends BaseActivity {
 
         setContentView(R.layout.activity_main);
 
-        final ImageButton sendButton = (ImageButton) findViewById(R.id.sendButton);
+        ImageButton sendButton = (ImageButton) findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sendFollowup(view);
             }
         });
+
+        TextView roomText = (TextView) findViewById(R.id.txt_room_name);
+        roomText.setText("Answers");
+
+        EditText inputBox = (EditText) findViewById(R.id.messageInput);
+        inputBox.setHint("Give a Follow up");
 
         Intent intent = getIntent();
         assert (intent != null);

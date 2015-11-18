@@ -1,13 +1,17 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.List;
 
 import hk.ust.cse.hunkim.questionroom.question.Answer;
+import hk.ust.cse.hunkim.questionroom.question.BaseQuestion;
 import hk.ust.cse.hunkim.questionroom.question.FollowUp;
 import hk.ust.cse.hunkim.questionroom.services.ErrorIdResponse;
 import hk.ust.cse.hunkim.questionroom.services.QuestionService;
@@ -44,12 +48,21 @@ public class FollowupListAdapter extends DatabaseListAdapter<FollowUp> {
             tag = answer.getId();
         }
         else {
-            populateView(view, mQuestionList.get(i));
-            tag = mQuestionList.get(i).getId();
+            populateView(view, mQuestionList.get(i-1));
+            tag = mQuestionList.get(i-1).getId();
         }
+
+        //REPLY
+        Button replyBtn = (Button) view.findViewById(R.id.reply);
+        replyBtn.setVisibility(View.GONE);
 
         view.setTag(tag);
         return view;
+    }
+
+    @Override
+    public int getCount() {
+        return super.getCount() + 1;
     }
 
     @Override
