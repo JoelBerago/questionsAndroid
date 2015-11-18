@@ -25,6 +25,8 @@ import javax.security.auth.login.LoginException;
 import hk.ust.cse.hunkim.questionroom.services.LogInResponse;
 import hk.ust.cse.hunkim.questionroom.services.LogInService;
 import hk.ust.cse.hunkim.questionroom.services.RegisterService;
+import hk.ust.cse.hunkim.questionroom.services.UserInfoResponse;
+import hk.ust.cse.hunkim.questionroom.services.UserInfoService;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.JacksonConverterFactory;
@@ -45,7 +47,7 @@ public class LogIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
+        final SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
 
         //Check if user is already logged in then move to JoinActivity
         if (pref.getString("logged", null)!=null && pref.getString("logged", null).toString().equals("logged")) {
@@ -63,7 +65,8 @@ public class LogIn extends AppCompatActivity {
                 EditText email = (EditText) findViewById(R.id.email);
                 EditText password = (EditText) findViewById(R.id.password);
                 TextView text_error= (TextView) findViewById(R.id.errorMessage);
-                handleSignIn(email.getText().toString(),password.getText().toString(), text_error);
+
+                handleSignIn(email.getText().toString(), password.getText().toString(), text_error);
 
             }
         });
@@ -84,9 +87,10 @@ public class LogIn extends AppCompatActivity {
                     Log.i("LOGIN", "error");
                     //TextView text_error= (TextView) view.findViewById(R.id.errorMessage);
                     TextView txt = (TextView) view;
-                    txt.setText(response.body().error.toString()+" Log-in Failed. Please try again.");
+                    txt.setText(response.body().error.toString() + " Log-in Failed. Please try again.");
                 } else {
                     Log.i("LOGIN", "valid log-in");
+                    Log.i("LOGIN", "userId: "+String.valueOf(response.body().userId));
 
                     //save to shared preference
                     SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
@@ -95,19 +99,70 @@ public class LogIn extends AppCompatActivity {
                     editor.putInt("userId", response.body().userId);
                     editor.commit();
 
-                    Log.i("LOGIN", "userId: " + String.valueOf(pref.getInt("userId", -1)));
-                    Intent intent = new Intent(LogIn.this, JoinActivity.class);
-                    //intent.putExtra("userId", response.body().userId);
-                    startActivity(intent);
-
+                    //get user info
+                    saveUserInfo(pref.getInt("userId", -1));
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Log.e("LOGIN", "Failed at SignIn", t);
+                Log.i("LOGIN", "Failed at SignIn", t);
             }
         });
+    }
+
+    //save user object in SharedPreference--> username, experience, jailed
+    public void saveUserInfo(final int userId){
+        UserInfoService service=logIn_retrofit.create(UserInfoService.class);
+        Call<UserInfoResponse> response;
+
+        if (userId!=-1){
+            //get userInfo in backend
+            response=service.getUserInfo(userId);
+            response.enqueue(new Callback<UserInfoResponse>() {
+                @Override
+                public void onResponse(Response<UserInfoResponse> response, Retrofit retrofit) {
+                    Log.i("USER", "got userInfo response");
+
+                    if (response.body().userId != userId) {
+                        Log.i("USER", "Error id got in login not the same as user info");
+                    } else {
+                        Log.i("USER", "Got user info");
+
+                        //save user info to SharedPreference
+                        SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString("username", response.body().username);
+                        editor.putInt("experience", response.body().experience);
+                        editor.putBoolean("jailed", response.body().jailed);
+                        editor.commit();
+
+                        //Debugging
+                        Log.i("USER", "userId: "+String.valueOf(response.body().userId));
+                        Log.i("USER", "username: "+response.body().username.toString());
+                        Log.i("USER", "experience: "+String.valueOf(response.body().experience));
+                        Log.i("USER", "jailed: "+String.valueOf(response.body().jailed));
+
+
+                        //Finish log in
+                        Log.i("LOGIN", "userId: " + String.valueOf(pref.getInt("userId", -1)));
+                        Intent intent = new Intent(LogIn.this, JoinActivity.class);
+                        //intent.putExtra("userId", response.body().userId);
+                        startActivity(intent);
+                    }
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    Log.e("LOGIN", "Failed at SignIn", t);
+                }
+            });
+        }
+
+        else{
+            Log.i("USER","Invalid userId");
+        }
+
     }
 
     public void showSignUpBox(View view){
