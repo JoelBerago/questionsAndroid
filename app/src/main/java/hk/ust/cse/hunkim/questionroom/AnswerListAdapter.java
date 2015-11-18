@@ -38,7 +38,6 @@ public class AnswerListAdapter extends DatabaseListAdapter<Answer> {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        String tag;
         if (view == null) {
             if (i == 0)
                 view = inflater.inflate(R.layout.questionfirst, viewGroup, false);
@@ -46,35 +45,40 @@ public class AnswerListAdapter extends DatabaseListAdapter<Answer> {
                 view = inflater.inflate(R.layout.questionsecond, viewGroup, false);
         }
 
+        //REPLY
+        Button replyBtn = (Button) view.findViewById(R.id.reply);
+        BaseQuestion item;
+
         if (i == 0) {
-            populateView(view, question);
-            tag = question.getId();
+            item = question;
+            replyBtn.setVisibility(View.GONE);
         }
         else {
-            populateView(view, mQuestionList.get(i));
-            tag = mQuestionList.get(i).getId();
+            item = mQuestionList.get(i - 1);
+            final Answer answer = (Answer) item;
+
+            String replyText = "Followup (" + Integer.toString(answer.getFollow_ups().size()) + ")";
+            replyBtn.setText(replyText);
+            replyBtn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, FollowupActivity.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable(FollowupActivity.ANSWER, answer);
+                    intent.putExtras(b);
+                    intent.putExtra(MainActivity.ROOM_NAME, ((AnswerActivity) context).roomName);
+                    context.startActivity(intent);
+                }
+            });
         }
 
-        view.setTag(tag);
+        populateView(view, item);
+        view.setTag(item.getId());
         return view;
     }
 
     @Override
-    protected void populateView(final View view, final BaseQuestion baseQuestion) {
-        super.populateView(view, baseQuestion);
-
-        //REPLY
-        Button replyBtn = (Button) view.findViewById(R.id.reply);
-        replyBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(context, FollowupActivity.class);
-                Bundle b = new Bundle();
-                b.putSerializable(FollowupActivity.ANSWER, baseQuestion);
-                intent.putExtras(b);
-                intent.putExtra(MainActivity.ROOM_NAME, ((AnswerActivity) context).roomName);
-                context.startActivity(intent);
-            }
-        });
+    public int getCount() {
+        return super.getCount() + 1;
     }
 
     @Override
