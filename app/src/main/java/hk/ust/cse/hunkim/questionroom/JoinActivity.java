@@ -24,6 +24,7 @@ public class JoinActivity extends Activity {
     //get access to SharedPreference
     public static final String PREFS_NAME = "LoginPrefs";
 
+
     // UI references.
     private TextView roomNameView;
 
@@ -86,9 +87,23 @@ public class JoinActivity extends Activity {
             // Start main activity
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra(MainActivity.ROOM_NAME, room_name);
-            intent.putExtra(MainActivity.USERID, userId);
+            //intent.putExtra(MainActivity.USERID, userId);
             startActivity(intent);
         }
+    }
+
+    public void handle_userLogout(View view){
+        SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = pref.edit();
+
+        //clear SharedPreferences
+        editor.clear();
+        editor.commit();
+
+        //Go back to login page
+        Intent intent=new Intent(this, LogIn.class);
+        startActivity(intent);
+
     }
 
     private boolean isEmailValid(String room_name) {
