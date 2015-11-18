@@ -1,12 +1,19 @@
 package hk.ust.cse.hunkim.questionroom;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -40,11 +47,13 @@ public class FollowupListAdapter extends DatabaseListAdapter<FollowUp> {
             if (i == 0)
                 view = inflater.inflate(R.layout.questionfirst, viewGroup, false);
             else
-                view = inflater.inflate(R.layout.questionsecond, viewGroup, false);
+                view = inflater.inflate(R.layout.followups, viewGroup, false);
         }
 
         if (i == 0) {
             populateView(view, answer);
+            Button replyButton = (Button) view.findViewById(R.id.reply);
+            replyButton.setVisibility(View.GONE);
             tag = answer.getId();
         }
         else {
@@ -59,6 +68,43 @@ public class FollowupListAdapter extends DatabaseListAdapter<FollowUp> {
     @Override
     public int getCount() {
         return super.getCount() + 1;
+    }
+
+    protected void populateView(final View view, final FollowUp followup) {
+        /// SETUP TEXT
+        TextView textView = (TextView) view.findViewById(R.id.head_desc);
+        textView.setText(followup.getText());
+
+        /// display image under text
+        ImageView iv = (ImageView) view.findViewById(R.id.imageView);
+        iv.setImageBitmap(null);
+        iv.setImageDrawable(null);
+        // only if URL exist
+        if (!followup.getImageURL().equals("")) {
+            Picasso.with(context)
+                    .load(followup.getImageURL())
+                    .resize(240, 140)   // image can stretch up to 240x140 max.
+                    .centerInside()
+                    .into(iv);
+            // upon clicking image view, pop up dialog
+            iv.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Log.e("Debug", "clicked");
+                    //Toast.makeText(activity, question.getImageURL(), Toast.LENGTH_SHORT).show();
+                    if (!followup.getImageURL().equals("")) {
+                        Dialog dialog = new Dialog(context);
+                        dialog.setTitle("View image");
+                        dialog.setContentView(R.layout.imageview_dialog);
+                        ImageView iv = (ImageView) dialog.findViewById(R.id.dialog_image);
+                        iv.setImageBitmap(null);
+                        Picasso.with(dialog.getContext())
+                                .load(followup.getImageURL())
+                                .into(iv);
+                        dialog.show();
+                    }
+                }
+            });
+        }
     }
 
     @Override
