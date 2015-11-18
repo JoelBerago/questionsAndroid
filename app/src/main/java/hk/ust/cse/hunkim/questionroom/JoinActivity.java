@@ -2,6 +2,7 @@ package hk.ust.cse.hunkim.questionroom;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,6 +20,9 @@ public class JoinActivity extends Activity {
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
+
+    //get access to SharedPreference
+    public static final String PREFS_NAME = "LoginPrefs";
 
     // UI references.
     private TextView roomNameView;
@@ -41,8 +45,12 @@ public class JoinActivity extends Activity {
             }
         });
 
-        Bundle extras=getIntent().getExtras();
-        userId=extras.getInt(BaseActivity.USERID);
+        //get the userID from SharedPreference
+        SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
+        userId=pref.getInt("userId", -1);
+
+        //Bundle extras=getIntent().getExtras();
+        //userId=extras.getInt(BaseActivity.USERID);
         Log.i("LOGIN","join activity userId: "+String.valueOf(userId));
     }
 

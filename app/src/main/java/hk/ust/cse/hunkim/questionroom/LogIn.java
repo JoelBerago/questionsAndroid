@@ -47,15 +47,15 @@ public class LogIn extends AppCompatActivity {
 
         SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
 
-        //check if user already logged in
+        //Check if user is already logged in then move to JoinActivity
         if (pref.getString("logged", null)!=null && pref.getString("logged", null).toString().equals("logged")) {
             Log.i("LOGIN", "saved log-in");
             Intent intent = new Intent(LogIn.this, JoinActivity.class);
-            intent.putExtra("userId", pref.getInt("userId", -1)); //-1 invalid user ID!
+            //intent.putExtra("userId", pref.getInt("userId", -1)); //-1 invalid user ID!
             startActivity(intent);
         }
 
-        //not logged in yet
+        //Not logged in yet
         Button signIn = (Button) findViewById(R.id.btn_signIn);
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,20 +84,20 @@ public class LogIn extends AppCompatActivity {
                     Log.i("LOGIN", "error");
                     //TextView text_error= (TextView) view.findViewById(R.id.errorMessage);
                     TextView txt = (TextView) view;
-                    txt.setText("Log-in Failed. Please try again.");
+                    txt.setText(response.body().error.toString()+" Log-in Failed. Please try again.");
                 } else {
                     Log.i("LOGIN", "valid log-in");
+
+                    //save to shared preference
                     SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
                     SharedPreferences.Editor editor = pref.edit();
-
                     editor.putString("logged", "logged");
                     editor.putInt("userId", response.body().userId);
                     editor.commit();
 
                     Log.i("LOGIN", "userId: " + String.valueOf(pref.getInt("userId", -1)));
-
                     Intent intent = new Intent(LogIn.this, JoinActivity.class);
-                    intent.putExtra("userId", response.body().userId);
+                    //intent.putExtra("userId", response.body().userId);
                     startActivity(intent);
 
                 }
