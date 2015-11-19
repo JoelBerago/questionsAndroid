@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,6 +46,9 @@ public abstract class BaseActivity extends ListActivity {
         if (roomName == null || roomName.length() == 0) {
             roomName = "all";
         }
+
+        SharedPreferences pref = getSharedPreferences(JoinActivity.PREFS_NAME, 0);
+        userId=pref.getInt("userId", -1);
 
         TextView txt=(TextView) findViewById(R.id.txt_room_name);
         txt.setText("ROOM: " + roomName);

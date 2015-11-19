@@ -96,17 +96,10 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
             question.getId(),user
         );
 
-        /* DEBUG CODE
-        Log.i("add_like","ADDED");
-        Log.i("add_like",question.getId());
-        Log.i("add_like",user);
-        */
-
         response.enqueue(new Callback<ErrorIdResponse>() {
             @Override
             public void onResponse(Response<ErrorIdResponse> response, Retrofit retrofit) {
                 question.addLikes(user);
-                notifyDataSetChanged();
             }
 
             @Override
@@ -171,34 +164,36 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         Button replyBtn;
     }
 
-    protected void populateView(Holder holder, final BaseQuestion baseQuestion) {
+    protected void populateView(final Holder holder, final BaseQuestion baseQuestion) {
         /// SETUP LIKES
         // Map a Chat object to an entry in our listview
         List<String> likesArr = baseQuestion.getLikes();
-        int likes = 0;
-        if (likesArr != null)
-            likes = likesArr.size();
-        holder.likeButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        add_like(baseQuestion, Integer.toString(((BaseActivity) context).getUserId()));
-                    }
-                }
-        );
-
         // check if we already clicked
         boolean clickable = !likesArr.contains(Integer.toString(((BaseActivity)context).getUserId()));
         holder.likeButton.setClickable(clickable);
         holder.likeButton.setEnabled(clickable);
         if (clickable) {
             holder.likeButton.getBackground().setColorFilter(null);
+            holder.likeButton.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            add_like(baseQuestion, Integer.toString(((BaseActivity) context).getUserId()));
+                            holder.likeButton.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+                            holder.likeButton.getBackground().invalidateSelf();
+                            holder.numberOfLikes.setText(Integer.toString(baseQuestion.getLikes().size() + 1));
+                            holder.likeButton.setClickable(false);
+                            holder.likeButton.setEnabled(false);
+                        }
+                    }
+            );
         } else {
             holder.likeButton.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
         }
+        holder.likeButton.getBackground().invalidateSelf();
 
         if (holder.numberOfLikes != null)
-            holder.numberOfLikes.setText(Integer.toString(likes));
+            holder.numberOfLikes.setText(Integer.toString(likesArr.size()));
 
 
         /// SETUP TEXT
