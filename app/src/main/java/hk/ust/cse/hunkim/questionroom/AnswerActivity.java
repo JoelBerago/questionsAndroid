@@ -1,28 +1,17 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.List;
-
 import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Answer;
 import hk.ust.cse.hunkim.questionroom.question.Question;
-import hk.ust.cse.hunkim.questionroom.services.QuestionService;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.JacksonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
 
 /**
  * Created by Joel on 17/11/2015.
@@ -66,7 +55,7 @@ public class AnswerActivity extends BaseActivity {
         final ListView listView = getListView();
 
         if(mChatListAdapter==null)
-            mChatListAdapter = new AnswerListAdapter(this, R.layout.questionsecond, question, question.getAnswers());
+            mChatListAdapter = new AnswerListAdapter(this, R.layout.answers, question, question.getAnswers());
         listView.setAdapter(mChatListAdapter);
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {

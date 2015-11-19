@@ -128,10 +128,7 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         response.enqueue(new Callback<List<Question>>() {
             @Override
             public void onResponse(Response<List<Question>> response, Retrofit retrofit) {
-                for (Question q : response.body()) {
-                    mQuestionList.add((T) q);
-                }
-
+                mQuestionList = (List<T>) response.body();
                 notifyDataSetChanged();
             }
 
@@ -140,10 +137,6 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
                 Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.pull():", t);
             }
         });
-    }
-
-    public void cleanup() {
-        mQuestionList.clear();
     }
 
     @Override
@@ -170,15 +163,22 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         return 1;
     }
 
-    protected void populateView(final View view, final BaseQuestion baseQuestion) {
+    protected class Holder {
+        Button likeButton;
+        TextView numberOfLikes;
+        TextView textView;
+        ImageView iv;
+        Button replyBtn;
+    }
+
+    protected void populateView(Holder holder, final BaseQuestion baseQuestion) {
         /// SETUP LIKES
         // Map a Chat object to an entry in our listview
         List<String> likesArr = baseQuestion.getLikes();
         int likes = 0;
         if (likesArr != null)
             likes = likesArr.size();
-        final Button likeButton = (Button) view.findViewById(R.id.echo);
-        likeButton.setOnClickListener(
+        holder.likeButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -187,37 +187,35 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
                 }
         );
 
-        TextView numberOfLikes=(TextView) view.findViewById(R.id.numberOfLikes);
-        if (numberOfLikes != null)
-            numberOfLikes.setText(Integer.toString(likes));
-
         // check if we already clicked
         boolean clickable = !likesArr.contains(Integer.toString(((BaseActivity)context).getUserId()));
-        likeButton.setClickable(clickable);
-        likeButton.setEnabled(clickable);
+        holder.likeButton.setClickable(clickable);
+        holder.likeButton.setEnabled(clickable);
         if (clickable) {
-            likeButton.getBackground().setColorFilter(null);
+            holder.likeButton.getBackground().setColorFilter(null);
         } else {
-            likeButton.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+            holder.likeButton.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
         }
 
+        if (holder.numberOfLikes != null)
+            holder.numberOfLikes.setText(Integer.toString(likes));
+
+
         /// SETUP TEXT
-        TextView textView = (TextView) view.findViewById(R.id.head_desc);
-        textView.setText(baseQuestion.getText());
+        holder.textView.setText(baseQuestion.getText());
 
         /// display image under text
-        ImageView iv = (ImageView) view.findViewById(R.id.imageView);
-        iv.setImageBitmap(null);
-        iv.setImageDrawable(null);
+        holder.iv.setImageBitmap(null);
+        holder.iv.setImageDrawable(null);
         // only if URL exist
         if (!baseQuestion.getImageURL().equals("")) {
             Picasso.with(context)
                     .load(baseQuestion.getImageURL())
                     .resize(240, 140)   // image can stretch up to 240x140 max.
                     .centerInside()
-                    .into(iv);
+                    .into(holder.iv);
             // upon clicking image view, pop up dialog
-            iv.setOnClickListener(new View.OnClickListener() {
+            holder.iv.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Log.e("Debug", "clicked");
                     //Toast.makeText(activity, question.getImageURL(), Toast.LENGTH_SHORT).show();

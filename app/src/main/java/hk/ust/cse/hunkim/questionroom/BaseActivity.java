@@ -55,12 +55,6 @@ public abstract class BaseActivity extends ListActivity {
         super.onStart();
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mChatListAdapter.cleanup();
-    }
-
     public void selectImage(View view) {
         // Create intent to Open Image applications like Gallery, Google Photos
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
