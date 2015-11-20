@@ -118,7 +118,6 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity.onCreate(null, null);
         }
-        activity.onStop();
         activity.onStart();
         activity.Close(mButton);
 
