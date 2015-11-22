@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ImageHelper.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">hk.ust.cse.hunkim.questionroom.db</a> &gt; <span class="el_source">ImageHelper.java</span></div><h1>ImageHelper.java</h1><pre class="source lang-java linenums">package hk.ust.cse.hunkim.questionroom.db;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+
+import com.squareup.picasso.Picasso;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+/**
+ * Created by Joel on 31/10/2015.
+ */
+<span class="nc" id="L18">public class ImageHelper {</span>
+<span class="fc" id="L19">    public static int RESULT_LOAD_IMG = 1;</span>
+    private final static int IMAGE_MAX_HEIGHT = 1200;
+    private final static int IMAGE_MAX_WIDTH = 1600;
+    private final static int IMAGE_QUALITY = 75;
+<span class="fc" id="L23">    public static String picturePath = &quot;&quot;;</span>
+
+    public static byte[] compressFile(String imagePath){
+        // http://stackoverflow.com/a/3549021
+
+        //Decode image size
+<span class="fc" id="L29">        BitmapFactory.Options o = new BitmapFactory.Options();</span>
+<span class="fc" id="L30">        o.inJustDecodeBounds = true;</span>
+<span class="fc" id="L31">        BitmapFactory.decodeFile(imagePath, o);</span>
+
+<span class="fc" id="L33">        int scale = 1;</span>
+<span class="fc bfc" id="L34" title="All 4 branches covered.">        if (o.outHeight &gt; o.outWidth  &amp;&amp; o.outHeight &gt; IMAGE_MAX_HEIGHT) {</span>
+<span class="fc" id="L35">            scale = (int)Math.pow(2, (int) Math.ceil(Math.log(IMAGE_MAX_HEIGHT /</span>
+<span class="fc" id="L36">                    (double)o.outHeight) / Math.log(0.5)));</span>
+        }
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        else if (o.outWidth &gt; IMAGE_MAX_WIDTH) {</span>
+<span class="fc" id="L39">            scale = (int)Math.pow(2, (int) Math.ceil(Math.log(IMAGE_MAX_WIDTH /</span>
+<span class="fc" id="L40">                    (double)o.outWidth) / Math.log(0.5)));</span>
+        }
+
+        //Decode with inSampleSize
+<span class="fc" id="L44">        BitmapFactory.Options o2 = new BitmapFactory.Options();</span>
+<span class="fc" id="L45">        o2.inSampleSize = scale;</span>
+<span class="fc" id="L46">        Bitmap myImg =  BitmapFactory.decodeFile(imagePath, o2);</span>
+
+        // Compress the Image to jpeg to reduce image size to make upload easy
+<span class="fc" id="L49">        ByteArrayOutputStream stream = new ByteArrayOutputStream();</span>
+<span class="fc" id="L50">        myImg.compress(Bitmap.CompressFormat.JPEG, IMAGE_QUALITY, stream);</span>
+
+
+        // Clear picturePath when done.
+<span class="fc" id="L54">        picturePath = &quot;&quot;;</span>
+<span class="fc" id="L55">        return stream.toByteArray();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

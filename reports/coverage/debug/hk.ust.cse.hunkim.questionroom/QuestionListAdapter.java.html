@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>QuestionListAdapter.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">hk.ust.cse.hunkim.questionroom</a> &gt; <span class="el_source">QuestionListAdapter.java</span></div><h1>QuestionListAdapter.java</h1><pre class="source lang-java linenums">package hk.ust.cse.hunkim.questionroom;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.util.Collections;
+import java.util.List;
+
+import hk.ust.cse.hunkim.questionroom.db.UserHelper;
+import hk.ust.cse.hunkim.questionroom.question.BaseQuestion;
+import hk.ust.cse.hunkim.questionroom.question.Question;
+import hk.ust.cse.hunkim.questionroom.services.ErrorIdResponse;
+import hk.ust.cse.hunkim.questionroom.services.QuestionService;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
+
+/**
+ * Created by Joel on 29/10/2015.
+ */
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">public class QuestionListAdapter extends DatabaseListAdapter&lt;Question&gt; {</span>
+    public QuestionListAdapter(Context context, int textViewResourceId, List&lt;Question&gt; questionList) {
+<span class="fc" id="L31">        super(context, textViewResourceId, questionList);</span>
+
+        // Must be MainActivity
+<span class="pc bpc" id="L34" title="3 of 4 branches missed.">        assert (context instanceof MainActivity);</span>
+<span class="fc" id="L35">        this.mQuestionList = questionList;</span>
+<span class="fc" id="L36">    }</span>
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        Holder holder;
+<span class="fc" id="L41">        final Question question = mQuestionList.get(i);</span>
+
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (view == null) {</span>
+<span class="fc" id="L44">            view = inflater.inflate(R.layout.questionfirst, viewGroup, false);</span>
+
+<span class="fc" id="L46">            holder = new Holder();</span>
+<span class="fc" id="L47">            holder.likeButton = (Button) view.findViewById(R.id.echo);</span>
+<span class="fc" id="L48">            holder.numberOfLikes = (TextView) view.findViewById(R.id.numberOfLikes);</span>
+<span class="fc" id="L49">            holder.textView = (TextView) view.findViewById(R.id.head_desc);</span>
+<span class="fc" id="L50">            holder.iv = (ImageView) view.findViewById(R.id.imageView);</span>
+<span class="fc" id="L51">            holder.replyBtn = (Button) view.findViewById(R.id.reply);</span>
+<span class="fc" id="L52">            holder.img_userCharacter=(ImageView)view.findViewById(R.id.questionUserCharacter);</span>
+<span class="fc" id="L53">            holder.txt_userClass=(TextView)view.findViewById(R.id.questionUserClass);</span>
+<span class="fc" id="L54">            holder.txt_userLvl=(TextView)view.findViewById(R.id.questionUserLvl);</span>
+<span class="fc" id="L55">            view.setTag(holder);</span>
+        } else {
+<span class="fc" id="L57">            holder = (Holder) view.getTag();</span>
+        }
+
+        //set profile info
+<span class="fc" id="L61">        int experience= question.getExperience();</span>
+<span class="fc" id="L62">        int level=UserHelper.getLevel(experience);</span>
+<span class="fc" id="L63">        holder.txt_userClass.setText(UserHelper.getUserClass(level));</span>
+<span class="fc" id="L64">        holder.txt_userLvl.setText(&quot;Lvl &quot;+String.valueOf(level));</span>
+<span class="fc" id="L65">        UserHelper.setCharacterImage(level, holder.img_userCharacter);</span>
+
+        //REPLY
+<span class="fc" id="L68">        String replyText = &quot;Answer (&quot; + Integer.toString(question.getAnswers().size()) + &quot;)&quot;;</span>
+<span class="fc" id="L69">        holder.replyBtn.setText(replyText);</span>
+<span class="fc" id="L70">        holder.replyBtn.setOnClickListener(new View.OnClickListener() {</span>
+            public void onClick(View v) {
+<span class="nc" id="L72">                Intent intent = new Intent(context, AnswerActivity.class);</span>
+<span class="nc" id="L73">                Bundle b = new Bundle();</span>
+<span class="nc" id="L74">                b.putSerializable(AnswerActivity.QUESTION, question);</span>
+<span class="nc" id="L75">                intent.putExtras(b);</span>
+<span class="nc" id="L76">                intent.putExtra(MainActivity.ROOM_NAME, ((MainActivity) context).roomName);</span>
+<span class="nc" id="L77">                context.startActivity(intent);</span>
+<span class="nc" id="L78">            }</span>
+        });
+
+<span class="fc" id="L81">        populateView(holder, question);</span>
+
+<span class="fc" id="L83">        return view;</span>
+    }
+
+    @Override
+    public void push(final Question question, String baseID) {
+<span class="fc" id="L88">        QuestionService service = retrofit.create(QuestionService.class);</span>
+
+<span class="fc" id="L90">        final Call&lt;ErrorIdResponse&gt; response = service.createQuestion(</span>
+<span class="fc" id="L91">                question.getText(),</span>
+<span class="fc" id="L92">                question.getImageURL(),</span>
+<span class="fc" id="L93">                question.getRoom(),</span>
+<span class="fc" id="L94">                ((MainActivity) context).getUserId()</span>
+
+        );
+
+<span class="fc" id="L98">        response.enqueue(new Callback&lt;ErrorIdResponse&gt;() {</span>
+            @Override
+            public void onResponse(Response&lt;ErrorIdResponse&gt; response, Retrofit retrofit) {
+<span class="fc" id="L101">                question.setId(response.body().id);</span>
+<span class="fc" id="L102">                mQuestionList.add(question);</span>
+<span class="fc" id="L103">                notifyDataSetChanged();</span>
+<span class="fc" id="L104">            }</span>
+
+            @Override
+            public void onFailure(Throwable t) {
+<span class="nc" id="L108">                Log.e(&quot;QUESTIONROOM&quot;, &quot;Failed at DatabaseListAdapter.push():&quot;, t);</span>
+<span class="nc" id="L109">            }</span>
+        });
+<span class="fc" id="L111">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DatabaseListAdapter.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">hk.ust.cse.hunkim.questionroom</a> &gt; <span class="el_source">DatabaseListAdapter.java</span></div><h1>DatabaseListAdapter.java</h1><pre class="source lang-java linenums">package hk.ust.cse.hunkim.questionroom;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import hk.ust.cse.hunkim.questionroom.db.DBHelper;
+import hk.ust.cse.hunkim.questionroom.db.DBUtil;
+import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
+import hk.ust.cse.hunkim.questionroom.question.Answer;
+import hk.ust.cse.hunkim.questionroom.question.BaseQuestion;
+import hk.ust.cse.hunkim.questionroom.question.FollowUp;
+import hk.ust.cse.hunkim.questionroom.question.Question;
+import hk.ust.cse.hunkim.questionroom.services.ErrorIdResponse;
+import hk.ust.cse.hunkim.questionroom.services.ImageResponse;
+import hk.ust.cse.hunkim.questionroom.services.PhotoService;
+import hk.ust.cse.hunkim.questionroom.services.QuestionService;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.JacksonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
+
+/**
+ * Created by Joel on 29/10/2015.
+ */
+public abstract class DatabaseListAdapter&lt;T extends BaseQuestion&gt; extends BaseAdapter {
+    protected final static  String BASE_URL = &quot;http://questions-backend.herokuapp.com/api/&quot;;
+<span class="fc" id="L49">    protected final static Retrofit retrofit = new Retrofit.Builder()</span>
+<span class="fc" id="L50">            .baseUrl(BASE_URL)</span>
+<span class="fc" id="L51">            .addConverterFactory(JacksonConverterFactory.create())</span>
+<span class="fc" id="L52">            .build();</span>
+
+    protected Context context;
+    protected LayoutInflater inflater;
+    protected List&lt;T&gt; mQuestionList;
+
+<span class="fc" id="L58">    public DatabaseListAdapter(Context context, int mLayoutID, List&lt;T&gt; mQuestionList) {</span>
+<span class="fc" id="L59">        this.context = context;</span>
+<span class="fc" id="L60">        this.mQuestionList = mQuestionList;</span>
+
+<span class="fc" id="L62">        inflater =</span>
+<span class="fc" id="L63">                (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);</span>
+<span class="fc" id="L64">    }</span>
+
+    public void uploadPhoto(String picturePath, final T baseQuestion, final String baseID) {
+<span class="fc" id="L67">        PhotoService service = retrofit.create(PhotoService.class);</span>
+<span class="fc" id="L68">        final Call&lt;ImageResponse&gt; responseURL = service.uploadPhoto(</span>
+<span class="fc" id="L69">                RequestBody.create(</span>
+<span class="fc" id="L70">                        MediaType.parse(&quot;text/plain&quot;),</span>
+<span class="fc" id="L71">                        ImageHelper.compressFile(picturePath)));</span>
+
+<span class="fc" id="L73">        responseURL.enqueue(</span>
+<span class="fc" id="L74">                new Callback&lt;ImageResponse&gt;() {</span>
+                    @Override
+                    public void onResponse(Response&lt;ImageResponse&gt; response, Retrofit retrofit) {
+<span class="fc" id="L77">                        baseQuestion.setImageURL(response.body().Filepath);</span>
+<span class="fc" id="L78">                        push(baseQuestion, baseID);</span>
+<span class="fc" id="L79">                        notifyDataSetChanged();</span>
+<span class="fc" id="L80">                    }</span>
+
+                    @Override
+                    public void onFailure(Throwable t) {
+<span class="nc" id="L84">                        Log.e(&quot;QuestionRoom&quot;, &quot;uploadPhoto() failed at callback&quot;, t);</span>
+<span class="nc" id="L85">                    }</span>
+                }
+        );
+<span class="fc" id="L88">    }</span>
+
+    public abstract void push(final T basequestion, String baseID);
+
+    public void add_like(final BaseQuestion question, final String user){
+<span class="nc" id="L93">        QuestionService service=retrofit.create(QuestionService.class);</span>
+
+<span class="nc" id="L95">        Call&lt;ErrorIdResponse&gt; response=service.addLike(</span>
+<span class="nc" id="L96">            question.getId(),user</span>
+        );
+
+<span class="nc" id="L99">        response.enqueue(new Callback&lt;ErrorIdResponse&gt;() {</span>
+            @Override
+            public void onResponse(Response&lt;ErrorIdResponse&gt; response, Retrofit retrofit) {
+<span class="nc" id="L102">                question.addLikes(user);</span>
+<span class="nc" id="L103">            }</span>
+
+            @Override
+            public void onFailure(Throwable t) {
+<span class="nc" id="L107">                Log.e(&quot;QUESTIONROOM&quot;, &quot;Failed at DatabaseListAdapter.add_like():&quot;, t);</span>
+<span class="nc" id="L108">            }</span>
+        });
+<span class="nc" id="L110">    }</span>
+
+    public void pull(final String roomName) {
+<span class="fc" id="L113">        QuestionService service = retrofit.create(QuestionService.class);</span>
+        Call&lt;List&lt;Question&gt;&gt; response;
+
+<span class="fc" id="L116">        response = service.getQuestions(roomName);</span>
+
+<span class="fc" id="L118">        response.enqueue(new Callback&lt;List&lt;Question&gt;&gt;() {</span>
+            @Override
+            public void onResponse(Response&lt;List&lt;Question&gt;&gt; response, Retrofit retrofit) {
+<span class="fc" id="L121">                mQuestionList = (List&lt;T&gt;) response.body();</span>
+<span class="fc" id="L122">                notifyDataSetChanged();</span>
+<span class="fc" id="L123">            }</span>
+
+            @Override
+            public void onFailure(Throwable t) {
+<span class="nc" id="L127">                Log.e(&quot;QUESTIONROOM&quot;, &quot;Failed at DatabaseListAdapter.pull():&quot;, t);</span>
+<span class="nc" id="L128">            }</span>
+        });
+<span class="fc" id="L130">    }</span>
+
+    @Override
+    public int getCount() {
+<span class="fc" id="L134">        return mQuestionList.size();</span>
+    }
+
+    @Override
+    public Object getItem(int i) {
+<span class="nc" id="L139">        return mQuestionList.get(i);</span>
+    }
+
+    @Override
+    public long getItemId(int i) {
+<span class="fc" id="L144">        return i;</span>
+    }
+
+    @Override
+    public int getViewTypeCount() {
+
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        if (getCount() != 0)</span>
+<span class="fc" id="L151">            return getCount();</span>
+
+<span class="fc" id="L153">        return 1;</span>
+    }
+
+<span class="fc" id="L156">    protected class Holder {</span>
+        Button likeButton;
+        TextView numberOfLikes;
+        TextView textView;
+        ImageView iv;
+        Button replyBtn;
+        TextView txt_userClass;
+        TextView txt_userLvl;
+        ImageView img_userCharacter;
+    }
+
+    protected void populateView(final Holder holder, final BaseQuestion baseQuestion) {
+        /// SETUP LIKES
+        // Map a Chat object to an entry in our listview
+<span class="fc" id="L170">        List&lt;String&gt; likesArr = baseQuestion.getLikes();</span>
+        // check if we already clicked
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">        boolean clickable = !likesArr.contains(Integer.toString(((BaseActivity)context).getUserId()));</span>
+<span class="pc bpc" id="L173" title="1 of 4 branches missed.">        if (((BaseActivity)context).getUserId() == -1||((BaseActivity)context).getJailed()) {</span>
+<span class="fc" id="L174">            clickable = false;</span>
+        }
+
+<span class="fc" id="L177">        holder.likeButton.setClickable(clickable);</span>
+<span class="fc" id="L178">        holder.likeButton.setEnabled(clickable);</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        if (clickable) {</span>
+<span class="fc" id="L180">            holder.likeButton.getBackground().setColorFilter(null);</span>
+<span class="fc" id="L181">            holder.likeButton.setOnClickListener(</span>
+<span class="fc" id="L182">                    new View.OnClickListener() {</span>
+                        @Override
+                        public void onClick(View view) {
+<span class="nc" id="L185">                            add_like(baseQuestion, Integer.toString(((BaseActivity) context).getUserId()));</span>
+<span class="nc" id="L186">                            holder.likeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);</span>
+<span class="nc" id="L187">                            holder.likeButton.getBackground().invalidateSelf();</span>
+<span class="nc" id="L188">                            holder.numberOfLikes.setText(Integer.toString(baseQuestion.getLikes().size() + 1));</span>
+<span class="nc" id="L189">                            holder.likeButton.setClickable(false);</span>
+<span class="nc" id="L190">                            holder.likeButton.setEnabled(false);</span>
+<span class="nc" id="L191">                        }</span>
+                    }
+            );
+        } else {
+<span class="fc" id="L195">            holder.likeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);</span>
+        }
+<span class="fc" id="L197">        holder.likeButton.getBackground().invalidateSelf();</span>
+<span class="fc" id="L198">        holder.numberOfLikes.setText(Integer.toString(likesArr.size()));</span>
+
+
+        /// SETUP TEXT
+<span class="fc" id="L202">        holder.textView.setText(baseQuestion.getText());</span>
+
+        /// display image under text
+<span class="fc" id="L205">        holder.iv.setImageBitmap(null);</span>
+<span class="fc" id="L206">        holder.iv.setImageDrawable(null);</span>
+        // only if URL exist
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        if (!baseQuestion.getImageURL().equals(&quot;&quot;)) {</span>
+<span class="fc" id="L209">            Picasso.with(context)</span>
+<span class="fc" id="L210">                    .load(baseQuestion.getImageURL())</span>
+<span class="fc" id="L211">                    .resize(240, 140)   // image can stretch up to 240x140 max.</span>
+<span class="fc" id="L212">                    .centerInside()</span>
+<span class="fc" id="L213">                    .into(holder.iv);</span>
+            // upon clicking image view, pop up dialog
+<span class="fc" id="L215">            holder.iv.setOnClickListener(new View.OnClickListener() {</span>
+                public void onClick(View v) {
+<span class="nc" id="L217">                    Log.e(&quot;Debug&quot;, &quot;clicked&quot;);</span>
+                    //Toast.makeText(activity, question.getImageURL(), Toast.LENGTH_SHORT).show();
+<span class="nc bnc" id="L219" title="All 2 branches missed.">                    if (!baseQuestion.getImageURL().equals(&quot;&quot;)) {</span>
+<span class="nc" id="L220">                        Dialog dialog = new Dialog(context);</span>
+<span class="nc" id="L221">                        dialog.setTitle(&quot;View image&quot;);</span>
+<span class="nc" id="L222">                        dialog.setContentView(R.layout.imageview_dialog);</span>
+<span class="nc" id="L223">                        ImageView iv = (ImageView) dialog.findViewById(R.id.dialog_image);</span>
+<span class="nc" id="L224">                        iv.setImageBitmap(null);</span>
+<span class="nc" id="L225">                        Picasso.with(dialog.getContext())</span>
+<span class="nc" id="L226">                                .load(baseQuestion.getImageURL())</span>
+<span class="nc" id="L227">                                .into(iv);</span>
+<span class="nc" id="L228">                        dialog.show();</span>
+                    }
+<span class="nc" id="L230">                }</span>
+            });
+        }
+<span class="fc" id="L233">    }</span>
+
+    protected void setList(List&lt;T&gt; questionList) {
+<span class="nc" id="L236">        this.mQuestionList = questionList;</span>
+<span class="nc" id="L237">        notifyDataSetChanged();</span>
+<span class="nc" id="L238">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

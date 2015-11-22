@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BaseActivity.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">hk.ust.cse.hunkim.questionroom</a> &gt; <span class="el_source">BaseActivity.java</span></div><h1>BaseActivity.java</h1><pre class="source lang-java linenums">package hk.ust.cse.hunkim.questionroom;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ListActivity;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
+import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
+import hk.ust.cse.hunkim.questionroom.db.UserHelper;
+import hk.ust.cse.hunkim.questionroom.question.Question;
+
+/**
+ * Created by Joel on 17/11/2015.
+ */
+<span class="fc" id="L32">public abstract class BaseActivity extends ListActivity {</span>
+    public static final String ROOM_NAME = &quot;Room_name&quot;;
+    protected String roomName;
+    protected DatabaseListAdapter mChatListAdapter;
+    public static final String PREFS_NAME = &quot;LoginPrefs&quot;;
+
+    int experience;
+    String username;
+    boolean jailed;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L44">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L45">        setContentView(R.layout.activity_main);</span>
+
+<span class="fc" id="L47">        Intent intent = getIntent();</span>
+        // Intent will never be null!
+        //assert (intent != null);
+
+        // Make it a bit more reliable
+<span class="fc" id="L52">        roomName = intent.getStringExtra(ROOM_NAME).toLowerCase();</span>
+
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (getUserId() == -1) {</span>
+<span class="fc" id="L55">            findViewById(R.id.listFooter).setVisibility(View.GONE);</span>
+        }
+
+<span class="fc" id="L58">        TextView txt=(TextView) findViewById(R.id.txt_room_name);</span>
+<span class="fc" id="L59">        txt.setText(&quot;ROOM: &quot; + roomName);</span>
+
+        //UPDATE USER PROFILE======================================
+        //data from SharedPreference
+<span class="fc" id="L63">        SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);</span>
+<span class="fc" id="L64">        experience=pref.getInt(&quot;experience&quot;, 0);</span>
+<span class="fc" id="L65">        username= pref.getString(&quot;username&quot;, null);</span>
+<span class="fc" id="L66">        jailed=pref.getBoolean(&quot;jailed&quot;, false);</span>
+<span class="fc" id="L67">        int level= UserHelper.getLevel(experience);</span>
+
+<span class="fc" id="L69">        updateUser(level);</span>
+<span class="fc" id="L70">        updateCharacter(level);</span>
+<span class="fc" id="L71">        checkJailed(jailed);</span>
+        //===============================================================
+
+<span class="fc" id="L74">    }</span>
+
+    @Override
+    public void onStart() {
+<span class="fc" id="L78">        super.onStart();</span>
+<span class="fc" id="L79">    }</span>
+
+    public void selectImage(View view) {
+        // Create intent to Open Image applications like Gallery, Google Photos
+<span class="nc" id="L83">        Intent galleryIntent = new Intent(Intent.ACTION_PICK,</span>
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // Start the Intent
+
+<span class="nc" id="L87">        startActivityForResult(galleryIntent, ImageHelper.RESULT_LOAD_IMG);</span>
+
+<span class="nc" id="L89">    }</span>
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+<span class="nc" id="L93">        super.onActivityResult(requestCode, resultCode, data);</span>
+<span class="nc bnc" id="L94" title="All 6 branches missed.">        if (requestCode == ImageHelper.RESULT_LOAD_IMG &amp;&amp; resultCode == RESULT_OK &amp;&amp; data != null) {</span>
+<span class="nc" id="L95">            Uri selectedImage = data.getData();</span>
+<span class="nc" id="L96">            String[] filePathColumn = { MediaStore.Images.Media.DATA };</span>
+<span class="nc" id="L97">            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);</span>
+<span class="nc" id="L98">            cursor.moveToFirst();</span>
+<span class="nc" id="L99">            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);</span>
+<span class="nc" id="L100">            ImageHelper.picturePath = cursor.getString(columnIndex);</span>
+<span class="nc" id="L101">            cursor.close();</span>
+
+<span class="nc" id="L103">            ImageView iv = (ImageView) findViewById(R.id.selected_picture);</span>
+<span class="nc" id="L104">            iv.setImageBitmap(null);</span>
+<span class="nc" id="L105">            iv.setImageDrawable(null);</span>
+<span class="nc" id="L106">            Log.i(&quot;picture&quot;, ImageHelper.picturePath);</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            if (!ImageHelper.picturePath.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L108">                Picasso.with(this)</span>
+<span class="nc" id="L109">                        .load(&quot;file://&quot;+ImageHelper.picturePath)</span>
+<span class="nc" id="L110">                        .placeholder(R.drawable.firebase_logo)</span>
+<span class="nc" id="L111">                        .resize(200, 200)   // image can stretch up to 240x140 max.</span>
+<span class="nc" id="L112">                        .centerInside()</span>
+<span class="nc" id="L113">                        .into(iv);</span>
+<span class="nc" id="L114">                Log.i(&quot;picture&quot;, &quot;should be displayed&quot;);</span>
+            }
+
+        }
+<span class="nc" id="L118">    }</span>
+
+    public void imageClicked(View view){
+<span class="nc" id="L121">        final ImageView iv = (ImageView) findViewById(R.id.selected_picture);</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        if(!(iv.getDrawable()==null)){</span>
+<span class="nc" id="L123">            AlertDialog.Builder builder = new AlertDialog.Builder(this);</span>
+<span class="nc" id="L124">            builder.setMessage(&quot;Remove Image?&quot;)</span>
+<span class="nc" id="L125">                    .setCancelable(false)</span>
+<span class="nc" id="L126">                    .setPositiveButton(&quot;OK&quot;, new DialogInterface.OnClickListener() {</span>
+                        //delete image
+                        public void onClick(DialogInterface dialog, int id) {
+<span class="nc" id="L129">                            ImageHelper.picturePath=&quot;&quot;;</span>
+<span class="nc" id="L130">                            iv.setImageBitmap(null);</span>
+<span class="nc" id="L131">                            iv.setImageDrawable(null);</span>
+<span class="nc" id="L132">                        }</span>
+                    })
+<span class="nc" id="L134">                    .setNegativeButton(&quot;Cancel&quot;, new DialogInterface.OnClickListener() {</span>
+                        //do nothing
+                        public void onClick(DialogInterface dialog, int id) {
+<span class="nc" id="L137">                            dialog.cancel();</span>
+<span class="nc" id="L138">                        }</span>
+                    });
+<span class="nc" id="L140">            AlertDialog alert = builder.create();</span>
+<span class="nc" id="L141">            alert.show();</span>
+<span class="nc" id="L142">        }</span>
+        else{
+<span class="nc" id="L144">            Log.i(&quot;image&quot;,&quot;no images selected&quot;);</span>
+<span class="nc" id="L145">            return;</span>
+        }
+<span class="nc" id="L147">    }</span>
+
+    public void Close(View view) {
+<span class="nc" id="L150">        finish();</span>
+<span class="nc" id="L151">    }</span>
+
+    public int getUserId() {
+<span class="fc" id="L154">        SharedPreferences pref = getSharedPreferences(JoinActivity.PREFS_NAME, 0);</span>
+<span class="fc" id="L155">        return pref.getInt(&quot;userId&quot;, -1); }</span>
+
+    public int getExperience() {
+<span class="fc" id="L158">        SharedPreferences pref = getSharedPreferences(JoinActivity.PREFS_NAME, 0);</span>
+<span class="fc" id="L159">        return pref.getInt(&quot;experience&quot;, -1); }</span>
+
+    public boolean getJailed(){
+<span class="fc" id="L162">        SharedPreferences pref = getSharedPreferences(JoinActivity.PREFS_NAME, 0);</span>
+<span class="fc" id="L163">        jailed=pref.getBoolean(&quot;jailed&quot;, false);;</span>
+<span class="fc" id="L164">        return jailed;</span>
+    }
+
+    public void addXP(int exp){
+<span class="fc" id="L168">        SharedPreferences pref = getSharedPreferences(JoinActivity.PREFS_NAME, 0);</span>
+<span class="fc" id="L169">        SharedPreferences.Editor editor = pref.edit();</span>
+<span class="fc" id="L170">        int experience= pref.getInt(&quot;experience&quot;, 0);</span>
+<span class="fc" id="L171">        String username=pref.getString(&quot;username&quot;, null);</span>
+
+<span class="fc" id="L173">        experience+=exp;</span>
+<span class="fc" id="L174">        editor.putInt(&quot;experience&quot;, experience);</span>
+<span class="fc" id="L175">        editor.commit();</span>
+
+<span class="fc" id="L177">        int level= UserHelper.getLevel(experience);</span>
+        //update UI
+<span class="fc" id="L179">        TextView username_txt=(TextView)findViewById(R.id.txtUserInfo);</span>
+<span class="fc" id="L180">        username_txt.setText(username + &quot; Lvl &quot; + String.valueOf(level));</span>
+
+<span class="fc" id="L182">        ProgressBar expBar = (ProgressBar) findViewById(R.id.experienceBar);</span>
+<span class="fc" id="L183">        expBar.setProgress(UserHelper.getResidualExperience(experience));</span>
+
+<span class="pc bpc" id="L185" title="1 of 2 branches missed.">        if(level%5==1){</span>
+<span class="fc" id="L186">            updateCharacter(level);</span>
+        }
+<span class="fc" id="L188">    }</span>
+
+    public void updateCharacter(int level){
+<span class="fc" id="L191">        ImageView img=(ImageView)findViewById(R.id.profileCharacter);</span>
+<span class="fc" id="L192">        UserHelper.setCharacterImage(level,img);</span>
+<span class="fc" id="L193">    }</span>
+
+    public void checkJailed(boolean jailed){
+<span class="fc" id="L196">        ImageButton sendButton = (ImageButton) findViewById(R.id.sendButton);</span>
+<span class="fc" id="L197">        ImageButton uploadImage = (ImageButton) findViewById(R.id.uploadImage);</span>
+<span class="fc" id="L198">        TextView msg_input=(TextView)findViewById(R.id.messageInput);</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        if(jailed){</span>
+<span class="fc" id="L200">            sendButton.setVisibility(View.GONE);</span>
+<span class="fc" id="L201">            uploadImage.setVisibility(View.GONE);</span>
+<span class="fc" id="L202">            msg_input.setText(&quot;JAILED!&quot;);</span>
+<span class="fc" id="L203">            msg_input.setTextColor(Color.RED);</span>
+<span class="fc" id="L204">            msg_input.setEnabled(false);</span>
+
+            //update character image
+
+        }
+        else{
+<span class="fc" id="L210">            sendButton.setVisibility(View.VISIBLE);</span>
+<span class="fc" id="L211">            uploadImage.setVisibility(View.VISIBLE);</span>
+<span class="fc" id="L212">            msg_input.setText(&quot;&quot;);</span>
+<span class="fc" id="L213">            msg_input.setEnabled(true);</span>
+
+            //update character image
+        }
+<span class="fc" id="L217">    }</span>
+
+    public void updateUser(int level){
+        //access UI components
+<span class="fc" id="L221">        TextView username_txt=(TextView)findViewById(R.id.txtUserInfo);</span>
+<span class="fc" id="L222">        ProgressBar expBar = (ProgressBar) findViewById(R.id.experienceBar);</span>
+        //update UI
+<span class="fc" id="L224">        username_txt.setText(username+&quot; Lvl &quot;+String.valueOf(level));</span>
+<span class="fc" id="L225">        expBar.setProgress(UserHelper.getResidualExperience(experience));</span>
+<span class="fc" id="L226">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

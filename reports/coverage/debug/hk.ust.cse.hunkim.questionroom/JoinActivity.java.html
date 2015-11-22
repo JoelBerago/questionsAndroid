@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JoinActivity.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">hk.ust.cse.hunkim.questionroom</a> &gt; <span class="el_source">JoinActivity.java</span></div><h1>JoinActivity.java</h1><pre class="source lang-java linenums">package hk.ust.cse.hunkim.questionroom;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
+
+
+/**
+ * A login screen that offers login via email/password.
+ */
+<span class="fc" id="L18">public class JoinActivity extends Activity {</span>
+    private int userId;
+    /**
+     * Keep track of the login task to ensure we can cancel it if requested.
+     */
+
+    //get access to SharedPreference
+    public static final String PREFS_NAME = &quot;LoginPrefs&quot;;
+
+
+    // UI references.
+    private TextView roomNameView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L33">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L34">        setContentView(R.layout.activity_join);</span>
+
+        // Set up the login form.
+<span class="fc" id="L37">        roomNameView = (TextView) findViewById(R.id.room_name);</span>
+
+        //get the userID from SharedPreference
+<span class="fc" id="L40">        SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);</span>
+<span class="fc" id="L41">        userId=pref.getInt(&quot;userId&quot;, -1);</span>
+
+        //Bundle extras=getIntent().getExtras();
+        //userId=extras.getInt(BaseActivity.USERID);
+<span class="fc" id="L45">        Log.i(&quot;LOGIN&quot;,&quot;join activity userId: &quot;+String.valueOf(userId));</span>
+<span class="fc" id="L46">    }</span>
+
+
+    /**
+     * Attempts to sign in or register the account specified by the login form.
+     * If there are form errors (invalid email, missing fields, etc.), the
+     * errors are presented and no actual login attempt is made.
+     */
+    public void attemptJoin(View view) {
+        // Reset errors.
+<span class="fc" id="L56">        roomNameView.setError(null);</span>
+
+        // Store values at the time of the login attempt.
+<span class="fc" id="L59">        String room_name = roomNameView.getText().toString();</span>
+
+<span class="fc" id="L61">        boolean cancel = false;</span>
+
+        // Check for a valid email address.
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (TextUtils.isEmpty(room_name)) {</span>
+<span class="fc" id="L65">            roomNameView.setError(getString(R.string.error_field_required));</span>
+<span class="fc" id="L66">            cancel = true;</span>
+        }
+
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (cancel) {</span>
+<span class="fc" id="L70">            roomNameView.setText(&quot;&quot;);</span>
+<span class="fc" id="L71">            roomNameView.requestFocus();</span>
+        } else {
+            // Start main activity
+<span class="fc" id="L74">            Intent intent = new Intent(this, MainActivity.class);</span>
+<span class="fc" id="L75">            intent.putExtra(MainActivity.ROOM_NAME, room_name);</span>
+<span class="fc" id="L76">            startActivity(intent);</span>
+        }
+<span class="fc" id="L78">    }</span>
+
+    public void handle_userLogout(View view){
+<span class="nc" id="L81">        SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);</span>
+<span class="nc" id="L82">        SharedPreferences.Editor editor = pref.edit();</span>
+
+        //clear SharedPreferences
+<span class="nc" id="L85">        editor.clear();</span>
+<span class="nc" id="L86">        editor.commit();</span>
+
+        //Go back to login page
+<span class="nc" id="L89">        Intent intent=new Intent(this, LogIn.class);</span>
+<span class="nc" id="L90">        startActivity(intent);</span>
+
+<span class="nc" id="L92">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

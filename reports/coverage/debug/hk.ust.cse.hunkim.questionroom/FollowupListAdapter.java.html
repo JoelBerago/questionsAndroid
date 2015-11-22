@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FollowupListAdapter.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">hk.ust.cse.hunkim.questionroom</a> &gt; <span class="el_source">FollowupListAdapter.java</span></div><h1>FollowupListAdapter.java</h1><pre class="source lang-java linenums">package hk.ust.cse.hunkim.questionroom;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
+import hk.ust.cse.hunkim.questionroom.db.UserHelper;
+import hk.ust.cse.hunkim.questionroom.question.Answer;
+import hk.ust.cse.hunkim.questionroom.question.BaseQuestion;
+import hk.ust.cse.hunkim.questionroom.question.FollowUp;
+import hk.ust.cse.hunkim.questionroom.services.ErrorIdResponse;
+import hk.ust.cse.hunkim.questionroom.services.QuestionService;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
+
+/**
+ * Created by J.T and Long on 10/31/2015.
+ */
+public class FollowupListAdapter extends DatabaseListAdapter&lt;FollowUp&gt; {
+    private final Answer answer;
+
+    public FollowupListAdapter(Context context, int textViewResourceId, Answer answer, List&lt;FollowUp&gt; followUpList) {
+<span class="fc" id="L38">        super(context, textViewResourceId, followUpList);</span>
+<span class="fc" id="L39">        this.context = context;</span>
+<span class="fc" id="L40">        this.answer = answer;</span>
+<span class="fc" id="L41">        this.mQuestionList = answer.getFollow_ups();</span>
+<span class="fc" id="L42">    }</span>
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        Holder holder;
+
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (view == null) {</span>
+<span class="fc" id="L49">            holder = new Holder();</span>
+
+<span class="fc bfc" id="L51" title="All 2 branches covered.">            if (i == 0) {</span>
+<span class="fc" id="L52">                view = inflater.inflate(R.layout.questionfirst, viewGroup, false);</span>
+<span class="fc" id="L53">                holder.likeButton = (Button) view.findViewById(R.id.echo);</span>
+<span class="fc" id="L54">                holder.numberOfLikes = (TextView) view.findViewById(R.id.numberOfLikes);</span>
+<span class="fc" id="L55">                holder.textView = (TextView) view.findViewById(R.id.head_desc);</span>
+<span class="fc" id="L56">                holder.iv = (ImageView) view.findViewById(R.id.imageView);</span>
+<span class="fc" id="L57">                holder.replyBtn = (Button) view.findViewById(R.id.reply);</span>
+<span class="fc" id="L58">                holder.img_userCharacter=(ImageView)view.findViewById(R.id.questionUserCharacter);</span>
+<span class="fc" id="L59">                holder.txt_userClass=(TextView)view.findViewById(R.id.questionUserClass);</span>
+<span class="fc" id="L60">                holder.txt_userLvl=(TextView)view.findViewById(R.id.questionUserLvl);</span>
+            }
+            else {
+<span class="fc" id="L63">                view = inflater.inflate(R.layout.followups, viewGroup, false);</span>
+<span class="fc" id="L64">                holder.textView = (TextView) view.findViewById(R.id.head_desc);</span>
+<span class="fc" id="L65">                holder.iv = (ImageView) view.findViewById(R.id.imageView);</span>
+<span class="fc" id="L66">                holder.img_userCharacter=(ImageView)view.findViewById(R.id.questionUserCharacter);</span>
+<span class="fc" id="L67">                holder.txt_userClass=(TextView)view.findViewById(R.id.questionUserClass);</span>
+<span class="fc" id="L68">                holder.txt_userLvl=(TextView)view.findViewById(R.id.questionUserLvl);</span>
+            }
+
+<span class="fc" id="L71">            view.setTag(holder);</span>
+
+        } else {
+<span class="fc" id="L74">            holder = (Holder) view.getTag();</span>
+        }
+
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (i == 0) {</span>
+            //set profile info
+<span class="fc" id="L79">            int experience= answer.getExperience();</span>
+<span class="fc" id="L80">            int level= UserHelper.getLevel(experience);</span>
+<span class="fc" id="L81">            holder.txt_userClass.setText(UserHelper.getUserClass(level));</span>
+<span class="fc" id="L82">            holder.txt_userLvl.setText(&quot;Lvl &quot;+String.valueOf(level));</span>
+<span class="fc" id="L83">            UserHelper.setCharacterImage(level,holder.img_userCharacter);</span>
+
+<span class="fc" id="L85">            holder.replyBtn.setVisibility(View.GONE);</span>
+<span class="fc" id="L86">            populateView(holder, answer);</span>
+
+<span class="fc" id="L88">        } else {</span>
+            //set profile info
+<span class="fc" id="L90">            int experience= (mQuestionList.get(i-1)).getExperience();</span>
+<span class="fc" id="L91">            int level= UserHelper.getLevel(experience);</span>
+<span class="fc" id="L92">            holder.txt_userClass.setText(UserHelper.getUserClass(level));</span>
+<span class="fc" id="L93">            holder.txt_userLvl.setText(&quot;Lvl &quot;+String.valueOf(level));</span>
+<span class="fc" id="L94">            UserHelper.setCharacterImage(level,holder.img_userCharacter);</span>
+
+<span class="fc" id="L96">            populateView(holder, mQuestionList.get(i-1));</span>
+        }
+<span class="fc" id="L98">        return view;</span>
+    }
+
+    protected void populateView(Holder holder, final FollowUp followUp) {
+        /// SETUP TEXT
+<span class="fc" id="L103">        holder.textView.setText(followUp.getText());</span>
+
+        /// display image under text
+<span class="fc" id="L106">        holder.iv.setImageBitmap(null);</span>
+<span class="fc" id="L107">        holder.iv.setImageDrawable(null);</span>
+        // only if URL exist
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        if (!followUp.getImageURL().equals(&quot;&quot;)) {</span>
+<span class="nc" id="L110">            Picasso.with(context)</span>
+<span class="nc" id="L111">                    .load(followUp.getImageURL())</span>
+<span class="nc" id="L112">                    .resize(240, 140)   // image can stretch up to 240x140 max.</span>
+<span class="nc" id="L113">                    .centerInside()</span>
+<span class="nc" id="L114">                    .into(holder.iv);</span>
+            // upon clicking image view, pop up dialog
+<span class="nc" id="L116">            holder.iv.setOnClickListener(new View.OnClickListener() {</span>
+                public void onClick(View v) {
+<span class="nc" id="L118">                    Log.e(&quot;Debug&quot;, &quot;clicked&quot;);</span>
+                    //Toast.makeText(activity, question.getImageURL(), Toast.LENGTH_SHORT).show();
+<span class="nc bnc" id="L120" title="All 2 branches missed.">                    if (!followUp.getImageURL().equals(&quot;&quot;)) {</span>
+<span class="nc" id="L121">                        Dialog dialog = new Dialog(context);</span>
+<span class="nc" id="L122">                        dialog.setTitle(&quot;View image&quot;);</span>
+<span class="nc" id="L123">                        dialog.setContentView(R.layout.imageview_dialog);</span>
+<span class="nc" id="L124">                        ImageView iv = (ImageView) dialog.findViewById(R.id.dialog_image);</span>
+<span class="nc" id="L125">                        iv.setImageBitmap(null);</span>
+<span class="nc" id="L126">                        Picasso.with(dialog.getContext())</span>
+<span class="nc" id="L127">                                .load(followUp.getImageURL())</span>
+<span class="nc" id="L128">                                .into(iv);</span>
+<span class="nc" id="L129">                        dialog.show();</span>
+                    }
+<span class="nc" id="L131">                }</span>
+            });
+        }
+<span class="fc" id="L134">    }</span>
+
+    @Override
+    public int getCount() {
+<span class="fc" id="L138">        return super.getCount() + 1;</span>
+    }
+
+    @Override
+    public void push(final FollowUp followUp, String baseID) {
+<span class="fc" id="L143">        QuestionService service = retrofit.create(QuestionService.class);</span>
+
+<span class="fc" id="L145">        Call&lt;ErrorIdResponse&gt; response = service.createFollowup(</span>
+                baseID,
+<span class="fc" id="L147">                followUp.getText(),</span>
+<span class="fc" id="L148">                followUp.getImageURL(),</span>
+<span class="fc" id="L149">                ((FollowupActivity) context).getUserId()</span>
+        );
+
+<span class="fc" id="L152">        response.enqueue(new Callback&lt;ErrorIdResponse&gt;() {</span>
+            @Override
+            public void onResponse(Response&lt;ErrorIdResponse&gt; response, Retrofit retrofit) {
+<span class="fc" id="L155">                followUp.setId(response.body().id);</span>
+<span class="fc" id="L156">                mQuestionList.add(followUp);</span>
+<span class="fc" id="L157">                notifyDataSetChanged();</span>
+<span class="fc" id="L158">            }</span>
+
+            @Override
+            public void onFailure(Throwable t) {
+<span class="nc" id="L162">                Log.e(&quot;QUESTIONROOM&quot;, &quot;Failed at DatabaseListAdapter.push():&quot;, t);</span>
+<span class="nc" id="L163">            }</span>
+        });
+<span class="fc" id="L165">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>FollowupActivity.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">hk.ust.cse.hunkim.questionroom</a> &gt; <span class="el_source">FollowupActivity.java</span></div><h1>FollowupActivity.java</h1><pre class="source lang-java linenums">package hk.ust.cse.hunkim.questionroom;
+
+import android.content.Intent;
+import android.database.DataSetObserver;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
+import hk.ust.cse.hunkim.questionroom.question.Answer;
+import hk.ust.cse.hunkim.questionroom.question.FollowUp;
+
+/**
+ * Created by Joel on 17/11/2015.
+ */
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">public class FollowupActivity extends BaseActivity {</span>
+    public static final String ANSWER = &quot;ANSWER&quot;;
+    private Answer answer;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L26">        super.onCreate(savedInstanceState);</span>
+
+<span class="fc" id="L28">        ImageButton sendButton = (ImageButton) findViewById(R.id.sendButton);</span>
+<span class="fc" id="L29">        sendButton.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L32">                sendFollowup(view);</span>
+<span class="fc" id="L33">            }</span>
+        });
+
+<span class="fc" id="L36">        TextView roomText = (TextView) findViewById(R.id.txt_room_name);</span>
+<span class="fc" id="L37">        roomText.setText(&quot;Followups&quot;);</span>
+
+<span class="fc" id="L39">        EditText inputBox = (EditText) findViewById(R.id.messageInput);</span>
+<span class="fc" id="L40">        inputBox.setHint(&quot;Give a Follow up&quot;);</span>
+
+<span class="fc" id="L42">        Intent intent = getIntent();</span>
+<span class="pc bpc" id="L43" title="3 of 4 branches missed.">        assert (intent != null);</span>
+
+<span class="fc" id="L45">        Bundle b = intent.getExtras();</span>
+<span class="fc" id="L46">        answer = (Answer) b.getSerializable(ANSWER);</span>
+
+<span class="fc" id="L48">        mChatListAdapter = new FollowupListAdapter(this, R.layout.followups, answer, answer.getFollow_ups());</span>
+<span class="fc" id="L49">    }</span>
+
+    @Override
+    public void onStart() {
+<span class="fc" id="L53">        super.onStart();</span>
+
+        // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
+<span class="fc" id="L56">        final ListView listView = getListView();</span>
+
+<span class="fc" id="L58">        listView.setAdapter(mChatListAdapter);</span>
+
+<span class="fc" id="L60">        mChatListAdapter.registerDataSetObserver(new DataSetObserver() {</span>
+            @Override
+            public void onChanged() {
+<span class="fc" id="L63">                super.onChanged();</span>
+<span class="fc" id="L64">                listView.setSelection(mChatListAdapter.getCount() - 1);</span>
+<span class="fc" id="L65">            }</span>
+        });
+<span class="fc" id="L67">    }</span>
+
+    protected void sendFollowup(View view) {
+<span class="fc" id="L70">        EditText inputText = (EditText) findViewById(R.id.messageInput);</span>
+<span class="fc" id="L71">        String input = inputText.getText().toString();</span>
+        FollowUp followUp;
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        if (!input.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L74">            followUp = new FollowUp(input);</span>
+<span class="fc" id="L75">            followUp.setExperience(getExperience());</span>
+
+            // Clear inputText.
+<span class="fc" id="L78">            inputText.setText(&quot;&quot;);</span>
+
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            if (!ImageHelper.picturePath.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L81">                mChatListAdapter.uploadPhoto(ImageHelper.picturePath, followUp, answer.getId());</span>
+            } else {
+<span class="fc" id="L83">                mChatListAdapter.push(followUp, answer.getId());</span>
+            }
+
+<span class="fc" id="L86">            addXP(10);</span>
+<span class="fc" id="L87">            Toast.makeText(FollowupActivity.this, &quot;You gained +10 xp!&quot;, Toast.LENGTH_SHORT).show();</span>
+        }
+<span class="fc" id="L89">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>
