@@ -96,17 +96,10 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
             question.getId(),user
         );
 
-        /* DEBUG CODE
-        Log.i("add_like","ADDED");
-        Log.i("add_like",question.getId());
-        Log.i("add_like",user);
-        */
-
         response.enqueue(new Callback<ErrorIdResponse>() {
             @Override
             public void onResponse(Response<ErrorIdResponse> response, Retrofit retrofit) {
                 question.addLikes(user);
-                notifyDataSetChanged();
             }
 
             @Override
@@ -128,10 +121,7 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         response.enqueue(new Callback<List<Question>>() {
             @Override
             public void onResponse(Response<List<Question>> response, Retrofit retrofit) {
-                for (Question q : response.body()) {
-                    mQuestionList.add((T) q);
-                }
-
+                mQuestionList = (List<T>) response.body();
                 notifyDataSetChanged();
             }
 
@@ -140,10 +130,6 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
                 Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.pull():", t);
             }
         });
-    }
-
-    public void cleanup() {
-        mQuestionList.clear();
     }
 
     @Override
@@ -170,54 +156,65 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         return 1;
     }
 
-    protected void populateView(final View view, final BaseQuestion baseQuestion) {
+    protected class Holder {
+        Button likeButton;
+        TextView numberOfLikes;
+        TextView textView;
+        ImageView iv;
+        Button replyBtn;
+    }
+
+    protected void populateView(final Holder holder, final BaseQuestion baseQuestion) {
         /// SETUP LIKES
         // Map a Chat object to an entry in our listview
         List<String> likesArr = baseQuestion.getLikes();
-        int likes = 0;
-        if (likesArr != null)
-            likes = likesArr.size();
-        final Button likeButton = (Button) view.findViewById(R.id.echo);
-        likeButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        add_like(baseQuestion, Integer.toString(((BaseActivity) context).getUserId()));
-                    }
-                }
-        );
-
-        TextView numberOfLikes=(TextView) view.findViewById(R.id.numberOfLikes);
-        if (numberOfLikes != null)
-            numberOfLikes.setText(Integer.toString(likes));
-
         // check if we already clicked
         boolean clickable = !likesArr.contains(Integer.toString(((BaseActivity)context).getUserId()));
-        likeButton.setClickable(clickable);
-        likeButton.setEnabled(clickable);
-        if (clickable) {
-            likeButton.getBackground().setColorFilter(null);
-        } else {
-            likeButton.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+        if (((BaseActivity)context).getUserId() == -1) {
+            clickable = false;
         }
 
+        holder.likeButton.setClickable(clickable);
+        holder.likeButton.setEnabled(clickable);
+        if (clickable) {
+            holder.likeButton.getBackground().setColorFilter(null);
+            holder.likeButton.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            add_like(baseQuestion, Integer.toString(((BaseActivity) context).getUserId()));
+                            holder.likeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+                            holder.likeButton.getBackground().invalidateSelf();
+                            holder.numberOfLikes.setText(Integer.toString(baseQuestion.getLikes().size() + 1));
+                            holder.likeButton.setClickable(false);
+                            holder.likeButton.setEnabled(false);
+                        }
+                    }
+            );
+        } else {
+            holder.likeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+        }
+        holder.likeButton.getBackground().invalidateSelf();
+
+        if (holder.numberOfLikes != null)
+            holder.numberOfLikes.setText(Integer.toString(likesArr.size()));
+
+
         /// SETUP TEXT
-        TextView textView = (TextView) view.findViewById(R.id.head_desc);
-        textView.setText(baseQuestion.getText());
+        holder.textView.setText(baseQuestion.getText());
 
         /// display image under text
-        ImageView iv = (ImageView) view.findViewById(R.id.imageView);
-        iv.setImageBitmap(null);
-        iv.setImageDrawable(null);
+        holder.iv.setImageBitmap(null);
+        holder.iv.setImageDrawable(null);
         // only if URL exist
         if (!baseQuestion.getImageURL().equals("")) {
             Picasso.with(context)
                     .load(baseQuestion.getImageURL())
                     .resize(240, 140)   // image can stretch up to 240x140 max.
                     .centerInside()
-                    .into(iv);
+                    .into(holder.iv);
             // upon clicking image view, pop up dialog
-            iv.setOnClickListener(new View.OnClickListener() {
+            holder.iv.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Log.e("Debug", "clicked");
                     //Toast.makeText(activity, question.getImageURL(), Toast.LENGTH_SHORT).show();

@@ -7,11 +7,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.List;
 
 import hk.ust.cse.hunkim.questionroom.question.Answer;
 import hk.ust.cse.hunkim.questionroom.question.BaseQuestion;
+import hk.ust.cse.hunkim.questionroom.question.FollowUp;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 import hk.ust.cse.hunkim.questionroom.services.ErrorIdResponse;
 import hk.ust.cse.hunkim.questionroom.services.QuestionService;
@@ -38,28 +41,37 @@ public class AnswerListAdapter extends DatabaseListAdapter<Answer> {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if (view == null) {
-            if (i == 0)
-                view = inflater.inflate(R.layout.questionfirst, viewGroup, false);
-            else
-                view = inflater.inflate(R.layout.questionsecond, viewGroup, false);
-        }
+        Holder holder;
 
-        //REPLY
-        Button replyBtn = (Button) view.findViewById(R.id.reply);
-        BaseQuestion item;
+        if (view == null) {
+            holder = new Holder();
+
+            if (i == 0) {
+                view = inflater.inflate(R.layout.questionfirst, viewGroup, false);
+            }
+            else {
+                view = inflater.inflate(R.layout.answers, viewGroup, false);
+            }
+            holder.likeButton = (Button) view.findViewById(R.id.echo);
+            holder.numberOfLikes = (TextView) view.findViewById(R.id.numberOfLikes);
+            holder.textView = (TextView) view.findViewById(R.id.head_desc);
+            holder.iv = (ImageView) view.findViewById(R.id.imageView);
+            holder.replyBtn = (Button) view.findViewById(R.id.reply);
+            view.setTag(holder);
+
+        } else {
+            holder = (Holder) view.getTag();
+        }
 
         if (i == 0) {
-            item = question;
-            replyBtn.setVisibility(View.GONE);
+            holder.replyBtn.setVisibility(View.GONE);
+            populateView(holder, question);
         }
         else {
-            item = mQuestionList.get(i - 1);
-            final Answer answer = (Answer) item;
-
+            final Answer answer = mQuestionList.get(i-1);
             String replyText = "Followup (" + Integer.toString(answer.getFollow_ups().size()) + ")";
-            replyBtn.setText(replyText);
-            replyBtn.setOnClickListener(new View.OnClickListener() {
+            holder.replyBtn.setText(replyText);
+            holder.replyBtn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent intent = new Intent(context, FollowupActivity.class);
                     Bundle b = new Bundle();
@@ -69,10 +81,10 @@ public class AnswerListAdapter extends DatabaseListAdapter<Answer> {
                     context.startActivity(intent);
                 }
             });
+
+            populateView(holder, answer);
         }
 
-        populateView(view, item);
-        view.setTag(item.getId());
         return view;
     }
 
