@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:text="Email:" />
+        android:text="Email:"/>
 
     <EditText
         android:id="@+id/email"
@@ -19,7 +19,7 @@
         android:layout_height="40dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        >
+        android:singleLine="true">
 
         <requestFocus />
     </EditText>
@@ -48,21 +48,37 @@
         android:layout_marginRight="10dp"
         android:textColor="#f00" />
 
-    <Button
-        android:id="@+id/btn_signIn"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:text="Sign In" />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <Button
+            android:id="@+id/btn_signInAsGuest"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/btn_signIn"
+            android:text="Sign In As Guest" />
+
+        <Button
+            android:id="@+id/btn_signIn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="Sign In" />
+    </RelativeLayout>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:text="Sign Up"
+        android:layout_marginTop="20dp"
+        android:text="Register an account"
         android:layout_marginLeft="10dp"
         android:id="@+id/btn_signUp"
-        android:onClick="showSignUpBox" />
+        android:onClick="showSignUpBox"
+        android:layout_gravity="center_horizontal" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -71,6 +87,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="#999"
+        android:visibility="invisible"
         android:id="@+id/registerBox">
 
         <TextView
