@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Question.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">hk.ust.cse.hunkim.questionroom.question</a> &gt; <span class="el_source">Question.java</span></div><h1>Question.java</h1><pre class="source lang-java linenums">package hk.ust.cse.hunkim.questionroom.question;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Created by hunkim on 7/16/15.
+ */
+public class Question extends BaseQuestion {
+    @JsonProperty(&quot;room&quot;) protected String room;
+<span class="fc" id="L15">    @JsonProperty(&quot;answers&quot;) protected List&lt;Answer&gt; answers = new ArrayList&lt;Answer&gt;();</span>
+
+    // Dummy Constructor for JSONObject-ifying
+<span class="fc" id="L18">    public Question() {}</span>
+    public Question(String room, String text) {
+<span class="fc" id="L20">        super(text);</span>
+
+<span class="fc" id="L22">        this.room = room;</span>
+<span class="fc" id="L23">    }</span>
+
+    public String getRoom() {
+<span class="fc" id="L26">        return this.room;</span>
+    }
+
+    public List&lt;Answer&gt;  getAnswers() {
+<span class="fc" id="L30">        return answers;</span>
+    }
+
+    public Answer getAnswer(int index) {
+<span class="nc" id="L34">        return answers.get(index);</span>
+    }
+
+    public void addFollowup(int answerIndex, FollowUp followup) {
+<span class="nc" id="L38">        this.getAnswer(answerIndex).addFollowUp(followup);</span>
+<span class="nc" id="L39">    }</span>
+
+    public void setRoom(String room) {
+<span class="fc" id="L42">        this.room = room;</span>
+<span class="fc" id="L43">    }</span>
+
+    public void addAnswer(Answer answer) {
+<span class="nc" id="L46">        this.answers.add(answer);</span>
+<span class="nc" id="L47">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

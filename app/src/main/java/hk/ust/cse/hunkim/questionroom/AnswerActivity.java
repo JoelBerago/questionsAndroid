@@ -45,6 +45,8 @@ public class AnswerActivity extends BaseActivity {
 
         Bundle b = intent.getExtras();
         question = (Question) b.getSerializable(QUESTION);
+
+        mChatListAdapter = new AnswerListAdapter(this, R.layout.answers, question, question.getAnswers());
     }
 
     @Override
@@ -53,8 +55,6 @@ public class AnswerActivity extends BaseActivity {
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
         final ListView listView = getListView();
 
-        if(mChatListAdapter==null)
-            mChatListAdapter = new AnswerListAdapter(this, R.layout.answers, question, question.getAnswers());
         listView.setAdapter(mChatListAdapter);
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {

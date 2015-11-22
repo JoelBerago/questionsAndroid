@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DBUtil.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">hk.ust.cse.hunkim.questionroom.db</a> &gt; <span class="el_source">DBUtil.java</span></div><h1>DBUtil.java</h1><pre class="source lang-java linenums">package hk.ust.cse.hunkim.questionroom.db;
+
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+/**
+ * Created by hunkim on 7/15/15.
+ */
+public class DBUtil {
+    SQLiteOpenHelper helper;
+
+<span class="nc" id="L14">    public DBUtil(SQLiteOpenHelper helper) {</span>
+<span class="nc" id="L15">        this.helper = helper;</span>
+<span class="nc" id="L16">    }</span>
+
+    public long put(String key) {
+
+        // Gets the data repository in write mode
+<span class="nc" id="L21">        SQLiteDatabase db = helper.getWritableDatabase();</span>
+
+        // Create a new map of values, where column names are the keys
+<span class="nc" id="L24">        ContentValues values = new ContentValues();</span>
+<span class="nc" id="L25">        values.put(DBHelper.KEY_NAME, key);</span>
+
+<span class="nc" id="L27">        return db.insert(</span>
+                DBHelper.TABLE_NAME,
+                DBHelper.KEY_NAME,
+                values);
+    }
+
+
+    public boolean contains(String key) {
+        // Gets the data repository in write mode
+<span class="nc" id="L36">        SQLiteDatabase db = helper.getReadableDatabase();</span>
+<span class="nc" id="L37">        Cursor c = db.rawQuery(</span>
+                &quot;SELECT 1 FROM &quot; + DBHelper.TABLE_NAME +
+                        &quot; WHERE &quot; + DBHelper.KEY_NAME +
+                        &quot; = ?&quot;, new String[]{key});
+
+<span class="nc" id="L42">        boolean exists = c.moveToFirst();</span>
+<span class="nc" id="L43">        c.close();</span>
+<span class="nc" id="L44">        return exists;</span>
+    }
+
+    public void delete(String key) {
+        // Gets the data repository in write mode
+<span class="nc" id="L49">        SQLiteDatabase db = helper.getWritableDatabase();</span>
+
+        // Define 'where' part of query.
+<span class="nc" id="L52">        String selection = DBHelper.KEY_NAME + &quot; = ?&quot;;</span>
+        // Specify arguments in placeholder order.
+<span class="nc" id="L54">        String[] selectionArgs = {key};</span>
+        // Issue SQL statement.
+<span class="nc" id="L56">        db.delete(DBHelper.TABLE_NAME, selection, selectionArgs);</span>
+<span class="nc" id="L57">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

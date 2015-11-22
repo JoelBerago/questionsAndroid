@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>LogIn.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">hk.ust.cse.hunkim.questionroom</a> &gt; <span class="el_source">LogIn.java</span></div><h1>LogIn.java</h1><pre class="source lang-java linenums">package hk.ust.cse.hunkim.questionroom;
+
+/**
+ * Created by mikacuy on 11/15/15.
+ */
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import javax.security.auth.login.LoginException;
+
+import hk.ust.cse.hunkim.questionroom.services.LogInResponse;
+import hk.ust.cse.hunkim.questionroom.services.LogInService;
+import hk.ust.cse.hunkim.questionroom.services.RegisterService;
+import hk.ust.cse.hunkim.questionroom.services.UserInfoResponse;
+import hk.ust.cse.hunkim.questionroom.services.UserInfoService;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.JacksonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
+
+<span class="fc" id="L36">public class LogIn extends AppCompatActivity {</span>
+
+    public static final String PREFS_NAME = &quot;LoginPrefs&quot;;
+    protected final static String BASE_URL = &quot;http://questions-backend.herokuapp.com/api/&quot;;
+<span class="fc" id="L40">    protected final static Retrofit logIn_retrofit = new Retrofit.Builder()</span>
+<span class="fc" id="L41">            .baseUrl(BASE_URL)</span>
+<span class="fc" id="L42">            .addConverterFactory(JacksonConverterFactory.create())</span>
+<span class="fc" id="L43">            .build();</span>
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L47">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L48">        setContentView(R.layout.activity_log_in);</span>
+
+<span class="fc" id="L50">        final SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);</span>
+
+        //Check if user is already logged in then move to JoinActivity
+<span class="pc bpc" id="L53" title="3 of 4 branches missed.">        if (pref.getString(&quot;logged&quot;, null)!=null &amp;&amp; pref.getString(&quot;logged&quot;, null).equals(&quot;logged&quot;)) {</span>
+<span class="nc" id="L54">            Log.i(&quot;LOGIN&quot;, &quot;saved log-in&quot;);</span>
+<span class="nc" id="L55">            Intent intent = new Intent(LogIn.this, JoinActivity.class);</span>
+            //intent.putExtra(&quot;userId&quot;, pref.getInt(&quot;userId&quot;, -1)); //-1 invalid user ID!
+<span class="nc" id="L57">            startActivity(intent);</span>
+        }
+
+        //Not logged in yet
+<span class="fc" id="L61">        Button signIn = (Button) findViewById(R.id.btn_signIn);</span>
+<span class="fc" id="L62">        signIn.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L65">                EditText email = (EditText) findViewById(R.id.email);</span>
+<span class="nc" id="L66">                EditText password = (EditText) findViewById(R.id.password);</span>
+<span class="nc" id="L67">                TextView text_error= (TextView) findViewById(R.id.errorMessage);</span>
+
+<span class="nc" id="L69">                handleSignIn(email.getText().toString(), password.getText().toString(), text_error);</span>
+<span class="nc" id="L70">            }</span>
+        });
+
+<span class="fc" id="L73">        Button signInAsGuest = (Button) findViewById(R.id.btn_signInAsGuest);</span>
+<span class="fc" id="L74">        signInAsGuest.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L77">                handleSignInAsGuest();</span>
+<span class="nc" id="L78">            }</span>
+        });
+<span class="fc" id="L80">    }</span>
+
+    public void handleSignIn(String email, String password, final View view){
+<span class="nc" id="L83">        LogInService service = logIn_retrofit.create(LogInService.class);</span>
+        Call&lt;LogInResponse&gt; response;
+<span class="nc" id="L85">        response = service.loginRequest(email, password);</span>
+
+<span class="nc" id="L87">        response.enqueue(new Callback&lt;LogInResponse&gt;() {</span>
+            @Override
+            public void onResponse(Response&lt;LogInResponse&gt; response, Retrofit retrofit) {
+<span class="nc" id="L90">                Log.i(&quot;LOGIN&quot;, &quot;in onResponse&quot;);</span>
+
+<span class="nc bnc" id="L92" title="All 2 branches missed.">                if (response.body().error != &quot;&quot;) {</span>
+<span class="nc" id="L93">                    Log.i(&quot;LOGIN&quot;, &quot;error&quot;);</span>
+                    //TextView text_error= (TextView) view.findViewById(R.id.errorMessage);
+<span class="nc" id="L95">                    TextView txt = (TextView) view;</span>
+<span class="nc" id="L96">                    txt.setText(response.body().error.toString() + &quot; Log-in Failed. Please try again.&quot;);</span>
+<span class="nc" id="L97">                } else {</span>
+<span class="nc" id="L98">                    Log.i(&quot;LOGIN&quot;, &quot;valid log-in&quot;);</span>
+<span class="nc" id="L99">                    Log.i(&quot;LOGIN&quot;, &quot;userId: &quot;+String.valueOf(response.body().userId));</span>
+
+                    //save to shared preference
+<span class="nc" id="L102">                    SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);</span>
+<span class="nc" id="L103">                    SharedPreferences.Editor editor = pref.edit();</span>
+<span class="nc" id="L104">                    editor.putString(&quot;logged&quot;, &quot;logged&quot;);</span>
+<span class="nc" id="L105">                    editor.putInt(&quot;userId&quot;, response.body().userId);</span>
+<span class="nc" id="L106">                    editor.commit();</span>
+
+                    //get user info
+<span class="nc" id="L109">                    saveUserInfo(response.body().userId);</span>
+                }
+<span class="nc" id="L111">            }</span>
+
+            @Override
+            public void onFailure(Throwable t) {
+<span class="nc" id="L115">                Log.i(&quot;LOGIN&quot;, &quot;Failed at SignIn&quot;, t);</span>
+<span class="nc" id="L116">            }</span>
+        });
+<span class="nc" id="L118">    }</span>
+
+    public void handleSignInAsGuest() {
+        //save to shared preference
+<span class="nc" id="L122">        SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);</span>
+<span class="nc" id="L123">        SharedPreferences.Editor editor = pref.edit();</span>
+<span class="nc" id="L124">        editor.putString(&quot;logged&quot;, &quot;logged&quot;);</span>
+<span class="nc" id="L125">        editor.putInt(&quot;userId&quot;, -1);</span>
+
+<span class="nc" id="L127">        editor.putString(&quot;username&quot;, &quot;&quot;);</span>
+<span class="nc" id="L128">        editor.putInt(&quot;experience&quot;, 0);</span>
+<span class="nc" id="L129">        editor.putBoolean(&quot;jailed&quot;, false);</span>
+<span class="nc" id="L130">        editor.commit();</span>
+
+<span class="nc" id="L132">        Intent intent = new Intent(LogIn.this, JoinActivity.class);</span>
+<span class="nc" id="L133">        startActivity(intent);</span>
+<span class="nc" id="L134">    }</span>
+
+    //save user object in SharedPreference--&gt; username, experience, jailed
+    public void saveUserInfo(final int userId){
+<span class="nc" id="L138">        UserInfoService service=logIn_retrofit.create(UserInfoService.class);</span>
+        Call&lt;UserInfoResponse&gt; response;
+
+        //get userInfo in backend
+<span class="nc" id="L142">        response=service.getUserInfo(userId);</span>
+<span class="nc" id="L143">        response.enqueue(new Callback&lt;UserInfoResponse&gt;() {</span>
+            @Override
+            public void onResponse(Response&lt;UserInfoResponse&gt; response, Retrofit retrofit) {
+<span class="nc" id="L146">                Log.i(&quot;USER&quot;, &quot;got userInfo response&quot;);</span>
+
+<span class="nc bnc" id="L148" title="All 2 branches missed.">                if (response.body().userId != userId) {</span>
+<span class="nc" id="L149">                    Log.i(&quot;USER&quot;, &quot;Error id got in login not the same as user info&quot;);</span>
+                } else {
+<span class="nc" id="L151">                    Log.i(&quot;USER&quot;, &quot;Got user info&quot;);</span>
+
+                    //save user info to SharedPreference
+<span class="nc" id="L154">                    SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);</span>
+<span class="nc" id="L155">                    SharedPreferences.Editor editor = pref.edit();</span>
+<span class="nc" id="L156">                    editor.putString(&quot;username&quot;, response.body().username);</span>
+<span class="nc" id="L157">                    editor.putInt(&quot;experience&quot;, response.body().experience);</span>
+<span class="nc" id="L158">                    editor.putBoolean(&quot;jailed&quot;, response.body().jailed);</span>
+<span class="nc" id="L159">                    editor.commit();</span>
+
+                    //Debugging
+<span class="nc" id="L162">                    Log.i(&quot;USER&quot;, &quot;userId: &quot;+String.valueOf(response.body().userId));</span>
+<span class="nc" id="L163">                    Log.i(&quot;USER&quot;, &quot;username: &quot;+response.body().username.toString());</span>
+<span class="nc" id="L164">                    Log.i(&quot;USER&quot;, &quot;experience: &quot;+String.valueOf(response.body().experience));</span>
+<span class="nc" id="L165">                    Log.i(&quot;USER&quot;, &quot;jailed: &quot;+String.valueOf(response.body().jailed));</span>
+
+
+                    //Finish log in
+<span class="nc" id="L169">                    Log.i(&quot;LOGIN&quot;, &quot;userId: &quot; + String.valueOf(pref.getInt(&quot;userId&quot;, -1)));</span>
+<span class="nc" id="L170">                    Intent intent = new Intent(LogIn.this, JoinActivity.class);</span>
+                    //intent.putExtra(&quot;userId&quot;, response.body().userId);
+<span class="nc" id="L172">                    startActivity(intent);</span>
+                }
+<span class="nc" id="L174">            }</span>
+
+            @Override
+            public void onFailure(Throwable t) {
+<span class="nc" id="L178">                Log.e(&quot;LOGIN&quot;, &quot;Failed at SignIn&quot;, t);</span>
+<span class="nc" id="L179">            }</span>
+        });
+<span class="nc" id="L181">    }</span>
+
+    public void showSignUpBox(View view){
+<span class="fc" id="L184">        LinearLayout registerBox=(LinearLayout)findViewById(R.id.registerBox);</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">        if(registerBox.getVisibility()!=View.VISIBLE){</span>
+<span class="fc" id="L186">            registerBox.setVisibility(View.VISIBLE);</span>
+        }
+        else{
+<span class="fc" id="L189">            registerBox.setVisibility(View.INVISIBLE);</span>
+        }
+<span class="fc" id="L191">    }</span>
+
+    public void sendRegisterRequest(final View view){
+<span class="nc" id="L194">        final TextView email = (TextView) findViewById(R.id.register_email);</span>
+<span class="nc" id="L195">        final TextView password= (TextView) findViewById(R.id.register_password);</span>
+<span class="nc" id="L196">        final TextView username= (TextView)findViewById(R.id.register_username);</span>
+
+<span class="nc" id="L198">        RegisterService service = logIn_retrofit.create(RegisterService.class);</span>
+        Call&lt;LogInResponse&gt; response;
+<span class="nc" id="L200">        response = service.registerRequest(email.getText().toString(), password.getText().toString(), username.getText().toString());</span>
+
+<span class="nc" id="L202">        response.enqueue(new Callback&lt;LogInResponse&gt;() {</span>
+            @Override
+            public void onResponse(Response&lt;LogInResponse&gt; response, Retrofit retrofit) {
+<span class="nc" id="L205">                Log.i(&quot;REGISTER&quot;, &quot;in callback&quot;);</span>
+<span class="nc" id="L206">                Log.i(&quot;REGISTER&quot;,email.getText().toString());</span>
+<span class="nc" id="L207">                Log.i(&quot;REGISTER&quot;,password.getText().toString());</span>
+<span class="nc" id="L208">                Log.i(&quot;REGISTER&quot;,username.getText().toString());</span>
+
+<span class="nc" id="L210">                TextView txt = (TextView) findViewById(R.id.registerErrorMsg);</span>
+
+<span class="nc bnc" id="L212" title="All 2 branches missed.">                if (response.body().error != &quot;&quot;) {</span>
+<span class="nc" id="L213">                    Log.i(&quot;Register&quot;, &quot;Register error&quot;);</span>
+<span class="nc" id="L214">                    txt.setTextColor(Color.RED);</span>
+<span class="nc" id="L215">                    txt.setText(response.body().error.toString()+&quot; Register Failed. Please try again.&quot;);</span>
+                } else {
+<span class="nc" id="L217">                    Log.i(&quot;REGISTER&quot;, &quot;valid register&quot;);</span>
+<span class="nc" id="L218">                    txt.setTextColor(Color.GREEN);</span>
+<span class="nc" id="L219">                    txt.setText(&quot;Register complete. Please sign in.&quot;);</span>
+                }
+<span class="nc" id="L221">            }</span>
+
+            @Override
+            public void onFailure(Throwable t) {
+<span class="nc" id="L225">                Log.e(&quot;LOGIN&quot;, &quot;Failed to Register&quot;, t);</span>
+<span class="nc" id="L226">            }</span>
+        });
+
+
+<span class="nc" id="L230">    }</span>
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

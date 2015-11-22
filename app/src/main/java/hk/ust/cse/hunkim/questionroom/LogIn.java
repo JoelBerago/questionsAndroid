@@ -50,7 +50,7 @@ public class LogIn extends AppCompatActivity {
         final SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
 
         //Check if user is already logged in then move to JoinActivity
-        if (pref.getString("logged", null)!=null && pref.getString("logged", null).toString().equals("logged")) {
+        if (pref.getString("logged", null)!=null && pref.getString("logged", null).equals("logged")) {
             Log.i("LOGIN", "saved log-in");
             Intent intent = new Intent(LogIn.this, JoinActivity.class);
             //intent.putExtra("userId", pref.getInt("userId", -1)); //-1 invalid user ID!
@@ -106,7 +106,7 @@ public class LogIn extends AppCompatActivity {
                     editor.commit();
 
                     //get user info
-                    saveUserInfo(pref.getInt("userId", -1));
+                    saveUserInfo(response.body().userId);
                 }
             }
 
@@ -138,53 +138,46 @@ public class LogIn extends AppCompatActivity {
         UserInfoService service=logIn_retrofit.create(UserInfoService.class);
         Call<UserInfoResponse> response;
 
-        if (userId!=-1){
-            //get userInfo in backend
-            response=service.getUserInfo(userId);
-            response.enqueue(new Callback<UserInfoResponse>() {
-                @Override
-                public void onResponse(Response<UserInfoResponse> response, Retrofit retrofit) {
-                    Log.i("USER", "got userInfo response");
+        //get userInfo in backend
+        response=service.getUserInfo(userId);
+        response.enqueue(new Callback<UserInfoResponse>() {
+            @Override
+            public void onResponse(Response<UserInfoResponse> response, Retrofit retrofit) {
+                Log.i("USER", "got userInfo response");
 
-                    if (response.body().userId != userId) {
-                        Log.i("USER", "Error id got in login not the same as user info");
-                    } else {
-                        Log.i("USER", "Got user info");
+                if (response.body().userId != userId) {
+                    Log.i("USER", "Error id got in login not the same as user info");
+                } else {
+                    Log.i("USER", "Got user info");
 
-                        //save user info to SharedPreference
-                        SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
-                        SharedPreferences.Editor editor = pref.edit();
-                        editor.putString("username", response.body().username);
-                        editor.putInt("experience", response.body().experience);
-                        editor.putBoolean("jailed", response.body().jailed);
-                        editor.commit();
+                    //save user info to SharedPreference
+                    SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("username", response.body().username);
+                    editor.putInt("experience", response.body().experience);
+                    editor.putBoolean("jailed", response.body().jailed);
+                    editor.commit();
 
-                        //Debugging
-                        Log.i("USER", "userId: "+String.valueOf(response.body().userId));
-                        Log.i("USER", "username: "+response.body().username.toString());
-                        Log.i("USER", "experience: "+String.valueOf(response.body().experience));
-                        Log.i("USER", "jailed: "+String.valueOf(response.body().jailed));
+                    //Debugging
+                    Log.i("USER", "userId: "+String.valueOf(response.body().userId));
+                    Log.i("USER", "username: "+response.body().username.toString());
+                    Log.i("USER", "experience: "+String.valueOf(response.body().experience));
+                    Log.i("USER", "jailed: "+String.valueOf(response.body().jailed));
 
 
-                        //Finish log in
-                        Log.i("LOGIN", "userId: " + String.valueOf(pref.getInt("userId", -1)));
-                        Intent intent = new Intent(LogIn.this, JoinActivity.class);
-                        //intent.putExtra("userId", response.body().userId);
-                        startActivity(intent);
-                    }
+                    //Finish log in
+                    Log.i("LOGIN", "userId: " + String.valueOf(pref.getInt("userId", -1)));
+                    Intent intent = new Intent(LogIn.this, JoinActivity.class);
+                    //intent.putExtra("userId", response.body().userId);
+                    startActivity(intent);
                 }
+            }
 
-                @Override
-                public void onFailure(Throwable t) {
-                    Log.e("LOGIN", "Failed at SignIn", t);
-                }
-            });
-        }
-
-        else{
-            Log.i("USER","Invalid userId");
-        }
-
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e("LOGIN", "Failed at SignIn", t);
+            }
+        });
     }
 
     public void showSignUpBox(View view){

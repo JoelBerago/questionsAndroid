@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DBHelper.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">hk.ust.cse.hunkim.questionroom.db</a> &gt; <span class="el_source">DBHelper.java</span></div><h1>DBHelper.java</h1><pre class="source lang-java linenums">package hk.ust.cse.hunkim.questionroom.db;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+/**
+ * Created by hunkim on 7/15/15.
+ */
+public class DBHelper extends SQLiteOpenHelper {
+
+    public static final String TABLE_NAME = &quot;echoed&quot;;
+    public static final String KEY_NAME = &quot;key&quot;;
+
+    private static final String SQL_CREATE_ENTRIES =
+            &quot;CREATE TABLE &quot; + TABLE_NAME + &quot; (&quot; + KEY_NAME + &quot; TEXT UNIQUE)&quot;;
+
+    private static final String SQL_DELETE_ENTRIES =
+            &quot;DROP TABLE IF EXISTS &quot; + TABLE_NAME;
+
+    // If you change the database schema, you must increment the database version.
+    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = &quot;echoedKeys.db&quot;;
+
+    public DBHelper(Context context) {
+<span class="nc" id="L26">        super(context, DATABASE_NAME, null, DATABASE_VERSION);</span>
+<span class="nc" id="L27">    }</span>
+
+
+    public void onCreate(SQLiteDatabase db) {
+<span class="nc" id="L31">        db.execSQL(SQL_CREATE_ENTRIES);</span>
+<span class="nc" id="L32">    }</span>
+
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // This database is only a cache for online data, so its upgrade policy is
+        // to simply to discard the data and start over
+<span class="nc" id="L37">        db.execSQL(SQL_DELETE_ENTRIES);</span>
+<span class="nc" id="L38">        onCreate(db);</span>
+<span class="nc" id="L39">    }</span>
+
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+<span class="nc" id="L42">        onUpgrade(db, oldVersion, newVersion);</span>
+<span class="nc" id="L43">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

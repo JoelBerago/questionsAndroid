@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>UserHelper.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">hk.ust.cse.hunkim.questionroom.db</a> &gt; <span class="el_source">UserHelper.java</span></div><h1>UserHelper.java</h1><pre class="source lang-java linenums">package hk.ust.cse.hunkim.questionroom.db;
+
+
+import android.widget.ImageView;
+
+import hk.ust.cse.hunkim.questionroom.R;
+
+/**
+ * Created by mikacuy on 11/18/15.
+ */
+<span class="nc" id="L11">public class UserHelper {</span>
+    public static final String PREFS_NAME = &quot;LoginPrefs&quot;;
+
+    //returns the level given experience
+    //to level up we need current_level*20 exp
+    public static int getLevel(int experience){
+<span class="fc" id="L17">        int level=1;</span>
+<span class="fc bfc" id="L18" title="All 2 branches covered.">        while(experience&gt;=level*20){</span>
+<span class="fc" id="L19">            experience=experience-level*20;</span>
+<span class="fc" id="L20">            level++;</span>
+        }
+<span class="fc" id="L22">        return level;</span>
+    }
+
+    //gets the amount of residual experience in percentage
+    public static int getResidualExperience(int experience){
+<span class="fc" id="L27">        int level=getLevel(experience);</span>
+<span class="fc" id="L28">        int residual=experience-(level*(level-1))*20/2;</span>
+<span class="fc" id="L29">        int residual_in_percentage= (residual*100)/(20*(level));</span>
+
+        /*
+        //Debugging
+        Log.i(&quot;EXPERIENCE&quot;, &quot;level: &quot; + String.valueOf(level));
+        Log.i(&quot;EXPERIENCE&quot;, &quot;experience: &quot; + String.valueOf(experience));
+        Log.i(&quot;EXPERIENCE&quot;, &quot;residual: &quot; + String.valueOf(residual));
+        Log.i(&quot;EXPERIENCE&quot;, &quot;percentage: &quot; + String.valueOf(residual_in_percentage));
+        */
+
+<span class="fc" id="L39">        return residual_in_percentage;</span>
+    }
+
+    public static void setCharacterImage(int level, ImageView view){
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if(level&lt;=5){</span>
+<span class="fc" id="L44">            view.setImageResource(R.drawable.class1);</span>
+        }
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        else if(level&lt;=10){</span>
+<span class="fc" id="L47">            view.setImageResource(R.drawable.class2);</span>
+        }
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        else if(level&lt;=15){</span>
+<span class="fc" id="L50">            view.setImageResource(R.drawable.class3);</span>
+        }
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        else if(level&lt;=20){</span>
+<span class="nc" id="L53">            view.setImageResource(R.drawable.class4);</span>
+        }
+        else{
+<span class="nc" id="L56">            view.setImageResource(R.drawable.class5);</span>
+        }
+
+<span class="fc" id="L59">    }</span>
+
+    public static String getUserClass(int level){
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if(level&lt;=5){</span>
+<span class="fc" id="L63">            return &quot;Farmer&quot;;</span>
+        }
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        else if(level&lt;=10){</span>
+<span class="fc" id="L66">            return &quot;Servant&quot;;</span>
+        }
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        else if(level&lt;=15){</span>
+<span class="fc" id="L69">            return &quot;Knight&quot;;</span>
+        }
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        else if(level&lt;=20){</span>
+<span class="nc" id="L72">            return &quot;Lord&quot;;</span>
+        }
+        else{
+<span class="nc" id="L75">            return &quot;Monarch&quot;;</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BaseQuestion.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">hk.ust.cse.hunkim.questionroom.question</a> &gt; <span class="el_source">BaseQuestion.java</span></div><h1>BaseQuestion.java</h1><pre class="source lang-java linenums">package hk.ust.cse.hunkim.questionroom.question;
+
+import android.util.Log;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Created by Joel on 29/10/2015.
+ */
+public abstract class BaseQuestion implements Serializable {
+    @JsonProperty(&quot;__v&quot;) private String __v;
+    @JsonProperty(&quot;_id&quot;) protected String id;
+    @JsonProperty(&quot;text&quot;) protected String text;
+    @JsonProperty(&quot;imageURL&quot;) protected String imageURL;
+    // TODO: Fix time handling; server side's fault probably.
+    @JsonProperty(&quot;time&quot;) private String time;
+<span class="fc" id="L22">    @JsonProperty(&quot;likes&quot;) protected List&lt;String&gt; likes = new ArrayList&lt;String&gt;();</span>
+    @JsonProperty(&quot;userId&quot;) protected int userId;
+    @JsonProperty(&quot;jailed&quot;) protected boolean jailed;
+    @JsonProperty(&quot;acctType&quot;) protected String acctType;
+    @JsonProperty(&quot;username&quot;) protected String username;
+    @JsonProperty(&quot;experience&quot;) protected int experience;
+
+    // Dummy Constructor for JSONObject-ifying
+<span class="fc" id="L30">    public BaseQuestion() {}</span>
+
+    /**
+     * Set question from a String message
+     * @param message string message
+     */
+<span class="fc" id="L36">    public BaseQuestion(String message) {</span>
+<span class="fc" id="L37">        this.text = message;</span>
+        //this.unixTime = new Date().getTime();
+<span class="fc" id="L39">        this.imageURL = &quot;&quot;;</span>
+<span class="fc" id="L40">    }</span>
+
+    public int getExperience(){
+<span class="fc" id="L43">        return experience;</span>
+    }
+
+    public void setExperience(int exp){
+<span class="fc" id="L47">        this.experience=exp;</span>
+<span class="fc" id="L48">        return;</span>
+    }
+
+    public String getId() {
+<span class="fc" id="L52">        return id;</span>
+    }
+
+    public void setId(String id) {
+<span class="fc" id="L56">        this.id = id;</span>
+<span class="fc" id="L57">    }</span>
+
+    public String getText() {
+<span class="fc" id="L60">        return text;</span>
+    }
+
+    public String getImageURL() {
+<span class="fc" id="L64">        return imageURL;</span>
+    }
+
+    public void setImageURL(String imageURL) {
+<span class="fc" id="L68">        this.imageURL = imageURL;</span>
+<span class="fc" id="L69">    }</span>
+
+    public void setText(String text) {
+<span class="fc" id="L72">        this.text = text;</span>
+<span class="fc" id="L73">    }</span>
+
+    public List&lt;String&gt; getLikes() {
+<span class="fc" id="L76">        return likes;</span>
+    }
+
+    public void addLikes(String user) {
+<span class="nc" id="L80">        getLikes().add(user);</span>
+<span class="nc" id="L81">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.4.201502262128</span></div></body></html>

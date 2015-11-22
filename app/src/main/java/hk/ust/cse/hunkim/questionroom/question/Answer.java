@@ -9,13 +9,9 @@ import java.util.List;
  * Created by Joel on 29/10/2015.
  */
 public class Answer extends BaseQuestion {
-    @JsonProperty("follow_ups") private List<FollowUp> follow_ups;
+    @JsonProperty("follow_ups") private List<FollowUp> follow_ups = new ArrayList<FollowUp>();
 
     public List<FollowUp> getFollow_ups() {
-        if (this.follow_ups == null) {
-            this.follow_ups = new ArrayList<FollowUp>();
-        }
-
         return follow_ups;
     }
 
@@ -27,10 +23,6 @@ public class Answer extends BaseQuestion {
     }
 
     public void addFollowUp(FollowUp followup) {
-        if (this.follow_ups == null) {
-            this.follow_ups = new ArrayList<FollowUp>();
-        }
-
         this.follow_ups.add(followup);
     }
 }
