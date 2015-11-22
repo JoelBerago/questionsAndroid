@@ -113,10 +113,7 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         QuestionService service = retrofit.create(QuestionService.class);
         Call<List<Question>> response;
 
-        if (roomName.equals(""))
-            response = service.getQuestions();
-        else
-            response = service.getQuestions(roomName);
+        response = service.getQuestions(roomName);
 
         response.enqueue(new Callback<List<Question>>() {
             @Override
@@ -198,9 +195,7 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
             holder.likeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
         }
         holder.likeButton.getBackground().invalidateSelf();
-
-        if (holder.numberOfLikes != null)
-            holder.numberOfLikes.setText(Integer.toString(likesArr.size()));
+        holder.numberOfLikes.setText(Integer.toString(likesArr.size()));
 
 
         /// SETUP TEXT

@@ -45,13 +45,11 @@ public abstract class BaseActivity extends ListActivity {
         setContentView(R.layout.activity_main);
 
         Intent intent = getIntent();
-        assert (intent != null);
+        // Intent will never be null!
+        //assert (intent != null);
 
         // Make it a bit more reliable
         roomName = intent.getStringExtra(ROOM_NAME).toLowerCase();
-        if (roomName == null || roomName.length() == 0) {
-            roomName = "all";
-        }
 
         if (getUserId() == -1) {
             findViewById(R.id.listFooter).setVisibility(View.GONE);

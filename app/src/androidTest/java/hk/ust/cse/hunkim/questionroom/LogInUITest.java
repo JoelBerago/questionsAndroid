@@ -1,5 +1,6 @@
 package hk.ust.cse.hunkim.questionroom;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
@@ -30,26 +31,11 @@ public class LogInUITest extends ActivityInstrumentationTestCase2<LogIn> {
         super(LogIn.class);
     }
 
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation ().getTargetContext());
-        preferences.edit().clear().commit();
-
-        activity = getActivity();
-    }
-
-    @Test
-    public void testTestRegisterField() throws Exception {
-        onView(withId(R.id.btn_signUp)).perform(click());
-        onView(withId(R.id.btn_signUp)).perform(click());
-    }
-
     @Test
     public void testOnCreate() throws Exception {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation ().getTargetContext());
+        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(InstrumentationRegistry.getInstrumentation().getTargetContext());
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("logged", "logged");
         editor.putInt("userId", 1);
@@ -60,7 +46,9 @@ public class LogInUITest extends ActivityInstrumentationTestCase2<LogIn> {
 
     @Test
     public void testOnCreateEmptyUserId() throws Exception {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation ().getTargetContext());
+        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(InstrumentationRegistry.getInstrumentation().getTargetContext());
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("logged", "");
         editor.putInt("userId", 1);
@@ -71,8 +59,29 @@ public class LogInUITest extends ActivityInstrumentationTestCase2<LogIn> {
 
     @Test
     public void testOnCreateNull() throws Exception {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation ().getTargetContext());
+        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(InstrumentationRegistry.getInstrumentation().getTargetContext());
         preferences.edit().clear().commit();
         activity = getActivity();
+    }
+
+    @Test
+    public void testTestRegisterField() throws Exception {
+        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
+
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+
+        SharedPreferences sharedPreferences =
+                context.getSharedPreferences(LogIn.PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        editor.commit();
+
+        activity = getActivity();
+
+        onView(withId(R.id.btn_signUp)).perform(click());
+        onView(withId(R.id.btn_signUp)).perform(click());
     }
 }
