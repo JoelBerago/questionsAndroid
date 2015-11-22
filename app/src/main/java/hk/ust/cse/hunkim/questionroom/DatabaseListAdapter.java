@@ -234,10 +234,6 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         }
     }
 
-    protected void sortModels(List<T> mModels) {
-        Collections.sort(mModels);
-    }
-
     protected void setList(List<T> questionList) {
         this.mQuestionList = questionList;
         notifyDataSetChanged();

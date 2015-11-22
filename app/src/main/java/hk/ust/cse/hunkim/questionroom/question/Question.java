@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class Question extends BaseQuestion {
     @JsonProperty("room") protected String room;
-    @JsonProperty("answers") protected List<Answer> answers;
+    @JsonProperty("answers") protected List<Answer> answers = new ArrayList<Answer>();
 
     // Dummy Constructor for JSONObject-ifying
     public Question() {}
@@ -27,9 +27,6 @@ public class Question extends BaseQuestion {
     }
 
     public List<Answer>  getAnswers() {
-        if (this.answers == null) {
-            this.answers = new ArrayList<Answer>();
-        }
         return answers;
     }
 
@@ -46,10 +43,6 @@ public class Question extends BaseQuestion {
     }
 
     public void addAnswer(Answer answer) {
-        if (this.answers == null) {
-            this.answers = new ArrayList<Answer>();
-        }
-
         this.answers.add(answer);
     }
 }
