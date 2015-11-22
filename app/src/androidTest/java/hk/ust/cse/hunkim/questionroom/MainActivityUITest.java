@@ -34,35 +34,4 @@ public class MainActivityUITest extends ActivityInstrumentationTestCase2<MainAct
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         activity = getActivity();
     }
-
-    @Test
-    public void testSendQuestion() throws Exception {
-        onView(withId(R.id.room_name)).perform(click());
-        onView(withId(R.id.room_name)).perform(typeText("comp3111"),
-                closeSoftKeyboard());
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        onView(withId(R.id.join_button)).perform(click());
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        onView(withId(R.id.close)).check(matches(isDisplayed()));
-    }
-
-    /**
-     * call here your local tests
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testLocal()throws Exception {
-        Class<?> test = Class.forName("hk.ust.cse.hunkim.questionroom.ImageHelperTest");
-        JUnitCore junit = new JUnitCore();
-        junit.run(test);
-    }
 }

@@ -62,4 +62,15 @@ public class JoinActivityUITest extends ActivityInstrumentationTestCase2<JoinAct
     }
 
 
+    /**
+     * call here your local tests
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testLocal()throws Exception {
+        Class<?> test = Class.forName("hk.ust.cse.hunkim.questionroom.ImageHelperTest");
+        JUnitCore junit = new JUnitCore();
+        junit.run(test);
+    }
 }

@@ -1,8 +1,6 @@
 package hk.ust.cse.hunkim.questionroom.db;
 
 
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import hk.ust.cse.hunkim.questionroom.R;
