@@ -39,6 +39,15 @@ public abstract class BaseQuestion implements Serializable {
         this.imageURL = "";
     }
 
+    public int getExperience(){
+        return experience;
+    }
+
+    public void setExperience(int exp){
+        this.experience=exp;
+        return;
+    }
+
     public String getId() {
         return id;
     }

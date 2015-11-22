@@ -67,10 +67,16 @@ public class LogIn extends AppCompatActivity {
                 TextView text_error= (TextView) findViewById(R.id.errorMessage);
 
                 handleSignIn(email.getText().toString(), password.getText().toString(), text_error);
-
             }
         });
 
+        Button signInAsGuest = (Button) findViewById(R.id.btn_signInAsGuest);
+        signInAsGuest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handleSignInAsGuest();
+            }
+        });
     }
 
     public void handleSignIn(String email, String password, final View view){
@@ -109,6 +115,22 @@ public class LogIn extends AppCompatActivity {
                 Log.i("LOGIN", "Failed at SignIn", t);
             }
         });
+    }
+
+    public void handleSignInAsGuest() {
+        //save to shared preference
+        SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("logged", "logged");
+        editor.putInt("userId", -1);
+
+        editor.putString("username", "");
+        editor.putInt("experience", 0);
+        editor.putBoolean("jailed", false);
+        editor.commit();
+
+        Intent intent = new Intent(LogIn.this, JoinActivity.class);
+        startActivity(intent);
     }
 
     //save user object in SharedPreference--> username, experience, jailed
@@ -171,7 +193,7 @@ public class LogIn extends AppCompatActivity {
             registerBox.setVisibility(View.VISIBLE);
         }
         else{
-            registerBox.setVisibility(View.GONE);
+            registerBox.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -213,7 +235,6 @@ public class LogIn extends AppCompatActivity {
 
 
     }
-
 }
 
 

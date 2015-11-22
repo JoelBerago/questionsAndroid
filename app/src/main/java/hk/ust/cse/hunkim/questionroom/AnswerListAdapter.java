@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import hk.ust.cse.hunkim.questionroom.db.UserHelper;
 import hk.ust.cse.hunkim.questionroom.question.Answer;
 import hk.ust.cse.hunkim.questionroom.question.BaseQuestion;
 import hk.ust.cse.hunkim.questionroom.question.FollowUp;
@@ -57,6 +58,9 @@ public class AnswerListAdapter extends DatabaseListAdapter<Answer> {
             holder.textView = (TextView) view.findViewById(R.id.head_desc);
             holder.iv = (ImageView) view.findViewById(R.id.imageView);
             holder.replyBtn = (Button) view.findViewById(R.id.reply);
+            holder.img_userCharacter=(ImageView)view.findViewById(R.id.questionUserCharacter);
+            holder.txt_userClass=(TextView)view.findViewById(R.id.questionUserClass);
+            holder.txt_userLvl=(TextView)view.findViewById(R.id.questionUserLvl);
             view.setTag(holder);
 
         } else {
@@ -64,11 +68,26 @@ public class AnswerListAdapter extends DatabaseListAdapter<Answer> {
         }
 
         if (i == 0) {
+            //set profile info
+            int experience= question.getExperience();
+            int level= UserHelper.getLevel(experience);
+            holder.txt_userClass.setText(UserHelper.getUserClass(level));
+            holder.txt_userLvl.setText("Lvl "+String.valueOf(level));
+            UserHelper.setCharacterImage(level,holder.img_userCharacter);
+
             holder.replyBtn.setVisibility(View.GONE);
             populateView(holder, question);
         }
         else {
-            final Answer answer = mQuestionList.get(i-1);
+            final Answer answer = mQuestionList.get(i - 1);
+
+            //set profile info
+            int experience= answer.getExperience();
+            int level= UserHelper.getLevel(experience);
+            holder.txt_userClass.setText(UserHelper.getUserClass(level));
+            holder.txt_userLvl.setText("Lvl "+String.valueOf(level));
+            UserHelper.setCharacterImage(level,holder.img_userCharacter);
+
             String replyText = "Followup (" + Integer.toString(answer.getFollow_ups().size()) + ")";
             holder.replyBtn.setText(replyText);
             holder.replyBtn.setOnClickListener(new View.OnClickListener() {

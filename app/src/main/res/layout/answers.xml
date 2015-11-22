@@ -22,7 +22,14 @@
             android:id="@+id/questionUserClass"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Anonymous\nLv1"
+            android:text="Anonymous"
+            android:textSize="9dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lvl 1"
+            android:id="@+id/questionUserLvl"
             android:textSize="9dp" />
     </LinearLayout>
 

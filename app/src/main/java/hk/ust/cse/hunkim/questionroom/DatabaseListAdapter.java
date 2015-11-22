@@ -162,6 +162,9 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         TextView textView;
         ImageView iv;
         Button replyBtn;
+        TextView txt_userClass;
+        TextView txt_userLvl;
+        ImageView img_userCharacter;
     }
 
     protected void populateView(final Holder holder, final BaseQuestion baseQuestion) {
@@ -170,7 +173,7 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         List<String> likesArr = baseQuestion.getLikes();
         // check if we already clicked
         boolean clickable = !likesArr.contains(Integer.toString(((BaseActivity)context).getUserId()));
-        if (((BaseActivity)context).getUserId() == -1) {
+        if (((BaseActivity)context).getUserId() == -1||((BaseActivity)context).getJailed()) {
             clickable = false;
         }
 
