@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import hk.ust.cse.hunkim.questionroom.db.ImageHelper;
 import hk.ust.cse.hunkim.questionroom.question.Answer;
@@ -71,6 +72,7 @@ public class FollowupActivity extends BaseActivity {
         FollowUp followUp;
         if (!input.equals("")) {
             followUp = new FollowUp(input);
+            followUp.setExperience(getExperience());
 
             // Clear inputText.
             inputText.setText("");
@@ -80,6 +82,9 @@ public class FollowupActivity extends BaseActivity {
             } else {
                 mChatListAdapter.push(followUp, answer.getId());
             }
+
+            addXP(10);
+            Toast.makeText(FollowupActivity.this, "You gained +10 xp!", Toast.LENGTH_SHORT).show();
         }
     }
 }

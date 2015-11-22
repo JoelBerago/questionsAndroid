@@ -71,6 +71,7 @@ public class MainActivity extends BaseActivity {
         Question question;
         if (!input.equals("")) {
             question = new Question(roomName, input);
+            question.setExperience(getExperience());
 
             // Clear inputText.
             inputText.setText("");
@@ -81,7 +82,7 @@ public class MainActivity extends BaseActivity {
                 mChatListAdapter.push(question, "");
             }
 
-            //User.addXP(10);
+            addXP(10);
             Toast.makeText(MainActivity.this, "You gained +10 xp!", Toast.LENGTH_SHORT).show();
         }
     }
