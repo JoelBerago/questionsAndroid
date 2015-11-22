@@ -211,9 +211,7 @@ public abstract class BaseActivity extends ListActivity {
         else{
             sendButton.setVisibility(View.VISIBLE);
             uploadImage.setVisibility(View.VISIBLE);
-            msg_input.setText("Add new question");
-            msg_input.setTextColor(Color.WHITE);
-            msg_input.setHintTextColor(Color.GRAY);
+            msg_input.setText("");
             msg_input.setEnabled(true);
 
             //update character image
