@@ -62,7 +62,7 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
         int level=UserHelper.getLevel(experience);
         holder.txt_userClass.setText(UserHelper.getUserClass(level));
         holder.txt_userLvl.setText("Lvl "+String.valueOf(level));
-        UserHelper.setCharacterImage(level,holder.img_userCharacter);
+        UserHelper.setCharacterImage(level, holder.img_userCharacter);
 
         //REPLY
         String replyText = "Answer (" + Integer.toString(question.getAnswers().size()) + ")";
