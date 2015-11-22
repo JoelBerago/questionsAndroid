@@ -58,11 +58,6 @@ class DatabaseListAdapterTest2 extends DatabaseListAdapter<Question> {
     }
 
     @Override
-    protected void populateView(View view, BaseQuestion question) {
-
-    }
-
-    @Override
     protected void sortModels(List<Question> mModels) {
 
     }

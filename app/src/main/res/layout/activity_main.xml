@@ -124,13 +124,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/mainActivityFooter"
-        android:layout_below="@+id/listFooter" />
+        android:layout_below="@id/listFooter" />
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:id="@+id/mainActivityFooter"
+        android:id="@id/mainActivityFooter"
         android:layout_alignParentBottom="true"
         android:background="#333">
 

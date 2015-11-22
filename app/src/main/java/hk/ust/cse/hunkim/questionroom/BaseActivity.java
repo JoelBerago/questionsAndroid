@@ -30,8 +30,6 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
  */
 public abstract class BaseActivity extends ListActivity {
     public static final String ROOM_NAME = "Room_name";
-    public static final String USERID = "userId";
-    protected int userId;
     protected String roomName;
     protected DatabaseListAdapter mChatListAdapter;
     public static final String PREFS_NAME = "LoginPrefs";
@@ -48,6 +46,10 @@ public abstract class BaseActivity extends ListActivity {
         roomName = intent.getStringExtra(ROOM_NAME).toLowerCase();
         if (roomName == null || roomName.length() == 0) {
             roomName = "all";
+        }
+
+        if (getUserId() == -1) {
+            findViewById(R.id.listFooter).setVisibility(View.GONE);
         }
 
         TextView txt=(TextView) findViewById(R.id.txt_room_name);
@@ -72,12 +74,6 @@ public abstract class BaseActivity extends ListActivity {
     @Override
     public void onStart() {
         super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mChatListAdapter.cleanup();
     }
 
     public void selectImage(View view) {
@@ -152,6 +148,8 @@ public abstract class BaseActivity extends ListActivity {
         finish();
     }
 
-    public int getUserId() { return userId; }
+    public int getUserId() {
+        SharedPreferences pref = getSharedPreferences(JoinActivity.PREFS_NAME, 0);
+        return pref.getInt("userId", -1); }
 
 }

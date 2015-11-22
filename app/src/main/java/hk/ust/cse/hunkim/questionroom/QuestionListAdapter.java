@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,27 +36,28 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        String tag;
+        Holder holder;
+        final Question question = mQuestionList.get(i);
+
         if (view == null) {
             view = inflater.inflate(R.layout.questionfirst, viewGroup, false);
+
+            holder = new Holder();
+            holder.likeButton = (Button) view.findViewById(R.id.echo);
+            holder.numberOfLikes = (TextView) view.findViewById(R.id.numberOfLikes);
+            holder.textView = (TextView) view.findViewById(R.id.head_desc);
+            holder.iv = (ImageView) view.findViewById(R.id.imageView);
+            holder.replyBtn = (Button) view.findViewById(R.id.reply);
+
+            view.setTag(holder);
+        } else {
+            holder = (Holder) view.getTag();
         }
 
-        populateView(view, mQuestionList.get(i));
-        tag =  mQuestionList.get(i).getId();
-
-        view.setTag(tag);
-        return view;
-    }
-
-    @Override
-    protected void populateView(final View view, final BaseQuestion question) {
-        super.populateView(view, question);
-
         //REPLY
-        Button replyBtn = (Button) view.findViewById(R.id.reply);
-        String replyText = "Answer (" + Integer.toString(((Question)question).getAnswers().size()) + ")";
-        replyBtn.setText(replyText);
-        replyBtn.setOnClickListener(new View.OnClickListener() {
+        String replyText = "Answer (" + Integer.toString(question.getAnswers().size()) + ")";
+        holder.replyBtn.setText(replyText);
+        holder.replyBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(context, AnswerActivity.class);
                 Bundle b = new Bundle();
@@ -64,6 +67,10 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
                 context.startActivity(intent);
             }
         });
+
+        populateView(holder, question);
+
+        return view;
     }
 
     @Override
@@ -89,32 +96,6 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
             @Override
             public void onFailure(Throwable t) {
                 Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.push():", t);
-            }
-        });
-    }
-
-    public void pull(final String roomName) {
-        QuestionService service = retrofit.create(QuestionService.class);
-        Call<List<Question>> response;
-
-        if (roomName == "")
-            response = service.getQuestions();
-        else
-            response = service.getQuestions(roomName);
-
-        response.enqueue(new Callback<List<Question>>() {
-            @Override
-            public void onResponse(Response<List<Question>> response, Retrofit retrofit) {
-                for (Question q : response.body()) {
-                    mQuestionList.add(q);
-                }
-
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                Log.e("QUESTIONROOM", "Failed at DatabaseListAdapter.pull():", t);
             }
         });
     }
