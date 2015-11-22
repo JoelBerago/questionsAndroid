@@ -58,12 +58,12 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
         }
 
         //set profile info
-        int experience= UserHelper.getLevel(question.getExperience());
-        int level=UserHelper.getLevel(UserHelper.getLevel(experience));
+        int experience= question.getExperience();
+        int level=UserHelper.getLevel(experience);
         holder.txt_userClass.setText(UserHelper.getUserClass(level));
         holder.txt_userLvl.setText("Lvl "+String.valueOf(level));
         UserHelper.setCharacterImage(level,holder.img_userCharacter);
-        
+
         //REPLY
         String replyText = "Answer (" + Integer.toString(question.getAnswers().size()) + ")";
         holder.replyBtn.setText(replyText);
@@ -87,7 +87,7 @@ public class QuestionListAdapter extends DatabaseListAdapter<Question> {
     public void push(final Question question, String baseID) {
         QuestionService service = retrofit.create(QuestionService.class);
 
-        Call<ErrorIdResponse> response = service.createQuestion(
+        final Call<ErrorIdResponse> response = service.createQuestion(
                 question.getText(),
                 question.getImageURL(),
                 question.getRoom(),

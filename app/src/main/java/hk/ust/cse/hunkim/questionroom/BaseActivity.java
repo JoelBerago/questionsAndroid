@@ -156,6 +156,9 @@ public abstract class BaseActivity extends ListActivity {
         SharedPreferences pref = getSharedPreferences(JoinActivity.PREFS_NAME, 0);
         return pref.getInt("userId", -1); }
 
+    public int getExperience() {
+        SharedPreferences pref = getSharedPreferences(JoinActivity.PREFS_NAME, 0);
+        return pref.getInt("experience", -1); }
 
 
 }

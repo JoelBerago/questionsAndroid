@@ -45,6 +45,11 @@ public abstract class BaseQuestion implements Comparable<BaseQuestion>, Serializ
         return experience;
     }
 
+    public void setExperience(int exp){
+        this.experience=exp;
+        return;
+    }
+
     public String getId() {
         return id;
     }

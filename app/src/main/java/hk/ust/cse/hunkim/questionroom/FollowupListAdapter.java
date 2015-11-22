@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import hk.ust.cse.hunkim.questionroom.db.UserHelper;
 import hk.ust.cse.hunkim.questionroom.question.Answer;
 import hk.ust.cse.hunkim.questionroom.question.BaseQuestion;
 import hk.ust.cse.hunkim.questionroom.question.FollowUp;
@@ -54,11 +55,17 @@ public class FollowupListAdapter extends DatabaseListAdapter<FollowUp> {
                 holder.textView = (TextView) view.findViewById(R.id.head_desc);
                 holder.iv = (ImageView) view.findViewById(R.id.imageView);
                 holder.replyBtn = (Button) view.findViewById(R.id.reply);
+                holder.img_userCharacter=(ImageView)view.findViewById(R.id.questionUserCharacter);
+                holder.txt_userClass=(TextView)view.findViewById(R.id.questionUserClass);
+                holder.txt_userLvl=(TextView)view.findViewById(R.id.questionUserLvl);
             }
             else {
                 view = inflater.inflate(R.layout.followups, viewGroup, false);
                 holder.textView = (TextView) view.findViewById(R.id.head_desc);
                 holder.iv = (ImageView) view.findViewById(R.id.imageView);
+                holder.img_userCharacter=(ImageView)view.findViewById(R.id.questionUserCharacter);
+                holder.txt_userClass=(TextView)view.findViewById(R.id.questionUserClass);
+                holder.txt_userLvl=(TextView)view.findViewById(R.id.questionUserLvl);
             }
 
             view.setTag(holder);
@@ -68,9 +75,24 @@ public class FollowupListAdapter extends DatabaseListAdapter<FollowUp> {
         }
 
         if (i == 0) {
+            //set profile info
+            int experience= answer.getExperience();
+            int level= UserHelper.getLevel(experience);
+            holder.txt_userClass.setText(UserHelper.getUserClass(level));
+            holder.txt_userLvl.setText("Lvl "+String.valueOf(level));
+            UserHelper.setCharacterImage(level,holder.img_userCharacter);
+
             holder.replyBtn.setVisibility(View.GONE);
             populateView(holder, answer);
+
         } else {
+            //set profile info
+            int experience= (mQuestionList.get(i-1)).getExperience();
+            int level= UserHelper.getLevel(experience);
+            holder.txt_userClass.setText(UserHelper.getUserClass(level));
+            holder.txt_userLvl.setText("Lvl "+String.valueOf(level));
+            UserHelper.setCharacterImage(level,holder.img_userCharacter);
+
             populateView(holder, mQuestionList.get(i-1));
         }
         return view;
