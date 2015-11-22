@@ -170,6 +170,10 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         List<String> likesArr = baseQuestion.getLikes();
         // check if we already clicked
         boolean clickable = !likesArr.contains(Integer.toString(((BaseActivity)context).getUserId()));
+        if (((BaseActivity)context).getUserId() == -1) {
+            clickable = false;
+        }
+
         holder.likeButton.setClickable(clickable);
         holder.likeButton.setEnabled(clickable);
         if (clickable) {
@@ -179,7 +183,7 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
                         @Override
                         public void onClick(View view) {
                             add_like(baseQuestion, Integer.toString(((BaseActivity) context).getUserId()));
-                            holder.likeButton.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+                            holder.likeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
                             holder.likeButton.getBackground().invalidateSelf();
                             holder.numberOfLikes.setText(Integer.toString(baseQuestion.getLikes().size() + 1));
                             holder.likeButton.setClickable(false);
@@ -188,7 +192,7 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
                     }
             );
         } else {
-            holder.likeButton.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+            holder.likeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
         }
         holder.likeButton.getBackground().invalidateSelf();
 

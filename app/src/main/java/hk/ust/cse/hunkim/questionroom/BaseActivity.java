@@ -45,7 +45,7 @@ public abstract class BaseActivity extends ListActivity {
             roomName = "all";
         }
 
-        if (getUserId() != -1) {
+        if (getUserId() == -1) {
             findViewById(R.id.listFooter).setVisibility(View.GONE);
         }
 
