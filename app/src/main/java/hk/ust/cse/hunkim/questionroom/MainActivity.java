@@ -27,6 +27,9 @@ public class MainActivity extends BaseActivity {
         });
 
         setTitle("Room name: " + roomName);
+
+        // No need to check null.
+        mChatListAdapter = new QuestionListAdapter(this, R.layout.questionfirst, new ArrayList<Question>());
     }
 
     @Override
@@ -34,9 +37,6 @@ public class MainActivity extends BaseActivity {
         super.onStart();
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
         final ListView listView = getListView();
-
-        if(mChatListAdapter==null)
-            mChatListAdapter = new QuestionListAdapter(this, R.layout.questionfirst, new ArrayList<Question>());
 
         mChatListAdapter.pull(roomName);
 

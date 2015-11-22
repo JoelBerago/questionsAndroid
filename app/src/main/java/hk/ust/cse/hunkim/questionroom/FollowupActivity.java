@@ -43,6 +43,8 @@ public class FollowupActivity extends BaseActivity {
 
         Bundle b = intent.getExtras();
         answer = (Answer) b.getSerializable(ANSWER);
+
+        mChatListAdapter = new FollowupListAdapter(this, R.layout.followups, answer, answer.getFollow_ups());
     }
 
     @Override
@@ -52,8 +54,6 @@ public class FollowupActivity extends BaseActivity {
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
         final ListView listView = getListView();
 
-        if(mChatListAdapter==null)
-            mChatListAdapter = new FollowupListAdapter(this, R.layout.followups, answer, answer.getFollow_ups());
         listView.setAdapter(mChatListAdapter);
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
