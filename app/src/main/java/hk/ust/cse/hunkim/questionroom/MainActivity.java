@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity {
                 mChatListAdapter.push(question, "");
             }
 
-            //User.addXP(10);
+            addXP(10);
             Toast.makeText(MainActivity.this, "You gained +10 xp!", Toast.LENGTH_SHORT).show();
         }
     }

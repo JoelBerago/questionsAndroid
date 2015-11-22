@@ -62,16 +62,14 @@ public abstract class BaseActivity extends ListActivity {
         String username=pref.getString("username", null);
 
         int level= UserHelper.getLevel(experience);
-        int percentResidualExperience=(int)(UserHelper.getResidualExperience(experience)/20.0)*100;//in percent
         //update UI
         TextView username_txt=(TextView)findViewById(R.id.txtUserInfo);
         username_txt.setText(username+" Lvl "+String.valueOf(level));
         ProgressBar expBar = (ProgressBar) findViewById(R.id.experienceBar);
-        expBar.setProgress(percentResidualExperience);
+        expBar.setProgress(UserHelper.getResidualExperience(experience));
 
         //set profileCharacter
-        ImageView img=(ImageView)findViewById(R.id.profileCharacter);
-        UserHelper.setCharacterImage(level,img);
+        updateCharacter(level);
 
     }
 
@@ -159,6 +157,34 @@ public abstract class BaseActivity extends ListActivity {
     public int getExperience() {
         SharedPreferences pref = getSharedPreferences(JoinActivity.PREFS_NAME, 0);
         return pref.getInt("experience", -1); }
+
+    public void addXP(int exp){
+        SharedPreferences pref = getSharedPreferences(JoinActivity.PREFS_NAME, 0);
+        SharedPreferences.Editor editor = pref.edit();
+        int experience= pref.getInt("experience", 0);
+        String username=pref.getString("username", null);
+
+        experience+=exp;
+        editor.putInt("experience", experience);
+        editor.commit();
+
+        int level= UserHelper.getLevel(experience);
+        //update UI
+        TextView username_txt=(TextView)findViewById(R.id.txtUserInfo);
+        username_txt.setText(username + " Lvl " + String.valueOf(level));
+
+        ProgressBar expBar = (ProgressBar) findViewById(R.id.experienceBar);
+        expBar.setProgress(UserHelper.getResidualExperience(experience));
+
+        if(level%5==1){
+            updateCharacter(level);
+        }
+    }
+
+    public void updateCharacter(int level){
+        ImageView img=(ImageView)findViewById(R.id.profileCharacter);
+        UserHelper.setCharacterImage(level,img);
+    }
 
 
 }
