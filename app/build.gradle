@@ -19,6 +19,7 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "hk.ust.cse.hunkim.questionroom.AndroidJacocoTestRunner"
     }
     buildTypes {
         release {
@@ -56,9 +57,7 @@ dependencies {
     // Set this dependency if you want to use Hamcrest matching
     androidTestCompile 'org.hamcrest:hamcrest-library:1.1'
 
-    /*
     androidTestCompile 'com.android.support.test:runner:0.3'
     androidTestCompile 'com.android.support.test:rules:0.3'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
-    */
 }
