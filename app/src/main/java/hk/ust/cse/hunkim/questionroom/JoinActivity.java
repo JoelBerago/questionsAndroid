@@ -36,16 +36,6 @@ public class JoinActivity extends Activity {
         // Set up the login form.
         roomNameView = (TextView) findViewById(R.id.room_name);
 
-        roomNameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    attemptJoin(textView);
-                }
-                return true;
-            }
-        });
-
         //get the userID from SharedPreference
         SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
         userId=pref.getInt("userId", -1);
@@ -73,10 +63,6 @@ public class JoinActivity extends Activity {
         // Check for a valid email address.
         if (TextUtils.isEmpty(room_name)) {
             roomNameView.setError(getString(R.string.error_field_required));
-
-            cancel = true;
-        } else if (!isEmailValid(room_name)) {
-            roomNameView.setError(getString(R.string.error_invalid_room_name));
             cancel = true;
         }
 
@@ -87,7 +73,6 @@ public class JoinActivity extends Activity {
             // Start main activity
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra(MainActivity.ROOM_NAME, room_name);
-            //intent.putExtra(MainActivity.USERID, userId);
             startActivity(intent);
         }
     }
@@ -104,12 +89,6 @@ public class JoinActivity extends Activity {
         Intent intent=new Intent(this, LogIn.class);
         startActivity(intent);
 
-    }
-
-    private boolean isEmailValid(String room_name) {
-        // http://stackoverflow.com/questions/8248277
-        // Make sure alphanumeric characters
-        return !room_name.matches("^.*[^a-zA-Z0-9 ].*$");
     }
 }
 
