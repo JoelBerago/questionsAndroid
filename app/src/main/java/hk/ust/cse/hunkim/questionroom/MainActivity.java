@@ -71,6 +71,7 @@ public class MainActivity extends BaseActivity {
         Question question;
         if (!input.equals("")) {
             question = new Question(roomName, input);
+            question.setExperience(getExperience());
 
             // Clear inputText.
             inputText.setText("");

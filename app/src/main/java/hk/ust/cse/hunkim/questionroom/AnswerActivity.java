@@ -71,6 +71,7 @@ public class AnswerActivity extends BaseActivity {
         Answer answer;
         if (!input.equals("")) {
             answer = new Answer(input);
+            answer.setExperience(getExperience());
 
             // Clear inputText.
             inputText.setText("");

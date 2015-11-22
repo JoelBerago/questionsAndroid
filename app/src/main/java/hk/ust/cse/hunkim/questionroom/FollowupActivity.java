@@ -71,6 +71,7 @@ public class FollowupActivity extends BaseActivity {
         FollowUp followUp;
         if (!input.equals("")) {
             followUp = new FollowUp(input);
+            followUp.setExperience(getExperience());
 
             // Clear inputText.
             inputText.setText("");
