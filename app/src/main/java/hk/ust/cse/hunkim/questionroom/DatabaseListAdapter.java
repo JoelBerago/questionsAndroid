@@ -162,6 +162,9 @@ public abstract class DatabaseListAdapter<T extends BaseQuestion> extends BaseAd
         TextView textView;
         ImageView iv;
         Button replyBtn;
+        TextView txt_userClass;
+        TextView txt_userLvl;
+        ImageView img_userCharacter;
     }
 
     protected void populateView(final Holder holder, final BaseQuestion baseQuestion) {

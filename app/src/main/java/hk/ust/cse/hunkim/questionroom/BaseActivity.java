@@ -69,6 +69,10 @@ public abstract class BaseActivity extends ListActivity {
         ProgressBar expBar = (ProgressBar) findViewById(R.id.experienceBar);
         expBar.setProgress(percentResidualExperience);
 
+        //set profileCharacter
+        ImageView img=(ImageView)findViewById(R.id.profileCharacter);
+        UserHelper.setCharacterImage(level,img);
+
     }
 
     @Override
@@ -151,5 +155,7 @@ public abstract class BaseActivity extends ListActivity {
     public int getUserId() {
         SharedPreferences pref = getSharedPreferences(JoinActivity.PREFS_NAME, 0);
         return pref.getInt("userId", -1); }
+
+
 
 }

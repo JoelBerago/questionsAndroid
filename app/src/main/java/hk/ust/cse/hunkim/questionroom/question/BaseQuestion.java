@@ -41,6 +41,10 @@ public abstract class BaseQuestion implements Comparable<BaseQuestion>, Serializ
         this.imageURL = "";
     }
 
+    public int getExperience(){
+        return experience;
+    }
+
     public String getId() {
         return id;
     }
