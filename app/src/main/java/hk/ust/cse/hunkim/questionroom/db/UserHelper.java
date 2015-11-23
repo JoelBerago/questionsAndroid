@@ -55,7 +55,24 @@ public class UserHelper {
         else{
             view.setImageResource(R.drawable.class5);
         }
+    }
 
+    public static void setCharacterJailedImage(int level, ImageView view){
+        if(level<=5){
+            view.setImageResource(R.drawable.class1j);
+        }
+        else if(level<=10){
+            view.setImageResource(R.drawable.class2j);
+        }
+        else if(level<=15){
+            view.setImageResource(R.drawable.class3j);
+        }
+        else if(level<=20){
+            view.setImageResource(R.drawable.class4j);
+        }
+        else{
+            view.setImageResource(R.drawable.class5j);
+        }
     }
 
     public static String getUserClass(int level){
