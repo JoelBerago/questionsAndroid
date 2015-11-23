@@ -50,6 +50,7 @@ public class JailedUITest extends ActivityInstrumentationTestCase2<MainActivity>
         editor.putString("logged", "logged");
         editor.putInt("userId", 1);
         editor.putBoolean("jailed", true);
+        editor.putInt("experience", 1000000);
         editor.commit();
 
 
@@ -71,6 +72,7 @@ public class JailedUITest extends ActivityInstrumentationTestCase2<MainActivity>
         editor.putString("logged", "logged");
         editor.putInt("userId", 1);
         editor.putBoolean("jailed", true);
+        editor.putInt("experience", 1000000);
         editor.commit();
 
 
@@ -92,6 +94,7 @@ public class JailedUITest extends ActivityInstrumentationTestCase2<MainActivity>
         editor.putString("logged", "logged");
         editor.putInt("userId", -1);
         editor.putBoolean("jailed", true);
+        editor.putInt("experience", 1000000);
         editor.commit();
 
 

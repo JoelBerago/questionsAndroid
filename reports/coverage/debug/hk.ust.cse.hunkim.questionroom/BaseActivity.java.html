@@ -68,7 +68,7 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 
 <span class="fc" id="L69">        updateUser(level);</span>
 <span class="fc" id="L70">        updateCharacter(level);</span>
-<span class="fc" id="L71">        checkJailed(jailed);</span>
+<span class="fc" id="L71">        checkJailed(jailed,level);</span>
         //===============================================================
 
 <span class="fc" id="L74">    }</span>
@@ -192,7 +192,7 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 <span class="fc" id="L192">        UserHelper.setCharacterImage(level,img);</span>
 <span class="fc" id="L193">    }</span>
 
-    public void checkJailed(boolean jailed){
+    public void checkJailed(boolean jailed,int level){
 <span class="fc" id="L196">        ImageButton sendButton = (ImageButton) findViewById(R.id.sendButton);</span>
 <span class="fc" id="L197">        ImageButton uploadImage = (ImageButton) findViewById(R.id.uploadImage);</span>
 <span class="fc" id="L198">        TextView msg_input=(TextView)findViewById(R.id.messageInput);</span>
@@ -204,26 +204,30 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 <span class="fc" id="L204">            msg_input.setEnabled(false);</span>
 
             //update character image
+<span class="fc" id="L207">            ImageView img=(ImageView)findViewById(R.id.profileCharacter);</span>
+<span class="fc" id="L208">            UserHelper.setCharacterJailedImage(level, img);</span>
 
-        }
+<span class="fc" id="L210">        }</span>
         else{
-<span class="fc" id="L210">            sendButton.setVisibility(View.VISIBLE);</span>
-<span class="fc" id="L211">            uploadImage.setVisibility(View.VISIBLE);</span>
-<span class="fc" id="L212">            msg_input.setText(&quot;&quot;);</span>
-<span class="fc" id="L213">            msg_input.setEnabled(true);</span>
+<span class="fc" id="L212">            sendButton.setVisibility(View.VISIBLE);</span>
+<span class="fc" id="L213">            uploadImage.setVisibility(View.VISIBLE);</span>
+<span class="fc" id="L214">            msg_input.setText(&quot;&quot;);</span>
+<span class="fc" id="L215">            msg_input.setEnabled(true);</span>
 
             //update character image
+<span class="fc" id="L218">            ImageView img=(ImageView)findViewById(R.id.profileCharacter);</span>
+<span class="fc" id="L219">            UserHelper.setCharacterImage(level, img);</span>
         }
-<span class="fc" id="L217">    }</span>
+<span class="fc" id="L221">    }</span>
 
     public void updateUser(int level){
         //access UI components
-<span class="fc" id="L221">        TextView username_txt=(TextView)findViewById(R.id.txtUserInfo);</span>
-<span class="fc" id="L222">        ProgressBar expBar = (ProgressBar) findViewById(R.id.experienceBar);</span>
+<span class="fc" id="L225">        TextView username_txt=(TextView)findViewById(R.id.txtUserInfo);</span>
+<span class="fc" id="L226">        ProgressBar expBar = (ProgressBar) findViewById(R.id.experienceBar);</span>
         //update UI
-<span class="fc" id="L224">        username_txt.setText(username+&quot; Lvl &quot;+String.valueOf(level));</span>
-<span class="fc" id="L225">        expBar.setProgress(UserHelper.getResidualExperience(experience));</span>
-<span class="fc" id="L226">    }</span>
+<span class="fc" id="L228">        username_txt.setText(username+&quot; Lvl &quot;+String.valueOf(level));</span>
+<span class="fc" id="L229">        expBar.setProgress(UserHelper.getResidualExperience(experience));</span>
+<span class="fc" id="L230">    }</span>
 
 
 }

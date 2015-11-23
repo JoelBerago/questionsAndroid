@@ -48,7 +48,7 @@ public class FollowupListAdapter extends DatabaseListAdapter&lt;FollowUp&gt; {
 <span class="fc bfc" id="L48" title="All 2 branches covered.">        if (view == null) {</span>
 <span class="fc" id="L49">            holder = new Holder();</span>
 
-<span class="fc bfc" id="L51" title="All 2 branches covered.">            if (i == 0) {</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">            if (i == 0) {</span>
 <span class="fc" id="L52">                view = inflater.inflate(R.layout.questionfirst, viewGroup, false);</span>
 <span class="fc" id="L53">                holder.likeButton = (Button) view.findViewById(R.id.echo);</span>
 <span class="fc" id="L54">                holder.numberOfLikes = (TextView) view.findViewById(R.id.numberOfLikes);</span>
@@ -60,12 +60,12 @@ public class FollowupListAdapter extends DatabaseListAdapter&lt;FollowUp&gt; {
 <span class="fc" id="L60">                holder.txt_userLvl=(TextView)view.findViewById(R.id.questionUserLvl);</span>
             }
             else {
-<span class="fc" id="L63">                view = inflater.inflate(R.layout.followups, viewGroup, false);</span>
-<span class="fc" id="L64">                holder.textView = (TextView) view.findViewById(R.id.head_desc);</span>
-<span class="fc" id="L65">                holder.iv = (ImageView) view.findViewById(R.id.imageView);</span>
-<span class="fc" id="L66">                holder.img_userCharacter=(ImageView)view.findViewById(R.id.questionUserCharacter);</span>
-<span class="fc" id="L67">                holder.txt_userClass=(TextView)view.findViewById(R.id.questionUserClass);</span>
-<span class="fc" id="L68">                holder.txt_userLvl=(TextView)view.findViewById(R.id.questionUserLvl);</span>
+<span class="nc" id="L63">                view = inflater.inflate(R.layout.followups, viewGroup, false);</span>
+<span class="nc" id="L64">                holder.textView = (TextView) view.findViewById(R.id.head_desc);</span>
+<span class="nc" id="L65">                holder.iv = (ImageView) view.findViewById(R.id.imageView);</span>
+<span class="nc" id="L66">                holder.img_userCharacter=(ImageView)view.findViewById(R.id.questionUserCharacter);</span>
+<span class="nc" id="L67">                holder.txt_userClass=(TextView)view.findViewById(R.id.questionUserClass);</span>
+<span class="nc" id="L68">                holder.txt_userLvl=(TextView)view.findViewById(R.id.questionUserLvl);</span>
             }
 
 <span class="fc" id="L71">            view.setTag(holder);</span>
@@ -74,7 +74,7 @@ public class FollowupListAdapter extends DatabaseListAdapter&lt;FollowUp&gt; {
 <span class="fc" id="L74">            holder = (Holder) view.getTag();</span>
         }
 
-<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (i == 0) {</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        if (i == 0) {</span>
             //set profile info
 <span class="fc" id="L79">            int experience= answer.getExperience();</span>
 <span class="fc" id="L80">            int level= UserHelper.getLevel(experience);</span>
@@ -87,26 +87,26 @@ public class FollowupListAdapter extends DatabaseListAdapter&lt;FollowUp&gt; {
 
 <span class="fc" id="L88">        } else {</span>
             //set profile info
-<span class="fc" id="L90">            int experience= (mQuestionList.get(i-1)).getExperience();</span>
-<span class="fc" id="L91">            int level= UserHelper.getLevel(experience);</span>
-<span class="fc" id="L92">            holder.txt_userClass.setText(UserHelper.getUserClass(level));</span>
-<span class="fc" id="L93">            holder.txt_userLvl.setText(&quot;Lvl &quot;+String.valueOf(level));</span>
-<span class="fc" id="L94">            UserHelper.setCharacterImage(level,holder.img_userCharacter);</span>
+<span class="nc" id="L90">            int experience= (mQuestionList.get(i-1)).getExperience();</span>
+<span class="nc" id="L91">            int level= UserHelper.getLevel(experience);</span>
+<span class="nc" id="L92">            holder.txt_userClass.setText(UserHelper.getUserClass(level));</span>
+<span class="nc" id="L93">            holder.txt_userLvl.setText(&quot;Lvl &quot;+String.valueOf(level));</span>
+<span class="nc" id="L94">            UserHelper.setCharacterImage(level,holder.img_userCharacter);</span>
 
-<span class="fc" id="L96">            populateView(holder, mQuestionList.get(i-1));</span>
+<span class="nc" id="L96">            populateView(holder, mQuestionList.get(i-1));</span>
         }
 <span class="fc" id="L98">        return view;</span>
     }
 
     protected void populateView(Holder holder, final FollowUp followUp) {
         /// SETUP TEXT
-<span class="fc" id="L103">        holder.textView.setText(followUp.getText());</span>
+<span class="nc" id="L103">        holder.textView.setText(followUp.getText());</span>
 
         /// display image under text
-<span class="fc" id="L106">        holder.iv.setImageBitmap(null);</span>
-<span class="fc" id="L107">        holder.iv.setImageDrawable(null);</span>
+<span class="nc" id="L106">        holder.iv.setImageBitmap(null);</span>
+<span class="nc" id="L107">        holder.iv.setImageDrawable(null);</span>
         // only if URL exist
-<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        if (!followUp.getImageURL().equals(&quot;&quot;)) {</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (!followUp.getImageURL().equals(&quot;&quot;)) {</span>
 <span class="nc" id="L110">            Picasso.with(context)</span>
 <span class="nc" id="L111">                    .load(followUp.getImageURL())</span>
 <span class="nc" id="L112">                    .resize(240, 140)   // image can stretch up to 240x140 max.</span>
@@ -131,7 +131,7 @@ public class FollowupListAdapter extends DatabaseListAdapter&lt;FollowUp&gt; {
 <span class="nc" id="L131">                }</span>
             });
         }
-<span class="fc" id="L134">    }</span>
+<span class="nc" id="L134">    }</span>
 
     @Override
     public int getCount() {
@@ -159,8 +159,8 @@ public class FollowupListAdapter extends DatabaseListAdapter&lt;FollowUp&gt; {
 
             @Override
             public void onFailure(Throwable t) {
-<span class="nc" id="L162">                Log.e(&quot;QUESTIONROOM&quot;, &quot;Failed at DatabaseListAdapter.push():&quot;, t);</span>
-<span class="nc" id="L163">            }</span>
+<span class="fc" id="L162">                Log.e(&quot;QUESTIONROOM&quot;, &quot;Failed at DatabaseListAdapter.push():&quot;, t);</span>
+<span class="fc" id="L163">            }</span>
         });
 <span class="fc" id="L165">    }</span>
 
