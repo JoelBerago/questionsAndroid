@@ -68,7 +68,7 @@ public abstract class BaseActivity extends ListActivity {
 
         updateUser(level);
         updateCharacter(level);
-        checkJailed(jailed);
+        checkJailed(jailed,level);
         //===============================================================
 
     }
@@ -192,7 +192,7 @@ public abstract class BaseActivity extends ListActivity {
         UserHelper.setCharacterImage(level,img);
     }
 
-    public void checkJailed(boolean jailed){
+    public void checkJailed(boolean jailed,int level){
         ImageButton sendButton = (ImageButton) findViewById(R.id.sendButton);
         ImageButton uploadImage = (ImageButton) findViewById(R.id.uploadImage);
         TextView msg_input=(TextView)findViewById(R.id.messageInput);
@@ -204,6 +204,8 @@ public abstract class BaseActivity extends ListActivity {
             msg_input.setEnabled(false);
 
             //update character image
+            ImageView img=(ImageView)findViewById(R.id.profileCharacter);
+            UserHelper.setCharacterJailedImage(level, img);
 
         }
         else{
@@ -213,6 +215,8 @@ public abstract class BaseActivity extends ListActivity {
             msg_input.setEnabled(true);
 
             //update character image
+            ImageView img=(ImageView)findViewById(R.id.profileCharacter);
+            UserHelper.setCharacterImage(level, img);
         }
     }
 
